@@ -1,0 +1,21 @@
+{
+    "name": "survos/data-contracts",
+    "type": "library",
+    "description": "Shared data vocabularies, content metadata, and item DTO contracts for Survos data/media/import packages.",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Survos\\DataContracts\\": "src/"
+        }
+    },
+    "require": {
+        "php": "^8.4"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^13.0",
+        "phpstan/phpstan": "^2.0",
+        "symplify/easy-coding-standard": "^13.0"
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}
