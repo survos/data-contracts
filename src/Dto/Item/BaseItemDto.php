@@ -5,6 +5,7 @@ namespace Survos\DataContracts\Dto\Item;
 
 use Survos\DataContracts\Metadata\ContentType;
 use Survos\DataContracts\Vocabulary\DcTerms;
+use Survos\DataContracts\Vocabulary\ItemField;
 
 /**
  * Base DTO for all museum collection items.
@@ -34,8 +35,15 @@ abstract class BaseItemDto
     /** dcterms:title */
     public ?string $title = null;
 
-    /** dcterms:description */
+    /** dcterms:description — human-readable finding-aid prose */
     public ?string $description = null;
+
+    /**
+     * ai:denseSummary — ≤ 400 char retrieval-optimised summary.
+     * Entity-rich, factual, no filler. Used by Meilisearch /chat, RAG, chatbots.
+     * AI-generated but treated as a core field alongside title/description.
+     */
+    public ?string $denseSummary = null;
 
     /** dcterms:date — display string, may be fuzzy ("ca. 1920") */
     public ?string $date = null;
@@ -89,9 +97,18 @@ abstract class BaseItemDto
     // ── Media ─────────────────────────────────────────────────────────────────
 
     /** IIIF Image API base URL — use for AI vision and imgProxy resizing */
-    public ?string $iiifBase     = null;
-    public ?string $iiifManifest = null;
-    public ?string $thumbnailUrl = null;
+    public ?string $iiifBase      = null;
+    public ?string $iiifManifest  = null;
+    public ?string $thumbnailUrl  = null;
+    public ?string $largeImageUrl = null;
+
+    /** Best display label: title → description prefix → id */
+    public function label(): string
+    {
+        return $this->title
+            ?? ($this->description ? mb_strimwidth($this->description, 0, 80, '…') : null)
+            ?? (string) ($this->id ?? '');
+    }
 
     // ── Provenance (for zm Values) ────────────────────────────────────────────
 
@@ -146,7 +163,7 @@ abstract class BaseItemDto
     public static function fromSourceMeta(array $meta): static
     {
         // Pick the right subclass from content_type
-        $contentType = $meta['content_type'] ?? null;
+        $contentType = $meta[ItemField::CONTENT_TYPE] ?? null;
         $class = static::$typeRegistry[$contentType] ?? static::class;
         /** @var static $dto */
         $dto = new $class();
@@ -166,18 +183,19 @@ abstract class BaseItemDto
         }
 
         // Special mappings where dcterms localName ≠ DTO property
-        $dto->id          ??= $meta['source_id']     ?? null;
-        $dto->sourceUrl   ??= $meta['dcterms:source'] ?? null;
-        $dto->contentType ??= $contentType            ?? ($dto instanceof static ? static::contentType() : null);
-        $dto->aggregator  ??= $meta['aggregator']      ?? null;
-        $dto->creators    ??= $meta['dcterms:creator'] ?? null;
-        $dto->subjects    ??= $meta['dcterms:subject'] ?? null;
-        $dto->collections ??= $meta['dcterms:isPartOf'] ?? null;
-        $dto->rights      ??= $meta['dcterms:rights']  ?? $meta['rights'] ?? null;
-        $dto->rightsUri   ??= $meta['dcterms:license'] ?? $meta['license_uri'] ?? null;
-        $dto->iiifBase    ??= $meta['iiif_base']       ?? null;
-        $dto->iiifManifest??= $meta['iiif_manifest']   ?? null;
-        $dto->thumbnailUrl??= $meta['thumbnail_url']   ?? null;
+        $dto->id           ??= $meta[ItemField::SOURCE_ID]         ?? null;
+        $dto->sourceUrl    ??= $meta[DcTerms::SOURCE->value]       ?? null;
+        $dto->contentType  ??= $contentType                        ?? ($dto instanceof static ? static::contentType() : null);
+        $dto->aggregator   ??= $meta[ItemField::AGGREGATOR]        ?? null;
+        $dto->creators     ??= $meta[DcTerms::CREATOR->value]      ?? null;
+        $dto->subjects     ??= $meta[DcTerms::SUBJECT->value]      ?? null;
+        $dto->collections  ??= $meta[DcTerms::IS_PART_OF->value]   ?? null;
+        $dto->rights       ??= $meta[DcTerms::RIGHTS->value]       ?? null;
+        $dto->rightsUri    ??= $meta[DcTerms::LICENSE->value]      ?? $meta['license_uri'] ?? null;
+        $dto->iiifBase     ??= $meta[ItemField::IIIF_BASE]         ?? null;
+        $dto->iiifManifest ??= $meta[ItemField::IIIF_MANIFEST]     ?? null;
+        $dto->thumbnailUrl ??= $meta[ItemField::THUMBNAIL_URL]     ?? null;
+        $dto->denseSummary ??= $meta[ItemField::DENSE_SUMMARY]     ?? null;
 
         return $dto;
     }
@@ -190,27 +208,27 @@ abstract class BaseItemDto
     {
         // Build dcterms: keyed map from DTO properties
         $meta = array_filter([
-            DcTerms::TITLE->value       => $this->title,
-            DcTerms::DESCRIPTION->value => $this->description,
-            DcTerms::DATE->value        => $this->date,
-            DcTerms::CREATOR->value     => $this->creators,
-            DcTerms::SUBJECT->value     => $this->subjects,
-            DcTerms::IS_PART_OF->value  => $this->collections,
-            DcTerms::PUBLISHER->value   => $this->institution,
-            DcTerms::LANGUAGE->value    => $this->language,
-            DcTerms::EXTENT->value      => $this->extent ?? null,
-            DcTerms::RIGHTS->value      => $this->rights,
-            DcTerms::LICENSE->value     => $this->rightsUri,
+            DcTerms::TITLE->value         => $this->title,
+            DcTerms::DESCRIPTION->value   => $this->description,
+            DcTerms::DATE->value          => $this->date,
+            DcTerms::CREATOR->value       => $this->creators,
+            DcTerms::SUBJECT->value       => $this->subjects,
+            DcTerms::IS_PART_OF->value    => $this->collections,
+            DcTerms::PUBLISHER->value     => $this->institution,
+            DcTerms::LANGUAGE->value      => $this->language,
+            DcTerms::EXTENT->value        => $this->extent ?? null,
+            DcTerms::RIGHTS->value        => $this->rights,
+            DcTerms::LICENSE->value       => $this->rightsUri,
             DcTerms::ACCESS_RIGHTS->value => $this->reuseAllowed ?? null,
-            DcTerms::SOURCE->value      => $this->sourceUrl,
-            DcTerms::IDENTIFIER->value  => $this->identifierLocal,
-            // Non-dcterms fields stored alongside
-            'content_type'   => static::contentType(),
-            'aggregator'     => $this->aggregator,
-            'source_id'      => $this->id,
-            'iiif_base'      => $this->iiifBase,
-            'iiif_manifest'  => $this->iiifManifest,
-            'thumbnail_url'  => $this->thumbnailUrl,
+            DcTerms::SOURCE->value        => $this->sourceUrl,
+            DcTerms::IDENTIFIER->value    => $this->identifierLocal,
+            ItemField::CONTENT_TYPE       => static::contentType(),
+            ItemField::AGGREGATOR         => $this->aggregator,
+            ItemField::SOURCE_ID          => $this->id,
+            ItemField::IIIF_BASE          => $this->iiifBase,
+            ItemField::IIIF_MANIFEST      => $this->iiifManifest,
+            ItemField::THUMBNAIL_URL      => $this->thumbnailUrl,
+            ItemField::DENSE_SUMMARY      => $this->denseSummary,
         ], static fn($v) => $v !== null && $v !== '' && $v !== []);
 
         return $meta;
@@ -229,17 +247,19 @@ abstract class BaseItemDto
             }
         }
         // Handle snake_case aliases
-        $dto->id            ??= $row['id']             ?? $row['ark_id']        ?? null;
-        $dto->sourceUrl     ??= $row['url']            ?? $row['page_url']      ?? null;
-        $dto->contentType   ??= $row['content_type']   ?? static::contentType();
-        $dto->aggregator    ??= $row['aggregator']      ?? null;
-        $dto->creators      ??= $row['name_facet']     ?? $row['creators']      ?? null;
-        $dto->subjects      ??= $row['subject_facet']  ?? $row['subjects']      ?? $row['tags'] ?? null;
+        $dto->id            ??= $row[ItemField::SOURCE_ID]   ?? $row['id'] ?? $row[ItemField::ARK] ?? null;
+        $dto->sourceUrl     ??= $row[DcTerms::SOURCE->value] ?? $row[ItemField::PAGE_URL]   ?? null;
+        $dto->contentType   ??= $row[ItemField::CONTENT_TYPE]?? static::contentType();
+        $dto->aggregator    ??= $row[ItemField::AGGREGATOR]  ?? null;
+        $dto->creators      ??= $row[DcTerms::CREATOR->value]?? $row['name_facet']          ?? null;
+        $dto->subjects      ??= $row[DcTerms::SUBJECT->value]?? $row['subject_facet']       ?? null;
         $dto->subjectsGeographic ??= $row['subject_geographic'] ?? null;
         $dto->identifierLocal    ??= $row['identifier_local']   ?? null;
-        $dto->iiifBase      ??= $row['iiif_base']      ?? null;
-        $dto->iiifManifest  ??= $row['iiif_manifest']  ?? null;
-        $dto->thumbnailUrl  ??= $row['thumbnail_url']  ?? null;
+        $dto->iiifBase      ??= $row[ItemField::IIIF_BASE]     ?? null;
+        $dto->iiifManifest  ??= $row[ItemField::IIIF_MANIFEST] ?? null;
+        $dto->thumbnailUrl  ??= $row[ItemField::THUMBNAIL_URL]   ?? null;
+        $dto->largeImageUrl ??= $row[ItemField::LARGE_IMAGE_URL] ?? null;
+        $dto->denseSummary  ??= $row[ItemField::DENSE_SUMMARY] ?? null;
         return $dto;
     }
 
@@ -264,21 +284,22 @@ abstract class BaseItemDto
     public function toValueMap(): array
     {
         return array_filter([
-            'dcterms:title'       => $this->title,
-            'dcterms:description' => $this->description,
-            'dcterms:date'        => $this->date,
-            'dcterms:creator'     => $this->creators,
-            'dcterms:subject'     => array_unique(array_filter(array_merge(
+            DcTerms::TITLE->value      => $this->title,
+            DcTerms::DESCRIPTION->value=> $this->description,
+            DcTerms::DATE->value       => $this->date,
+            DcTerms::CREATOR->value    => $this->creators,
+            DcTerms::SUBJECT->value    => array_unique(array_filter(array_merge(
                 $this->subjects ?? [],
                 $this->subjectsGeographic ?? [],
             ))) ?: null,
-            'dcterms:language'    => $this->language,
-            'dcterms:rights'      => $this->rights,
-            'dcterms:license'     => $this->rightsUri,
-            'dcterms:identifier'  => $this->identifierLocal,
-            'dcterms:source'      => $this->sourceUrl,
-            'schema:latitude'     => $this->latitude,
-            'schema:longitude'    => $this->longitude,
+            DcTerms::LANGUAGE->value   => $this->language,
+            DcTerms::RIGHTS->value     => $this->rights,
+            DcTerms::LICENSE->value    => $this->rightsUri,
+            DcTerms::IDENTIFIER->value => $this->identifierLocal,
+            DcTerms::SOURCE->value     => $this->sourceUrl,
+            ItemField::LATITUDE        => $this->latitude,
+            ItemField::LONGITUDE       => $this->longitude,
+            ItemField::DENSE_SUMMARY   => $this->denseSummary,
         ], static fn($v) => $v !== null && $v !== [] && $v !== '');
     }
 }
