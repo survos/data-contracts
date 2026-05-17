@@ -3,6 +3,23 @@ declare(strict_types=1);
 
 namespace Survos\DataContracts\Metadata;
 
+use Symfony\Component\String\Inflector\EnglishInflector;
+use Survos\DataContracts\Dto\Item\ArtifactDto;
+use Survos\DataContracts\Dto\Item\EphemeraDto;
+use Survos\DataContracts\Dto\Item\AudioDto;
+use Survos\DataContracts\Dto\Item\BookDto;
+use Survos\DataContracts\Dto\Item\CorrespondenceDto;
+use Survos\DataContracts\Dto\Item\DocumentDto;
+use Survos\DataContracts\Dto\Item\DrawingDto;
+use Survos\DataContracts\Dto\Item\FilmDto;
+use Survos\DataContracts\Dto\Item\GenericItemDto;
+use Survos\DataContracts\Dto\Item\ManuscriptDto;
+use Survos\DataContracts\Dto\Item\MapDto;
+use Survos\DataContracts\Dto\Item\NewspaperDto;
+use Survos\DataContracts\Dto\Item\PhotographDto;
+use Survos\DataContracts\Dto\Item\PostcardDto;
+use Survos\DataContracts\Vocabulary\ItemField;
+
 /**
  * Canonical content-type slugs used across ssai, zm, md, and mus.
  *
@@ -17,6 +34,8 @@ namespace Survos\DataContracts\Metadata;
  */
 final class ContentType
 {
+    private static ?EnglishInflector $inflector = null;
+
     // ── Photographic / Visual ────────────────────────────────────────────────
     const PHOTOGRAPH    = 'photograph';     // TGM tgm007965 / LCGFT gf2017027258
     const POSTCARD      = 'postcard';       // TGM tgm008060 / marcgt postcard
@@ -118,6 +137,7 @@ final class ContentType
      */
     const GENRE_SPECIFIC_MAP = [
         // Photographs
+        'photograph'              => self::PHOTOGRAPH,
         'photographic prints'     => self::PHOTOGRAPH,
         'portrait photographs'    => self::PHOTOGRAPH,
         'group portraits'         => self::PHOTOGRAPH,
@@ -126,20 +146,33 @@ final class ContentType
         'cabinet photographs'     => self::PHOTOGRAPH,
         'cartes de visite'        => self::PHOTOGRAPH,
         // Postcards
+        'postcard'                => self::POSTCARD,
+        'photographic postcard'   => self::POSTCARD,
         'postcards'               => self::POSTCARD,
         'advertising cards'       => self::POSTCARD,
         // Stereographs
+        'stereograph'             => self::STEREOGRAPH,
         'stereographs'            => self::STEREOGRAPH,
         // Slides
+        'slide'                   => self::SLIDE,
+        'photographic slide'      => self::SLIDE,
         'lantern slides'          => self::SLIDE,
         'slides'                  => self::SLIDE,
         // Negatives (all types)
+        'negative'                => self::NEGATIVE,
+        'film negative'           => self::NEGATIVE,
+        'glass negative'          => self::NEGATIVE,
+        'glass plate negative'    => self::NEGATIVE,
         'film negatives'          => self::NEGATIVE,
         'glass negatives'         => self::NEGATIVE,
         'nitrate negatives'       => self::NEGATIVE,
         'dry plate negatives'     => self::NEGATIVE,
         'negatives'               => self::NEGATIVE,
         // Prints (non-photo)
+        'print'                   => self::PRINT,
+        'lithograph'              => self::PRINT,
+        'etching'                 => self::PRINT,
+        'engraving'               => self::PRINT,
         'lithographs'             => self::PRINT,
         'etchings'                => self::PRINT,
         'engravings'              => self::PRINT,
@@ -153,6 +186,7 @@ final class ContentType
         'albumen prints'          => self::PHOTOGRAPH,
         'gelatin silver prints'   => self::PHOTOGRAPH,
         // Maps
+        'map'                     => self::MAP,
         'topographic maps'        => self::MAP,
         'nautical charts'         => self::MAP,
         'wall maps'               => self::MAP,
@@ -162,16 +196,32 @@ final class ContentType
         'pictorial maps'          => self::MAP,
         'thematic maps'           => self::MAP,
         // Documents/text
+        'document'                => self::DOCUMENT,
+        'newspaper clipping'      => self::NEWSPAPER,
+        'letter'                  => self::CORRESPONDENCE,
+        'telegram'                => self::CORRESPONDENCE,
         'broadsides'              => self::DOCUMENT,
         'receipts (acknowledgments)' => self::CORRESPONDENCE,
         'lists'                   => self::DOCUMENT,
         'clippings'               => self::DOCUMENT,
         'anti-slavery newspapers' => self::NEWSPAPER,
         // Plans/drawings
+        'drawing'                 => self::DRAWING,
         'planning drawings'       => self::DRAWING,
         'architectural drawings'  => self::DRAWING,
-        // Caricatures
-        'caricatures'             => self::PRINT,
+        // Cartoons / caricatures
+        'cartoons'                => self::DRAWING,
+        'caricatures'             => self::DRAWING,
+        'cartoon'                 => self::DRAWING,
+        'editorial cartoons'      => self::DRAWING,
+        'comic strips'            => self::DRAWING,
+        'illustrations'           => self::DRAWING,
+        // Paintings
+        'painting'                => self::PAINTING,
+        'oil paintings'           => self::PAINTING,
+        'watercolors'             => self::PAINTING,
+        'watercolours'            => self::PAINTING,
+        'gouaches'                => self::PAINTING,
     ];
 
     /**
@@ -179,29 +229,57 @@ final class ContentType
      * Fallback when genre_specific doesn't match.
      */
     const GENRE_BASIC_MAP = [
+        'photograph'     => self::PHOTOGRAPH,
         'photographs'    => self::PHOTOGRAPH,
         'photo'          => self::PHOTOGRAPH,  // synonym
         'foto'           => self::PHOTOGRAPH,  // synonym (Spanish/German)
         'picture'        => self::PHOTOGRAPH,  // synonym
+        'postcard'       => self::POSTCARD,
         'cards'          => self::POSTCARD,    // DC uses 'Cards' for postcard collections
+        'map'            => self::MAP,
         'maps'           => self::MAP,
+        'newspaper'      => self::NEWSPAPER,
         'newspapers'     => self::NEWSPAPER,
+        'manuscript'     => self::MANUSCRIPT,
         'manuscripts'    => self::MANUSCRIPT,
         'correspondence' => self::CORRESPONDENCE,
+        'print'          => self::PRINT,
         'prints'         => self::PRINT,
+        'drawing'        => self::DRAWING,
         'drawings'       => self::DRAWING,
+        'painting'       => self::PAINTING,
         'paintings'      => self::PAINTING,
+        'poster'         => self::POSTER,
         'posters'        => self::POSTER,
         'ephemera'       => self::EPHEMERA,
+        'book'           => self::BOOK,
         'books'          => self::BOOK,
+        'periodical'     => self::PERIODICAL,
         'periodicals'    => self::PERIODICAL,
         'sound recordings' => self::AUDIO,
         'motion pictures'  => self::FILM,
+        'object'           => self::OBJECT,
         'objects'          => self::OBJECT,
         'art objects'      => self::OBJECT,
         'albums (books)'   => self::BOOK,
         'musical notation' => self::DOCUMENT,
         'music'            => self::AUDIO,
+    ];
+
+    private const GENRE_SUFFIX_MAP = [
+        'photograph' => self::PHOTOGRAPH,
+        'postcard' => self::POSTCARD,
+        'stereograph' => self::STEREOGRAPH,
+        'slide' => self::SLIDE,
+        'negative' => self::NEGATIVE,
+        'print' => self::PRINT,
+        'map' => self::MAP,
+        'newspaper clipping' => self::NEWSPAPER,
+        'letter' => self::CORRESPONDENCE,
+        'telegram' => self::CORRESPONDENCE,
+        'drawing' => self::DRAWING,
+        'painting' => self::PAINTING,
+        'poster' => self::POSTER,
     ];
 
     /**
@@ -239,29 +317,152 @@ final class ContentType
     public static function fromDcAttrs(array $attrs): string
     {
         // 1. genre_specific — most precise
-        foreach ((array)($attrs['genre_specific'] ?? []) as $g) {
-            $key = strtolower(trim((string)$g));
-            if (isset(self::GENRE_SPECIFIC_MAP[$key])) {
-                return self::GENRE_SPECIFIC_MAP[$key];
+        foreach ((array)($attrs[ItemField::GENRE_SPECIFIC] ?? []) as $g) {
+            if ($type = self::lookupGenreType((string) $g, self::GENRE_SPECIFIC_MAP, self::GENRE_BASIC_MAP)) {
+                return $type;
             }
         }
 
         // 2. genre_basic
-        foreach ((array)($attrs['genre_basic'] ?? []) as $g) {
-            $key = strtolower(trim((string)$g));
-            if (isset(self::GENRE_BASIC_MAP[$key])) {
-                return self::GENRE_BASIC_MAP[$key];
+        foreach ((array)($attrs[ItemField::GENRE_BASIC] ?? []) as $g) {
+            if ($type = self::lookupGenreType((string) $g, self::GENRE_BASIC_MAP, self::GENRE_SPECIFIC_MAP)) {
+                return $type;
             }
         }
 
         // 3. type_of_resource
         $typeRaw = $attrs['type_of_resource'] ?? '';
-        $type    = strtolower(trim(is_array($typeRaw) ? ($typeRaw[0] ?? '') : (string)$typeRaw));
-        if (isset(self::TYPE_OF_RESOURCE_MAP[$type])) {
-            return self::TYPE_OF_RESOURCE_MAP[$type];
+        foreach ((array) $typeRaw as $value) {
+            $type = self::lookupMappedType((string) $value, self::TYPE_OF_RESOURCE_MAP);
+            if ($type !== null) {
+                return $type;
+            }
         }
 
         return self::OBJECT;
+    }
+
+    /**
+     * Derive a canonical ContentType slug from any normalized record.
+     *
+     * Handles both DC-style datasets (genre_specific, genre_basic, type_of_resource)
+     * and museum/general datasets where type lives in fields like `type`,
+     * `classification`, `objectType`, `category`, `tipo`, `classe`, etc.
+     *
+     * Listeners call this after their extractions to stamp content_type onto the row.
+     * Resolution order:
+     *   1. content_type already set → pass through
+     *   2. DC-style genre fields → fromDcAttrs()
+     *   3. Common type/classification fields → GENRE_SPECIFIC_MAP → GENRE_BASIC_MAP
+     *   4. Fallback → self::OBJECT
+     */
+    public static function fromRecord(array $record): string
+    {
+        // Already resolved upstream
+        if (!empty($record[ItemField::CONTENT_TYPE])) {
+            return (string) $record[ItemField::CONTENT_TYPE];
+        }
+
+        // DC-style fields (md/europeana/LOC datasets)
+        $dcKeys = [ItemField::GENRE_SPECIFIC, 'genreSpecific', ItemField::GENRE_BASIC, 'genreBasic',
+                   'type_of_resource', 'typeOfResource'];
+        $dcAttrs = array_filter(array_intersect_key($record, array_flip($dcKeys)));
+        if ($dcAttrs) {
+            // normalise camelCase keys back to snake_case for fromDcAttrs
+            $normalised = [];
+            foreach ($dcAttrs as $k => $v) {
+                $snake = strtolower(preg_replace('/[A-Z]/', '_$0', lcfirst($k)));
+                $normalised[$snake] = $v;
+            }
+            $resolved = self::fromDcAttrs($normalised);
+            if ($resolved !== self::OBJECT) {
+                return $resolved;
+            }
+        }
+
+        // Common type/classification fields used by museum APIs
+        $candidates = ['type', 'classification', 'objectType', 'object_type',
+                       'category', 'tipo', 'classe', 'klasse'];
+        foreach ($candidates as $field) {
+            $value = $record[$field] ?? null;
+            if ($value === null || $value === '' || $value === []) {
+                continue;
+            }
+            foreach ((array) $value as $v) {
+                if ($type = self::lookupGenreType((string) $v, self::GENRE_SPECIFIC_MAP, self::GENRE_BASIC_MAP)) {
+                    return $type;
+                }
+            }
+        }
+
+        return self::OBJECT;
+    }
+
+    private static function lookupGenreType(string $value, array $primaryMap, array $fallbackMap): ?string
+    {
+        return self::lookupMappedType($value, $primaryMap)
+            ?? self::lookupMappedType($value, $fallbackMap)
+            ?? self::lookupSuffixType($value);
+    }
+
+    private static function lookupMappedType(string $value, array $map): ?string
+    {
+        foreach (self::lookupKeys($value) as $key) {
+            if (isset($map[$key])) {
+                return $map[$key];
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Common museum feeds often use descriptive phrases such as "bark paintings".
+     * After singularization, a suffix check catches those without adding every phrase.
+     */
+    private static function lookupSuffixType(string $value): ?string
+    {
+        foreach (self::lookupKeys($value) as $key) {
+            foreach (self::GENRE_SUFFIX_MAP as $suffix => $type) {
+                if ($key === $suffix || str_ends_with($key, ' '.$suffix)) {
+                    return $type;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    private static function lookupKeys(string $value): array
+    {
+        $key = strtolower(trim($value));
+        if ($key === '') {
+            return [];
+        }
+
+        $keys = [$key];
+        $inflector = self::$inflector ??= new EnglishInflector();
+
+        foreach ($inflector->singularize($key) as $singular) {
+            $singular = strtolower(trim($singular));
+            if ($singular !== '') {
+                $keys[] = $singular;
+            }
+        }
+
+        $lastSpace = strrpos($key, ' ');
+        if ($lastSpace !== false) {
+            $prefix = substr($key, 0, $lastSpace + 1);
+            $lastWord = substr($key, $lastSpace + 1);
+            foreach ($inflector->singularize($lastWord) as $singularLastWord) {
+                $singularLastWord = strtolower(trim($singularLastWord));
+                if ($singularLastWord !== '') {
+                    $keys[] = $prefix.$singularLastWord;
+                }
+            }
+        }
+
+        return array_values(array_unique($keys));
     }
 
     /**
@@ -286,5 +487,42 @@ final class ContentType
     public static function uri(string $contentType): ?string
     {
         return self::URIS[$contentType] ?? null;
+    }
+
+    /**
+     * Map a ContentType slug to the canonical BaseItemDto subclass FQCN.
+     * Falls back to GenericItemDto when no specific subclass exists.
+     */
+    public static function dtoClass(string $contentType): string
+    {
+        return match ($contentType) {
+            self::PHOTOGRAPH, self::STEREOGRAPH, self::SLIDE, self::NEGATIVE
+                => PhotographDto::class,
+            self::POSTCARD
+                => PostcardDto::class,
+            self::DRAWING, self::PAINTING, self::PRINT, self::POSTER
+                => DrawingDto::class,
+            self::MAP, self::ATLAS
+                => MapDto::class,
+            self::NEWSPAPER, self::PERIODICAL
+                => NewspaperDto::class,
+            self::CORRESPONDENCE
+                => CorrespondenceDto::class,
+            self::MANUSCRIPT
+                => ManuscriptDto::class,
+            self::BOOK
+                => BookDto::class,
+            self::DOCUMENT
+                => DocumentDto::class,
+            self::EPHEMERA
+                => EphemeraDto::class,
+            self::AUDIO
+                => AudioDto::class,
+            self::FILM
+                => FilmDto::class,
+            self::OBJECT
+                => ArtifactDto::class,
+            default => GenericItemDto::class,
+        };
     }
 }

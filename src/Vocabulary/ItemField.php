@@ -25,6 +25,22 @@ interface ItemField
     const ID          = 'id';
     const TITLE       = 'title';
     const DESCRIPTION = 'description';
+
+    /** Detailed physical description: form, materials, markings, condition.
+     *  May come from the source catalog or from AI vision (pass 1). */
+    const PHYSICAL_DESCRIPTION = 'physical_description';
+
+    /** AI pass 2: physical observation + provenance + cultural context → researcher narrative. */
+    const CONTEXT_DESCRIPTION  = 'context_description';
+
+    /** Supplementary notes beyond the main description. */
+    const NOTES       = 'notes';
+
+    /** Generic object-type classification (source vocabulary varies per dataset). */
+    const TYPE        = 'type';
+    const GENRE_SPECIFIC = 'genre_specific';
+    const GENRE_BASIC    = 'genre_basic';
+
     const URL         = 'url';
     const CITATION    = 'citation';
     const CITATION_URL = 'citation_url';

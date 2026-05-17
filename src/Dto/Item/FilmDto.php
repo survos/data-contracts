@@ -1,0 +1,21 @@
+<?php
+declare(strict_types=1);
+
+namespace Survos\DataContracts\Dto\Item;
+
+use Survos\DataContracts\Attribute\ClassMeta;
+use Survos\DataContracts\Metadata\ContentType;
+
+#[ClassMeta(
+    label: 'Film',
+    description: 'Moving image works: newsreels, home movies, documentaries, and silent films.',
+)]
+class FilmDto extends BaseItemDto
+{
+    /** Physical format e.g. "16mm", "35mm", "VHS", "Digital" */
+    public ?string $format   = null;
+    public ?string $duration = null;
+    public bool    $hasTranscription = false;
+
+    public static function contentType(): string { return ContentType::FILM; }
+}

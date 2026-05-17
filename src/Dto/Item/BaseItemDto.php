@@ -25,7 +25,9 @@ abstract class BaseItemDto
 {
     // ── Identity ──────────────────────────────────────────────────────────────
 
-    public ?string $id          = null;
+    public ?string $id = null {
+        set(mixed $value) => $this->id = $value !== null ? (string) $value : null;
+    }
     public ?string $sourceUrl   = null;
     public ?string $contentType = null;
     public ?string $aggregator  = null;
@@ -35,13 +37,26 @@ abstract class BaseItemDto
     /** dcterms:title */
     public ?string $title = null;
 
-    /** dcterms:description — human-readable finding-aid prose */
+    /** dcterms:description — short curatorial text from the source institution */
     public ?string $description = null;
+
+    /**
+     * Detailed physical description of the object as observed:
+     * form, materials, markings, condition, dimensions.
+     * May come from the source catalog or from AI pass 1 (image analysis).
+     */
+    public ?string $physicalDescription = null;
+
+    /**
+     * AI pass 2: combines physical observation with provenance, period,
+     * and cultural context into a researcher-facing narrative.
+     * Richer than physicalDescription; intended for display and discovery.
+     */
+    public ?string $contextDescription = null;
 
     /**
      * ai:denseSummary — ≤ 400 char retrieval-optimised summary.
      * Entity-rich, factual, no filler. Used by Meilisearch /chat, RAG, chatbots.
-     * AI-generated but treated as a core field alongside title/description.
      */
     public ?string $denseSummary = null;
 
@@ -50,6 +65,9 @@ abstract class BaseItemDto
 
     /** Integer year for sorting/filtering */
     public ?int $year = null;
+
+    /** ItemField::CITATION — canonical URL or attribution string for the record */
+    public ?string $citation = null;
 
     /** dcterms:rights */
     public ?string $rights = null;
@@ -101,6 +119,11 @@ abstract class BaseItemDto
     public ?string $iiifManifest  = null;
     public ?string $thumbnailUrl  = null;
     public ?string $largeImageUrl = null;
+
+    // ── Unmapped fields ───────────────────────────────────────────────────────
+
+    /** Fields present in the source record that don't map to any DTO property. */
+    public array $unmapped = [];
 
     /** Best display label: title → description prefix → id */
     public function label(): string
@@ -241,13 +264,25 @@ abstract class BaseItemDto
     public static function fromNormalized(array $row): static
     {
         $dto = new static();
-        foreach (get_object_vars($dto) as $prop => $_) {
+        $knownProps = array_keys(get_object_vars($dto));
+
+        foreach ($knownProps as $prop) {
+            if ($prop === 'unmapped') {
+                continue;
+            }
             if (array_key_exists($prop, $row)) {
-                $dto->$prop = $row[$prop];
+                $dto->$prop = $row[$prop]; // property hooks handle coercion (e.g. int id → string)
             }
         }
-        // Handle snake_case aliases
-        $dto->id            ??= $row[ItemField::SOURCE_ID]   ?? $row['id'] ?? $row[ItemField::ARK] ?? null;
+
+        foreach ($row as $key => $value) {
+            if (!in_array($key, $knownProps, true)) {
+                $dto->unmapped[$key] = $value;
+            }
+        }
+
+        // Handle snake_case / aliased keys not covered by direct property name match
+        $dto->id            ??= $row[ItemField::SOURCE_ID]   ?? $row[ItemField::ARK] ?? null;
         $dto->sourceUrl     ??= $row[DcTerms::SOURCE->value] ?? $row[ItemField::PAGE_URL]   ?? null;
         $dto->contentType   ??= $row[ItemField::CONTENT_TYPE]?? static::contentType();
         $dto->aggregator    ??= $row[ItemField::AGGREGATOR]  ?? null;
