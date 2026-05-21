@@ -56,9 +56,21 @@ interface ItemField
     const ARK          = 'ark';
 
     // ── Media ─────────────────────────────────────────────────────────────────
+    /** Provider-supplied small/fast fallback image. Used when imgproxy is unavailable. */
     const THUMBNAIL_URL   = 'thumbnail_url';
-    /** Full-resolution download URL for non-IIIF sources. */
+    /**
+     * Full-resolution image URL for non-IIIF sources (plain JPEG/PNG/TIFF).
+     * Fed to the imgproxy Stimulus controller for on-demand resizing as elements
+     * enter the viewport — avoids 429s and provider thumbnail quality issues.
+     */
     const LARGE_IMAGE_URL = 'large_image_url';
+    /**
+     * IIIF Image API base URL — a real IIIF endpoint, NOT a plain image URL.
+     * Append standard path segments to get any size:
+     *   {iiif_base}/full/max/0/default.jpg       → original
+     *   {iiif_base}/full/!512,512/0/default.webp → thumbnail
+     * Distinct from iiif_manifest (Presentation API) and large_image_url (plain JPEG).
+     */
     const IIIF_BASE       = 'iiif_base';
     const IIIF_MANIFEST   = 'iiif_manifest';
     const IIIF_INFO       = 'iiif_info';
