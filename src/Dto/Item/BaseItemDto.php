@@ -60,6 +60,12 @@ abstract class BaseItemDto
      */
     public ?string $denseSummary = null;
 
+    /**
+     * search_summary - deterministic BM25-friendly text assembled from normalized fields.
+     * Distinct from ai:denseSummary, which is an AI-generated retrieval summary.
+     */
+    public ?string $searchSummary = null;
+
     /** dcterms:date — display string, may be fuzzy ("ca. 1920") */
     public ?string $date = null;
 
@@ -251,6 +257,7 @@ abstract class BaseItemDto
             ItemField::IIIF_BASE          => $this->iiifBase,
             ItemField::IIIF_MANIFEST      => $this->iiifManifest,
             ItemField::THUMBNAIL_URL      => $this->thumbnailUrl,
+            ItemField::SEARCH_SUMMARY     => $this->searchSummary,
             ItemField::DENSE_SUMMARY      => $this->denseSummary,
         ], static fn($v) => $v !== null && $v !== '' && $v !== []);
 
@@ -294,6 +301,7 @@ abstract class BaseItemDto
         $dto->iiifManifest  ??= $row[ItemField::IIIF_MANIFEST] ?? null;
         $dto->thumbnailUrl  ??= $row[ItemField::THUMBNAIL_URL]   ?? null;
         $dto->largeImageUrl ??= $row[ItemField::LARGE_IMAGE_URL] ?? null;
+        $dto->searchSummary ??= $row[ItemField::SEARCH_SUMMARY] ?? null;
         $dto->denseSummary  ??= $row[ItemField::DENSE_SUMMARY] ?? null;
         return $dto;
     }
@@ -334,6 +342,7 @@ abstract class BaseItemDto
             DcTerms::SOURCE->value     => $this->sourceUrl,
             ItemField::LATITUDE        => $this->latitude,
             ItemField::LONGITUDE       => $this->longitude,
+            ItemField::SEARCH_SUMMARY  => $this->searchSummary,
             ItemField::DENSE_SUMMARY   => $this->denseSummary,
         ], static fn($v) => $v !== null && $v !== [] && $v !== '');
     }

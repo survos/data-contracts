@@ -6,15 +6,25 @@ namespace Survos\DataContracts\Vocabulary;
 use Survos\DataContracts\Attribute\VocabTerm;
 
 /**
- * Museum domain vocabulary — authority-reference type codes shared across
- * md, zm, mus, and pixie.
+ * Museum authority vocabulary — 3-letter codes for controlled vocabulary fields.
  *
- * Short codes (cul, tec, mat, …) serve as both Pixie table/entity-type codes
- * and normalized JSONL field keys.
+ * Use MuseumVocab for fields describing WHO made it, WHAT it's made of, WHERE it's
+ * from, and WHAT it depicts: cul (culture), med (medium), mat (material), tec
+ * (technique), pla (place), per (person), obj (subject), org (organisation).
+ * These codes are the FIELD KEYS in normalized JSONL records and TermSet codes in folios.
+ *
+ * NOT for core record fields. Those live in ItemField (id, title, language, …).
+ *
+ * Rule of thumb:
+ *   "What is this object made of / by / from / about?" → MuseumVocab (med, per, cul, obj)
+ *   "What TYPE is this object?" → ItemField::GENRE_SPECIFIC or ItemField::TYPE
+ *
+ * In normalize listeners, always write:
+ *   $row[MuseumVocab::MEDIUM]  = ...   ✓   NOT $row['medium']   ✗
+ *   $row[MuseumVocab::CULTURE] = ...   ✓   NOT $row['culture']  ✗
  *
  * Each constant carries a #[VocabTerm] attribute with label, linked-data URI,
- * and AI extraction hint — consumed by TypeEnrichmentTask to auto-generate
- * field prompts without hardcoding.
+ * and AI extraction hint — consumed by TypeEnrichmentTask to auto-generate prompts.
  */
 interface MuseumVocab
 {

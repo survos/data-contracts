@@ -6,18 +6,22 @@ namespace Survos\DataContracts\Vocabulary;
 use Survos\DataContracts\Attribute\VocabTerm;
 
 /**
- * Canonical field keys for normalized item records.
+ * Canonical field keys for normalized item records — CORE fields only.
  *
- * Two roles:
- *   1. #[Map(source: ItemField::TITLE)] — plain source key in raw API/CSV data
- *   2. Normalized JSONL output keys for non-DC, non-museum fields
+ * Use ItemField for: id, title, description, language, date, url, content_type,
+ * genre_specific, thumbnail_url, large_image_url, and other record-level fields.
+ * Values are lowercase_snake_case strings.
  *
- * DC output predicates (dcterms:title, dcterms:creator, …) → DcTerms enum
- * Museum authority codes (cul, tec, mat, …)                → MuseumVocab interface
+ * NOT for museum authority vocabulary. Those live in MuseumVocab with 3-letter
+ * codes (cul, med, mat, tec, pla, per, obj, org). When writing a normalize
+ * listener, use MuseumVocab::MEDIUM not 'medium', MuseumVocab::CULTURE not
+ * 'culture', etc.
  *
- * Note: plain names here (e.g. 'title') are distinct from their dcterms: equivalents
- * ('dcterms:title'). Use DcTerms::TITLE->value for the output predicate,
- * ItemField::TITLE as the source/input key name.
+ * Rule of thumb:
+ *   "What TYPE is this object?" → ItemField::GENRE_SPECIFIC, ItemField::TYPE
+ *   "What AUTHORITY controlled vocab applies?" → MuseumVocab (cul, med, per, …)
+ *
+ * DC output predicates (dcterms:title, …) → DcTerms enum
  */
 interface ItemField
 {
@@ -40,6 +44,12 @@ interface ItemField
     const TYPE        = 'type';
     const GENRE_SPECIFIC = 'genre_specific';
     const GENRE_BASIC    = 'genre_basic';
+
+    /** Generic keyword list for non-museum datasets; feeds MuseumVocab::SUBJECT bucket. */
+    const KEYWORDS    = 'keywords';
+
+    /** Dublin Core creator/author; feeds MuseumVocab::PERSON bucket. */
+    const CREATOR     = 'creator';
 
     const URL         = 'url';
     const CITATION    = 'citation';
@@ -74,6 +84,18 @@ interface ItemField
     const IIIF_BASE       = 'iiif_base';
     const IIIF_MANIFEST   = 'iiif_manifest';
     const IIIF_INFO       = 'iiif_info';
+
+    // -- Deterministic search fields ------------------------------------------
+    /**
+     * Low-cost deterministic summary generated from normalized catalogue fields.
+     * This is NOT an AI dense summary. It exists so FTS/BM25 search has a compact,
+     * readable text field even when AI enrichment is unavailable for cost or time.
+     */
+    #[VocabTerm(
+        label: 'Search summary',
+        aiHint: 'Deterministic BM25-friendly text assembled from normalized catalogue metadata. Do not treat as an AI claim.',
+    )]
+    const SEARCH_SUMMARY = 'search_summary';
 
     // ── AI-generated core fields ──────────────────────────────────────────────
     /**
