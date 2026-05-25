@@ -85,7 +85,7 @@ abstract class BaseItemDto
     public ?string $reuseAllowed = null;
 
     /** dcterms:language */
-    public ?array $language = null;
+    public ?string $language = null;
 
     /** dcterms:identifier — local accession number */
     public ?string $identifierLocal = null;
@@ -270,6 +270,11 @@ abstract class BaseItemDto
      */
     public static function fromNormalized(array $row): static
     {
+        assert(
+            !array_filter(array_keys($row), static fn(string $k): bool => str_contains($k, '_') && !str_starts_with($k, 'ai:')),
+            'Normalized row keys must be camelCase; found snake_case: ' . implode(', ', array_filter(array_keys($row), static fn(string $k): bool => str_contains($k, '_') && !str_starts_with($k, 'ai:')))
+        );
+
         $dto = new static();
         $knownProps = array_keys(get_object_vars($dto));
 
@@ -295,8 +300,8 @@ abstract class BaseItemDto
         $dto->aggregator    ??= $row[ItemField::AGGREGATOR]  ?? null;
         $dto->creators      ??= $row[DcTerms::CREATOR->value]?? $row['name_facet']          ?? null;
         $dto->subjects      ??= $row[DcTerms::SUBJECT->value]?? $row['subject_facet']       ?? null;
-        $dto->subjectsGeographic ??= $row['subject_geographic'] ?? null;
-        $dto->identifierLocal    ??= $row['identifier_local']   ?? null;
+        $dto->subjectsGeographic ??= $row['subjectsGeographic'] ?? null;
+        $dto->identifierLocal    ??= $row['identifierLocal']   ?? null;
         $dto->iiifBase      ??= $row[ItemField::IIIF_BASE]     ?? null;
         $dto->iiifManifest  ??= $row[ItemField::IIIF_MANIFEST] ?? null;
         $dto->thumbnailUrl  ??= $row[ItemField::THUMBNAIL_URL]   ?? null;
