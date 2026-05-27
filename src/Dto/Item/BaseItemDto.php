@@ -295,7 +295,7 @@ abstract class BaseItemDto
 
         // Handle snake_case / aliased keys not covered by direct property name match
         $dto->id            ??= $row[ItemField::SOURCE_ID]   ?? $row[ItemField::ARK] ?? null;
-        $dto->sourceUrl     ??= $row[DcTerms::SOURCE->value] ?? $row[ItemField::PAGE_URL]   ?? null;
+        $dto->sourceUrl     ??= $row[DcTerms::SOURCE->value] ?? $row[ItemField::CITATION_URL] ?? $row[ItemField::PAGE_URL] ?? null;
         $dto->contentType   ??= $row[ItemField::CONTENT_TYPE]?? static::contentType();
         $dto->aggregator    ??= $row[ItemField::AGGREGATOR]  ?? null;
         $dto->creators      ??= $row[DcTerms::CREATOR->value]?? $row['name_facet']          ?? null;

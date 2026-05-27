@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Survos\DataContracts\Metadata;
 
 use Symfony\Component\String\Inflector\EnglishInflector;
+use Survos\DataContracts\Dto\Core\PersonDto;
 use Survos\DataContracts\Dto\Item\ArtifactDto;
 use Survos\DataContracts\Dto\Item\EphemeraDto;
 use Survos\DataContracts\Dto\Item\AudioDto;
@@ -68,6 +69,9 @@ final class ContentType
     // ── Object / Artifact ────────────────────────────────────────────────────
     const OBJECT        = 'object';         // dcmitype:PhysicalObject (fallback)
 
+    // ── Agent cores ─────────────────────────────────────────────────────────────
+    const PERSON        = 'person';         // foaf:Person; used with the compact folio core code `per`
+
     // ── LOC URIs for RDF / zm Vocabulary interop ─────────────────────────────
     const URIS = [
         self::PHOTOGRAPH    => 'http://id.loc.gov/vocabulary/graphicMaterials/tgm007965',
@@ -92,6 +96,7 @@ final class ContentType
         self::FILM          => 'http://purl.org/dc/dcmitype/MovingImage',
         self::AUDIO         => 'http://purl.org/dc/dcmitype/Sound',
         self::OBJECT        => 'http://purl.org/dc/dcmitype/PhysicalObject',
+        self::PERSON        => 'http://xmlns.com/foaf/0.1/Person',
     ];
 
     /**
@@ -522,6 +527,8 @@ final class ContentType
                 => FilmDto::class,
             self::OBJECT
                 => ArtifactDto::class,
+            self::PERSON
+                => PersonDto::class,
             default => GenericItemDto::class,
         };
     }
