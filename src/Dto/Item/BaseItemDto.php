@@ -6,6 +6,7 @@ namespace Survos\DataContracts\Dto\Item;
 use Survos\DataContracts\Metadata\ContentType;
 use Survos\DataContracts\Vocabulary\DcTerms;
 use Survos\DataContracts\Vocabulary\ItemField;
+use Survos\Lingua\Contracts\Attribute\Translatable;
 
 /**
  * Base DTO for all museum collection items.
@@ -35,9 +36,11 @@ abstract class BaseItemDto
     // ── Core DC fields (always present regardless of type) ───────────────────
 
     /** dcterms:title */
+    #[Translatable]
     public ?string $title = null;
 
     /** dcterms:description — short curatorial text from the source institution */
+    #[Translatable]
     public ?string $description = null;
 
     /**
@@ -45,6 +48,7 @@ abstract class BaseItemDto
      * form, materials, markings, condition, dimensions.
      * May come from the source catalog or from AI pass 1 (image analysis).
      */
+    #[Translatable]
     public ?string $physicalDescription = null;
 
     /**
@@ -52,6 +56,7 @@ abstract class BaseItemDto
      * and cultural context into a researcher-facing narrative.
      * Richer than physicalDescription; intended for display and discovery.
      */
+    #[Translatable]
     public ?string $contextDescription = null;
 
     /**

@@ -24,8 +24,33 @@ abstract class PhysicalObjectDto extends BaseItemDto
     /** MuseumVocab::TECHNIQUE — fabrication techniques, e.g. ['Etching', 'Lithograph'] */
     public ?array $tec = null;
 
-    /** MuseumVocab::DIMENSIONS — human-readable dimensions string */
-    public ?string $dimensions = null;
+    /**
+     * MuseumVocab::DIMENSIONS — structured dimension records.
+     *
+     * Each entry: {height?, width?, length?, depth?, radius?, units, name?}
+     * where height/width/length/depth/radius are numeric values in `units`
+     * (e.g. "cm", "in", "mm"). `name` is an optional label like "framed",
+     * "sight", "with mount", etc. Producers should emit only the keys present
+     * on the source record.
+     *
+     * @var list<array<string, mixed>>|null
+     */
+    public ?array $dimensions = null;
+
+    /**
+     * Original free-text dimensions string from the source, kept as a fallback
+     * when the normalizer cannot fully parse it (e.g. fractional inches,
+     * museum-specific shorthand). Templates may render this verbatim when
+     * `$dimensions` is empty.
+     */
+    public ?string $dimensionsRaw = null;
+
+    /**
+     * Weight records. Each entry: {amount, units, name?}.
+     *
+     * @var list<array<string, mixed>>|null
+     */
+    public ?array $weight = null;
 
     /** MuseumVocab::CULTURE — cultural attribution, e.g. ['Mochica', 'Inca'] */
     public ?array $cul = null;
