@@ -32,6 +32,7 @@ interface MuseumVocab
         label: 'Culture',
         uri: 'http://id.loc.gov/vocabulary/graphicMaterials/tgm002187',
         aiHint: 'Named cultural group, civilisation, or ethnic origin, e.g. "Roman", "Aztec", "Edo period Japan".',
+        termSet: true,
     )]
     const CULTURE = 'cul';
 
@@ -39,6 +40,7 @@ interface MuseumVocab
         label: 'Technique',
         uri: 'http://purl.org/dc/terms/medium',
         aiHint: 'Method or process of manufacture, e.g. "Lost-wax casting", "Oil on canvas", "Woodblock print".',
+        termSet: true,
     )]
     const TECHNIQUE = 'tec';
 
@@ -46,6 +48,7 @@ interface MuseumVocab
         label: 'Material',
         uri: 'http://purl.org/dc/terms/medium',
         aiHint: 'Physical substance(s) the object is made from, e.g. "Terracotta", "Gold and turquoise", "Silk".',
+        termSet: true,
     )]
     const MATERIAL = 'mat';
 
@@ -53,6 +56,7 @@ interface MuseumVocab
         label: 'Medium',
         uri: 'http://purl.org/dc/terms/medium',
         aiHint: 'Combined material and technique shorthand as used by the holding institution.',
+        termSet: true,
     )]
     const MEDIUM = 'med';
 
@@ -60,6 +64,7 @@ interface MuseumVocab
         label: 'Place',
         uri: 'http://purl.org/dc/terms/spatial',
         aiHint: 'Geographic findspot, place of origin, or provenance location.',
+        termSet: true,
     )]
     const PLACE = 'pla';
 
@@ -88,6 +93,7 @@ interface MuseumVocab
         label: 'Period',
         uri: 'http://purl.org/dc/terms/temporal',
         aiHint: 'Named historical period, dynasty, or style era, e.g. "Ming Dynasty", "Victorian", "Art Deco".',
+        termSet: true,
     )]
     const PERIOD = 'period';
 
@@ -95,6 +101,7 @@ interface MuseumVocab
         label: 'Epoch',
         uri: 'http://purl.org/dc/terms/temporal',
         aiHint: 'Broad archaeological or geological era, broader than period, e.g. "Bronze Age", "Neolithic", "Classical Antiquity".',
+        termSet: true,
     )]
     const EPOCH = 'epoch';
 
@@ -103,6 +110,7 @@ interface MuseumVocab
         uri: 'http://purl.org/dc/terms/isPartOf',
         aiHint: 'Institutional or thematic collection within the holding museum.',
         aiExtractable: false,
+        termSet: true,
     )]
     const COLLECTION = 'coll';
 
@@ -110,6 +118,7 @@ interface MuseumVocab
         label: 'Department',
         aiHint: 'Curatorial department within the museum, e.g. "Ancient Near East", "Prints and Drawings".',
         aiExtractable: false,
+        termSet: true,
     )]
     const DEPARTMENT = 'dept';
 

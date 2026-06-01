@@ -37,5 +37,12 @@ final class VocabTerm
          * Defaults to true; set false for fields that come from structured source data only.
          */
         public readonly bool $aiExtractable = true,
+
+        /**
+         * Whether this field is a low-cardinality controlled vocabulary that should be promoted to a
+         * TermSet (distinct values → terms) during dataset processing and related to rows on folio
+         * import. Flagging it here is the single source of truth — no per-dataset --fields.
+         */
+        public readonly bool $termSet = false,
     ) {}
 }
