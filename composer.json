@@ -9,7 +9,7 @@
         }
     },
     "require": {
-        "php": "^8.4",
+        "php": "^8.5",
         "voku/stop-words": "^2.0",
         "survos/lingua-contracts": "^2.5"
     },
