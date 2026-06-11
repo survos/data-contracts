@@ -6,6 +6,7 @@ namespace Survos\DataContracts\Metadata;
 use Symfony\Component\String\Inflector\EnglishInflector;
 use Survos\DataContracts\Dto\Core\PersonDto;
 use Survos\DataContracts\Dto\Item\ArtifactDto;
+use Survos\DataContracts\Dto\Item\CoinDto;
 use Survos\DataContracts\Dto\Item\EphemeraDto;
 use Survos\DataContracts\Dto\Item\AudioDto;
 use Survos\DataContracts\Dto\Item\BookDto;
@@ -68,6 +69,7 @@ final class ContentType
 
     // ── Object / Artifact ────────────────────────────────────────────────────
     const OBJECT        = 'object';         // dcmitype:PhysicalObject (fallback)
+    const COIN          = 'coin';           // nmo:NumismaticObject (numismatic specimen)
 
     // ── Agent cores ─────────────────────────────────────────────────────────────
     const PERSON        = 'person';         // foaf:Person; used with the compact folio core code `per`
@@ -527,6 +529,8 @@ final class ContentType
                 => FilmDto::class,
             self::OBJECT
                 => ArtifactDto::class,
+            self::COIN
+                => CoinDto::class,
             self::PERSON
                 => PersonDto::class,
             default => GenericItemDto::class,

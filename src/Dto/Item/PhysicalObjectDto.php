@@ -64,8 +64,7 @@ abstract class PhysicalObjectDto extends BaseItemDto
     /** Holding collection identifier */
     public ?int $collectionId = null;
 
-    /** Number of associated digital images */
-    public ?int $imageCount = null;
+    // imageCount is inherited from BaseItemDto (sortable + facetable there).
 
     public static function contentType(): string
     {

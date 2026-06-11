@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Survos\DataContracts\Dto\Item;
 
+use Survos\DataContracts\Attribute\PropertyMeta;
 use Survos\DataContracts\Metadata\ContentType;
 use Survos\DataContracts\Vocabulary\DcTerms;
 use Survos\DataContracts\Vocabulary\ItemField;
@@ -130,6 +131,12 @@ abstract class BaseItemDto
     public ?string $iiifManifest  = null;
     public ?string $thumbnailUrl  = null;
     public ?string $largeImageUrl = null;
+
+    #[PropertyMeta(label: 'Image count', description: 'Number of images associated with the item.', sortable: true, facet: true)]
+    public ?int $imageCount = null;
+
+    #[PropertyMeta(label: 'Has images', description: 'Whether the item has at least one image; facet for filtering out image-less objects.', facet: true)]
+    public ?bool $hasImages = null;
 
     // ── Unmapped fields ───────────────────────────────────────────────────────
 
