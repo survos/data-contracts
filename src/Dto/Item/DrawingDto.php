@@ -12,7 +12,7 @@ use Survos\DataContracts\Metadata\ContentType;
  *
  * Subclass for more specific drawn types (CartoonDto, SketchDto, etc.)
  */
-class DrawingDto extends PhysicalObjectDto
+class DrawingDto extends ArtworkDto
 {
     public static function contentType(): string
     {

@@ -7,12 +7,14 @@ use Symfony\Component\String\Inflector\EnglishInflector;
 use Survos\DataContracts\Dto\Core\PersonDto;
 use Survos\DataContracts\Dto\Item\ArtifactDto;
 use Survos\DataContracts\Dto\Item\CoinDto;
+use Survos\DataContracts\Dto\Item\SculptureDto;
 use Survos\DataContracts\Dto\Item\EphemeraDto;
 use Survos\DataContracts\Dto\Item\AudioDto;
 use Survos\DataContracts\Dto\Item\BookDto;
 use Survos\DataContracts\Dto\Item\CorrespondenceDto;
 use Survos\DataContracts\Dto\Item\DocumentDto;
 use Survos\DataContracts\Dto\Item\DrawingDto;
+use Survos\DataContracts\Dto\Item\PaintingDto;
 use Survos\DataContracts\Dto\Item\FilmDto;
 use Survos\DataContracts\Dto\Item\GenericItemDto;
 use Survos\DataContracts\Dto\Item\ManuscriptDto;
@@ -70,6 +72,7 @@ final class ContentType
     // ── Object / Artifact ────────────────────────────────────────────────────
     const OBJECT        = 'object';         // dcmitype:PhysicalObject (fallback)
     const COIN          = 'coin';           // nmo:NumismaticObject (numismatic specimen)
+    const SCULPTURE     = 'sculpture';      // LCGFT gf2017027252 (statue, bust, relief, …)
 
     // ── Agent cores ─────────────────────────────────────────────────────────────
     const PERSON        = 'person';         // foaf:Person; used with the compact folio core code `per`
@@ -229,6 +232,25 @@ final class ContentType
         'watercolors'             => self::PAINTING,
         'watercolours'            => self::PAINTING,
         'gouaches'                => self::PAINTING,
+        // Sculpture (EN + PT)
+        'sculpture'               => self::SCULPTURE,
+        'sculptures'              => self::SCULPTURE,
+        'escultura'               => self::SCULPTURE,
+        'esculturas'              => self::SCULPTURE,
+        'statue'                  => self::SCULPTURE,
+        'statues'                 => self::SCULPTURE,
+        'estatua'                 => self::SCULPTURE,
+        'estátua'                 => self::SCULPTURE,
+        'statuette'               => self::SCULPTURE,
+        'estatueta'               => self::SCULPTURE,
+        'bust'                    => self::SCULPTURE,
+        'busts'                   => self::SCULPTURE,
+        'busto'                   => self::SCULPTURE,
+        'relief'                  => self::SCULPTURE,
+        'bas-relief'              => self::SCULPTURE,
+        'relevo'                  => self::SCULPTURE,
+        'imaginaria'             => self::SCULPTURE,
+        'imaginária'             => self::SCULPTURE,
     ];
 
     /**
@@ -370,18 +392,15 @@ final class ContentType
             return (string) $record[ItemField::CONTENT_TYPE];
         }
 
-        // DC-style fields (md/europeana/LOC datasets)
-        $dcKeys = [ItemField::GENRE_SPECIFIC, 'genreSpecific', ItemField::GENRE_BASIC, 'genreBasic',
-                   'type_of_resource', 'typeOfResource'];
-        $dcAttrs = array_filter(array_intersect_key($record, array_flip($dcKeys)));
+        // DC-style genre fields — pass them under the exact keys fromDcAttrs reads
+        // (genre_specific is the most precise signal; camel/snake both accepted).
+        $dcAttrs = array_filter([
+            ItemField::GENRE_SPECIFIC => $record[ItemField::GENRE_SPECIFIC] ?? $record['genreSpecific'] ?? null,
+            ItemField::GENRE_BASIC    => $record[ItemField::GENRE_BASIC] ?? $record['genreBasic'] ?? null,
+            'type_of_resource'        => $record['type_of_resource'] ?? $record['typeOfResource'] ?? null,
+        ]);
         if ($dcAttrs) {
-            // normalise camelCase keys back to snake_case for fromDcAttrs
-            $normalised = [];
-            foreach ($dcAttrs as $k => $v) {
-                $snake = strtolower(preg_replace('/[A-Z]/', '_$0', lcfirst($k)));
-                $normalised[$snake] = $v;
-            }
-            $resolved = self::fromDcAttrs($normalised);
+            $resolved = self::fromDcAttrs($dcAttrs);
             if ($resolved !== self::OBJECT) {
                 return $resolved;
             }
@@ -507,8 +526,10 @@ final class ContentType
                 => PhotographDto::class,
             self::POSTCARD
                 => PostcardDto::class,
-            self::DRAWING, self::PAINTING, self::PRINT, self::POSTER
+            self::DRAWING, self::PRINT, self::POSTER
                 => DrawingDto::class,
+            self::PAINTING
+                => PaintingDto::class,
             self::MAP, self::ATLAS
                 => MapDto::class,
             self::NEWSPAPER, self::PERIODICAL
@@ -531,6 +552,8 @@ final class ContentType
                 => ArtifactDto::class,
             self::COIN
                 => CoinDto::class,
+            self::SCULPTURE
+                => SculptureDto::class,
             self::PERSON
                 => PersonDto::class,
             default => GenericItemDto::class,
