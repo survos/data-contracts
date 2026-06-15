@@ -7,6 +7,7 @@ use Survos\DataContracts\Attribute\PropertyMeta;
 use Survos\DataContracts\Metadata\ContentType;
 use Survos\DataContracts\Vocabulary\DcTerms;
 use Survos\DataContracts\Vocabulary\ItemField;
+use Survos\FieldBundle\Attribute\Field;
 use Survos\Lingua\Contracts\Attribute\Translatable;
 
 /**
@@ -33,6 +34,14 @@ abstract class BaseItemDto
     public ?string $sourceUrl   = null;
     public ?string $contentType = null;
     public ?string $aggregator  = null;
+
+    /** Original source asset format: 'pdf' (single document) or 'images' (page-image set). A facet. */
+    #[Field(facet: true, filterable: true)]
+    public ?string $sourceFormat = null;
+
+    /** Pipeline processing stage (raw / normalized / enriched). A facet so you can filter to enriched items; later this can be made dev-only. */
+    #[Field(facet: true, filterable: true)]
+    public ?string $stage = null;
 
     // ── Core DC fields (always present regardless of type) ───────────────────
 
@@ -72,14 +81,25 @@ abstract class BaseItemDto
      */
     public ?string $searchSummary = null;
 
+    /**
+     * Full OCR / transcription text, folded in from the vault's claims.jsonl (ai:ocrText).
+     * Long-form; rendered in a dedicated panel, not the field table. For multi-page items
+     * this is the item-level concatenation; per-page text lives on the image core.
+     */
+    public ?string $ocrText = null;
+
     /** dcterms:date — display string, may be fuzzy ("ca. 1920") */
     public ?string $date = null;
 
-    /** Integer year for sorting/filtering */
+    /** Integer year for sorting/filtering. Facet (numeric → range slider in the grid). */
+    #[PropertyMeta(label: 'Year', description: 'Coverage/production year.', sortable: true, facet: true)]
     public ?int $year = null;
 
     /** ItemField::CITATION — canonical URL or attribution string for the record */
     public ?string $citation = null;
+
+    /** ItemField::CITATION_URL — deep link back to the source record (e.g. the NARA catalog page). Rendered as the "Original" link on the folio item page. */
+    public ?string $citationUrl = null;
 
     /** dcterms:rights */
     public ?string $rights = null;
@@ -135,8 +155,16 @@ abstract class BaseItemDto
     #[PropertyMeta(label: 'Image count', description: 'Number of images associated with the item.', sortable: true, facet: true)]
     public ?int $imageCount = null;
 
+    /** Number of pages (PDF pages or page-images). Known precisely after OCR; falls back to imageCount. */
+    #[PropertyMeta(label: 'Page count', description: 'Number of pages in the document.', sortable: true)]
+    public ?int $pageCount = null;
+
     #[PropertyMeta(label: 'Has images', description: 'Whether the item has at least one image; facet for filtering out image-less objects.', facet: true)]
     public ?bool $hasImages = null;
+
+    /** Coarse bucket of imageCount (digital-object count) — '1' / '2-4' / '5-20' / '21+'. A facet for filtering small vs huge items (e.g. microfilm rolls) during dev. */
+    #[Field(facet: true, filterable: true)]
+    public ?string $sizeBucket = null;
 
     // ── Unmapped fields ───────────────────────────────────────────────────────
 
