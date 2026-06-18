@@ -152,12 +152,20 @@ abstract class BaseItemDto
     public ?string $thumbnailUrl  = null;
     public ?string $largeImageUrl = null;
 
+    /** Downloadable PDF of the document (e.g. DC document_access.pdf). When set, folio shows the
+     *  pdf.js viewer instead of the image viewer; it is also the source for the split/OCR pipeline. */
+    public ?string $pdfUrl = null;
+
     #[PropertyMeta(label: 'Image count', description: 'Number of images associated with the item.', sortable: true, facet: true)]
     public ?int $imageCount = null;
 
     /** Number of pages (PDF pages or page-images). Known precisely after OCR; falls back to imageCount. */
     #[PropertyMeta(label: 'Page count', description: 'Number of pages in the document.', sortable: true)]
     public ?int $pageCount = null;
+
+    /** Size of $pdfUrl in bytes (cheap to learn from the PDF's Content-Range during the page probe). */
+    #[PropertyMeta(label: 'PDF size', description: 'Byte size of the source PDF.', sortable: true)]
+    public ?int $pdfBytes = null;
 
     #[PropertyMeta(label: 'Has images', description: 'Whether the item has at least one image; facet for filtering out image-less objects.', facet: true)]
     public ?bool $hasImages = null;
