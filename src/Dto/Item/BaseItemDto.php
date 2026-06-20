@@ -67,6 +67,10 @@ abstract class BaseItemDto
     #[Map(source: ['object_material_technique', 'objectMaterialTechnique'])]
     public ?string $physicalDescription = null;
 
+    /** Ownership history (museum provenance line, e.g. Walters' "provenance" extra). Free text. */
+    #[Map(source: ['provenance', 'dcterms:provenance'])]
+    public ?string $provenance = null;
+
     /**
      * AI pass 2: combines physical observation with provenance, period,
      * and cultural context into a researcher-facing narrative.
