@@ -8,6 +8,7 @@ use Survos\DataContracts\Metadata\ContentType;
 use Survos\DataContracts\Vocabulary\DcTerms;
 use Survos\DataContracts\Vocabulary\ItemField;
 use Survos\FieldBundle\Attribute\Field;
+use Survos\FieldBundle\Attribute\Map;
 use Survos\Lingua\Contracts\Attribute\Translatable;
 
 /**
@@ -46,10 +47,12 @@ abstract class BaseItemDto
     // ── Core DC fields (always present regardless of type) ───────────────────
 
     /** dcterms:title */
+    #[Map(source: ['title', DcTerms::TITLE->value, 'titulo', 'titel'])]
     #[Translatable]
     public ?string $title = null;
 
     /** dcterms:description — short curatorial text from the source institution */
+    #[Map(source: ['description', DcTerms::DESCRIPTION->value, 'descripcion', 'beschreibung'])]
     #[Translatable]
     public ?string $description = null;
 
@@ -89,6 +92,7 @@ abstract class BaseItemDto
     public ?string $ocrText = null;
 
     /** dcterms:date — display string, may be fuzzy ("ca. 1920") */
+    #[Map(source: ['date', DcTerms::DATE->value])]
     public ?string $date = null;
 
     /** Integer year for sorting/filtering. Facet (numeric → range slider in the grid). */
@@ -129,17 +133,22 @@ abstract class BaseItemDto
 
     // ── Subjects ──────────────────────────────────────────────────────────────
 
-    /** dcterms:subject — keyword/topical subjects */
+    /** dcterms:subject — keyword/topical subjects (incl. AI keywords). A sidebar facet. */
+    #[Map(source: ['subjects', DcTerms::SUBJECT->value, 'subject_facet', 'keywords'])]
+    #[Field(facet: true, filterable: true)]
     public ?array $subjects = null;
 
     /** dcterms:spatial — geographic subjects */
+    #[Field(facet: true, filterable: true)]
     public ?array $subjectsGeographic = null;
 
     // ── Geography ─────────────────────────────────────────────────────────────
 
+    #[Field(facet: true, filterable: true)]
     public ?string $country  = null;
     public ?string $state    = null;
     public ?string $county   = null;
+    #[Field(facet: true, filterable: true)]
     public ?string $city     = null;
     public ?float  $latitude = null;
     public ?float  $longitude= null;
