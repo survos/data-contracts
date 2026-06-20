@@ -97,7 +97,7 @@ abstract class BaseItemDto
     public ?string $ocrText = null;
 
     /** dcterms:date — display string, may be fuzzy ("ca. 1920") */
-    #[Map(source: ['date', DcTerms::DATE->value, 'creationDate', 'CreationDate', 'DateText', 'dateMade', 'objectDate'])]
+    #[Map(source: ['date', DcTerms::DATE->value, 'creationDate', 'CreationDate', 'DateText', 'dateMade', 'objectDate', 'accessionDate', 'lastUpdate'])]
     public ?string $date = null;
 
     /** Integer year for sorting/filtering. Facet (numeric → range slider in the grid). */
