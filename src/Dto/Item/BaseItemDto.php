@@ -29,9 +29,11 @@ abstract class BaseItemDto
 {
     // ── Identity ──────────────────────────────────────────────────────────────
 
+    #[Map(source: [ItemField::SOURCE_ID, ItemField::ARK])]
     public ?string $id = null {
         set(mixed $value) => $this->id = $value !== null ? (string) $value : null;
     }
+    #[Map(source: [DcTerms::SOURCE->value, ItemField::CITATION_URL, ItemField::PAGE_URL])]
     public ?string $sourceUrl   = null;
     public ?string $contentType = null;
     public ?string $aggregator  = null;
@@ -76,6 +78,7 @@ abstract class BaseItemDto
      * ai:denseSummary — ≤ 400 char retrieval-optimised summary.
      * Entity-rich, factual, no filler. Used by Meilisearch /chat, RAG, chatbots.
      */
+    #[Map(source: [ItemField::DENSE_SUMMARY])]
     public ?string $denseSummary = null;
 
     /**
@@ -123,6 +126,7 @@ abstract class BaseItemDto
     // ── Agents ────────────────────────────────────────────────────────────────
 
     /** dcterms:creator — array of names */
+    #[Map(source: [DcTerms::CREATOR->value])]
     public ?array $creators = null;
 
     /** Holding institution */
@@ -134,7 +138,7 @@ abstract class BaseItemDto
     // ── Subjects ──────────────────────────────────────────────────────────────
 
     /** dcterms:subject — keyword/topical subjects (incl. AI keywords). A sidebar facet. */
-    #[Map(source: ['subjects', DcTerms::SUBJECT->value, 'subject_facet', 'keywords'])]
+    #[Map(source: [DcTerms::SUBJECT->value, ItemField::KEYWORDS])]
     #[Field(facet: true, filterable: true)]
     public ?array $subjects = null;
 
@@ -350,22 +354,66 @@ abstract class BaseItemDto
             }
         }
 
-        // Handle snake_case / aliased keys not covered by direct property name match
-        $dto->id            ??= $row[ItemField::SOURCE_ID]   ?? $row[ItemField::ARK] ?? null;
-        $dto->sourceUrl     ??= $row[DcTerms::SOURCE->value] ?? $row[ItemField::CITATION_URL] ?? $row[ItemField::PAGE_URL] ?? null;
-        $dto->contentType   ??= $row[ItemField::CONTENT_TYPE]?? static::contentType();
-        $dto->aggregator    ??= $row[ItemField::AGGREGATOR]  ?? null;
-        $dto->creators      ??= $row[DcTerms::CREATOR->value]?? $row['name_facet']          ?? null;
-        $dto->subjects      ??= $row[DcTerms::SUBJECT->value]?? $row['subject_facet']       ?? null;
-        $dto->subjectsGeographic ??= $row['subjectsGeographic'] ?? null;
-        $dto->identifierLocal    ??= $row['identifierLocal']   ?? null;
-        $dto->iiifBase      ??= $row[ItemField::IIIF_BASE]     ?? null;
-        $dto->iiifManifest  ??= $row[ItemField::IIIF_MANIFEST] ?? null;
-        $dto->thumbnailUrl  ??= $row[ItemField::THUMBNAIL_URL]   ?? null;
-        $dto->largeImageUrl ??= $row[ItemField::LARGE_IMAGE_URL] ?? null;
-        $dto->searchSummary ??= $row[ItemField::SEARCH_SUMMARY] ?? null;
-        $dto->denseSummary  ??= $row[ItemField::DENSE_SUMMARY] ?? null;
+        // Everything not matched by direct camelCase property name is resolved by the declarative
+        // #[Map(source: […])] alias lists (id←sourceId/ark, sourceUrl←dcterms:source/…, creators,
+        // subjects, denseSummary←ai:denseSummary, title/description/date, …) — one source of truth.
+        $dto->applyMapAliases($row);
+
+        // The only non-alias rule left: fall back to the subclass's declared content type.
+        $dto->contentType ??= static::contentType();
         return $dto;
+    }
+
+    /** @var array<class-string, array<string, list<string>>> property → source aliases, per class */
+    private static array $aliasMapCache = [];
+
+    /**
+     * Resolve declarative #[Map(source: […])] aliases onto this DTO: for each property carrying a
+     * Map, set the first present, non-null source key it doesn't already have. One source of truth
+     * for "this source field asserts this property", shared by the hydrators — it replaces the
+     * per-field `??=` alias chains and is the same property↔predicate map a source-meta→claims
+     * projection keys on.
+     *
+     * @param array<string,mixed> $row
+     */
+    private function applyMapAliases(array $row): void
+    {
+        foreach (self::aliasMap() as $prop => $sources) {
+            if (($this->$prop ?? null) !== null) {
+                continue; // already set by direct property-name match
+            }
+            foreach ($sources as $src) {
+                if (($row[$src] ?? null) !== null) {
+                    $this->$prop = $row[$src]; // property hooks handle coercion
+                    break;
+                }
+            }
+        }
+    }
+
+    /**
+     * property name → ordered source aliases, read once per class from #[Map(source: …)].
+     *
+     * @return array<string, list<string>>
+     */
+    private static function aliasMap(): array
+    {
+        if (isset(self::$aliasMapCache[static::class])) {
+            return self::$aliasMapCache[static::class];
+        }
+
+        $map = [];
+        foreach ((new \ReflectionClass(static::class))->getProperties(\ReflectionProperty::IS_PUBLIC) as $p) {
+            $sources = [];
+            foreach ($p->getAttributes(Map::class) as $attr) {
+                $sources = [...$sources, ...$attr->newInstance()->sources()];
+            }
+            if ($sources !== []) {
+                $map[$p->getName()] = $sources;
+            }
+        }
+
+        return self::$aliasMapCache[static::class] = $map;
     }
 
     /**
