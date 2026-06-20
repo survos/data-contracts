@@ -29,11 +29,11 @@ abstract class BaseItemDto
 {
     // ── Identity ──────────────────────────────────────────────────────────────
 
-    #[Map(source: [ItemField::SOURCE_ID, ItemField::ARK])]
+    #[Map(source: [ItemField::SOURCE_ID, ItemField::ARK, 'objectID', 'ObjectID', 'codigoDeCatalogacion', 'systemId'])]
     public ?string $id = null {
         set(mixed $value) => $this->id = $value !== null ? (string) $value : null;
     }
-    #[Map(source: [DcTerms::SOURCE->value, ItemField::CITATION_URL, ItemField::PAGE_URL])]
+    #[Map(source: [DcTerms::SOURCE->value, ItemField::CITATION_URL, ItemField::PAGE_URL, 'IsShownAt', 'cite', 'ResourceURL', 'objectURL', 'linkResource', 'frontendUrl', 'recordUrl', 'objectUrl'])]
     public ?string $sourceUrl   = null;
     public ?string $contentType = null;
     public ?string $aggregator  = null;
@@ -49,12 +49,12 @@ abstract class BaseItemDto
     // ── Core DC fields (always present regardless of type) ───────────────────
 
     /** dcterms:title */
-    #[Map(source: ['title', DcTerms::TITLE->value, 'titulo', 'titel'])]
+    #[Map(source: ['title', DcTerms::TITLE->value, 'title_info_primary', 'title_info_primary_t', 'object_name', 'objectName', 'display_title', 'displayTitle', 'nativeName', 'label', 'titulo', 'titel'])]
     #[Translatable]
     public ?string $title = null;
 
     /** dcterms:description — short curatorial text from the source institution */
-    #[Map(source: ['description', DcTerms::DESCRIPTION->value, 'descripcion', 'beschreibung'])]
+    #[Map(source: ['description', DcTerms::DESCRIPTION->value, 'object_description', 'objectDescription', 'objectSummary', 'descripcion', 'beschreibung'])]
     #[Translatable]
     public ?string $description = null;
 
@@ -64,6 +64,7 @@ abstract class BaseItemDto
      * May come from the source catalog or from AI pass 1 (image analysis).
      */
     #[Translatable]
+    #[Map(source: ['object_material_technique', 'objectMaterialTechnique'])]
     public ?string $physicalDescription = null;
 
     /**
@@ -72,6 +73,7 @@ abstract class BaseItemDto
      * Richer than physicalDescription; intended for display and discovery.
      */
     #[Translatable]
+    #[Map(source: ['significanceStatement'])]
     public ?string $contextDescription = null;
 
     /**
@@ -95,7 +97,7 @@ abstract class BaseItemDto
     public ?string $ocrText = null;
 
     /** dcterms:date — display string, may be fuzzy ("ca. 1920") */
-    #[Map(source: ['date', DcTerms::DATE->value])]
+    #[Map(source: ['date', DcTerms::DATE->value, 'creationDate', 'CreationDate', 'DateText', 'dateMade', 'objectDate'])]
     public ?string $date = null;
 
     /** Integer year for sorting/filtering. Facet (numeric → range slider in the grid). */
@@ -106,27 +108,33 @@ abstract class BaseItemDto
     public ?string $citation = null;
 
     /** ItemField::CITATION_URL — deep link back to the source record (e.g. the NARA catalog page). Rendered as the "Original" link on the folio item page. */
+    #[Map(source: ['ResourceURL'])]
     public ?string $citationUrl = null;
 
     /** dcterms:rights */
+    #[Map(source: ['estadoDerechosObra'])]
     public ?string $rights = null;
 
     /** dcterms:license URI (rightsstatements.org) */
+    #[Map(source: ['license', 'rightsstatement_uri', 'license_uri'])]
     public ?string $rightsUri = null;
 
     /** dcterms:accessRights — e.g. "no restrictions", "creative commons" */
+    #[Map(source: ['reuse_allowed'])]
     public ?string $reuseAllowed = null;
 
     /** dcterms:language */
+    #[Map(source: ['expected_language', 'expectedLanguage'])]
     public ?string $language = null;
 
     /** dcterms:identifier — local accession number */
+    #[Map(source: ['localIdentifier', 'object_inventory_number', 'objectInventoryNumber'])]
     public ?string $identifierLocal = null;
 
     // ── Agents ────────────────────────────────────────────────────────────────
 
     /** dcterms:creator — array of names */
-    #[Map(source: [DcTerms::CREATOR->value])]
+    #[Map(source: [DcTerms::CREATOR->value, 'autores'])]
     public ?array $creators = null;
 
     /** Holding institution */
@@ -149,6 +157,7 @@ abstract class BaseItemDto
     // ── Geography ─────────────────────────────────────────────────────────────
 
     #[Field(facet: true, filterable: true)]
+    #[Map(source: ['edm:country'])]
     public ?string $country  = null;
     public ?string $state    = null;
     public ?string $county   = null;
@@ -161,8 +170,10 @@ abstract class BaseItemDto
 
     /** IIIF Image API base URL — use for AI vision and imgProxy resizing */
     public ?string $iiifBase      = null;
+    #[Map(source: ['identifier_iiif_manifest'])]
     public ?string $iiifManifest  = null;
     public ?string $thumbnailUrl  = null;
+    #[Map(source: ['IsShownBy', 'edm:isShownBy'])]
     public ?string $largeImageUrl = null;
 
     /** Downloadable PDF of the document (e.g. DC document_access.pdf). When set, folio shows the
@@ -343,8 +354,10 @@ abstract class BaseItemDto
             if ($prop === 'unmapped') {
                 continue;
             }
-            if (array_key_exists($prop, $row)) {
-                $dto->$prop = $row[$prop]; // property hooks handle coercion (e.g. int id → string)
+            if (array_key_exists($prop, $row) && $row[$prop] !== '') {
+                // '' is treated as absent (blankToNull semantics) so a #[Map] alias fallback can fill
+                // the field from the next source; toMeili filters '' out of dto_data anyway.
+                $dto->assignTolerant($prop, $row[$prop]);
             }
         }
 
@@ -383,12 +396,38 @@ abstract class BaseItemDto
                 continue; // already set by direct property-name match
             }
             foreach ($sources as $src) {
-                if (($row[$src] ?? null) !== null) {
-                    $this->$prop = $row[$src]; // property hooks handle coercion
+                if (($row[$src] ?? null) !== null && $row[$src] !== '' && $this->assignTolerant($prop, $row[$src])) {
                     break;
                 }
             }
         }
+    }
+
+    /**
+     * Assign a source value to a property, tolerating type mismatches instead of letting one bad
+     * field abort ALL hydration (which dropped the record to a raw row and silently disabled every
+     * #[Map] alias). A scalar going to a ?string property is coerced (an int year 1910 → "1910");
+     * anything still incompatible (a string into an ?array field like `dimensions`) is kept as raw
+     * context in `unmapped` (→ extras) so it isn't lost.
+     *
+     * @return bool true if the property was set, false if the value spilled to unmapped
+     */
+    private function assignTolerant(string $prop, mixed $value): bool
+    {
+        try {
+            $this->$prop = $value; // property hooks handle coercion (e.g. int id → string)
+            return true;
+        } catch (\TypeError) {
+        }
+        if (is_scalar($value)) {
+            try {
+                $this->$prop = (string) $value; // e.g. int year → ?string date
+                return true;
+            } catch (\TypeError) {
+            }
+        }
+        $this->unmapped[$prop] = $value;
+        return false;
     }
 
     /**
