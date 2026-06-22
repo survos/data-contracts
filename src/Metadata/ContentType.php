@@ -7,6 +7,7 @@ use Symfony\Component\String\Inflector\EnglishInflector;
 use Survos\DataContracts\Dto\Core\PersonDto;
 use Survos\DataContracts\Dto\Item\ArtifactDto;
 use Survos\DataContracts\Dto\Item\CoinDto;
+use Survos\DataContracts\Dto\Item\CollectionDto;
 use Survos\DataContracts\Dto\Item\SculptureDto;
 use Survos\DataContracts\Dto\Item\EphemeraDto;
 use Survos\DataContracts\Dto\Item\AudioDto;
@@ -77,6 +78,9 @@ final class ContentType
     // ── Agent cores ─────────────────────────────────────────────────────────────
     const PERSON        = 'person';         // foaf:Person; used with the compact folio core code `per`
 
+    // ── Aggregations ─────────────────────────────────────────────────────────────
+    const COLLECTION    = 'collection';     // dcmitype:Collection; the `coll` core — a folio / set of items
+
     // ── LOC URIs for RDF / zm Vocabulary interop ─────────────────────────────
     const URIS = [
         self::PHOTOGRAPH    => 'http://id.loc.gov/vocabulary/graphicMaterials/tgm007965',
@@ -102,6 +106,7 @@ final class ContentType
         self::AUDIO         => 'http://purl.org/dc/dcmitype/Sound',
         self::OBJECT        => 'http://purl.org/dc/dcmitype/PhysicalObject',
         self::PERSON        => 'http://xmlns.com/foaf/0.1/Person',
+        self::COLLECTION    => 'http://purl.org/dc/dcmitype/Collection',
     ];
 
     /**
@@ -556,6 +561,8 @@ final class ContentType
                 => SculptureDto::class,
             self::PERSON
                 => PersonDto::class,
+            self::COLLECTION
+                => CollectionDto::class,
             default => GenericItemDto::class,
         };
     }

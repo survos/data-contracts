@@ -401,6 +401,9 @@ abstract class BaseItemDto
             }
             foreach ($sources as $src) {
                 if (($row[$src] ?? null) !== null && $row[$src] !== '' && $this->assignTolerant($prop, $row[$src])) {
+                    // Consumed as an alias for $prop — drop it from unmapped so it doesn't ALSO
+                    // leak into extras (e.g. sourceId/ark→id, license→license were duplicated).
+                    unset($this->unmapped[$src]);
                     break;
                 }
             }
