@@ -25,8 +25,12 @@ interface ItemField
     const TYPE        = 'type';
     const GENRE_SPECIFIC = 'genreSpecific';
     const GENRE_BASIC    = 'genreBasic';
+    const TYPE_OF_RESOURCE = 'typeOfResource';
     const KEYWORDS    = 'keywords';
-    const CREATOR     = 'creator';
+    const SUBJECTS              = 'subjects';
+    const SUBJECTS_GEOGRAPHIC   = 'subjectsGeographic';
+    const CREATOR     = 'creators'; // the normalized field is the array `creators` (BaseItemDto::$creators)
+    const COLLECTIONS = 'collections';
     const URL         = 'url';
     const CITATION    = 'citation';
     const CITATION_URL = 'citationUrl';

@@ -48,8 +48,9 @@ final class Core
     /** People (creators, subjects, authors). */
     public const PERSON = 'per';
 
-    /** Places. */
-    public const PLACE = 'place';
+    /** Places. (Abbreviated to match the other shared entity codes — obj/per/coll/org — and the
+     *  term-set data, which already keys places as 'pla'.) */
+    public const PLACE = 'pla';
 
     /** Organisations. */
     public const ORGANISATION = 'org';

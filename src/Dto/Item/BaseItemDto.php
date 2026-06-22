@@ -158,6 +158,20 @@ abstract class BaseItemDto
     #[Field(facet: true, filterable: true)]
     public ?array $subjectsGeographic = null;
 
+    // ── Genre / form ──────────────────────────────────────────────────────────
+
+    /** Broad genre/form terms (MODS genre @basic) — e.g. ["Photographs"]. A sidebar facet. */
+    #[Field(facet: true, filterable: true)]
+    public ?array $genreBasic = null;
+
+    /** Specific genre/form terms (MODS genre @specific) — e.g. ["Albumen prints"]. A facet. */
+    #[Field(facet: true, filterable: true)]
+    public ?array $genreSpecific = null;
+
+    /** MODS typeOfResource — coarse resource class, e.g. ["Still image"], ["Text"]. A facet. */
+    #[Field(facet: true, filterable: true)]
+    public ?array $typeOfResource = null;
+
     // ── Geography ─────────────────────────────────────────────────────────────
 
     #[Field(facet: true, filterable: true)]

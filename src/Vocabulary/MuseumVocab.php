@@ -65,29 +65,48 @@ interface MuseumVocab
         uri: 'http://purl.org/dc/terms/spatial',
         aiHint: 'Geographic findspot, place of origin, or provenance location.',
         termSet: true,
+        sourceFields: [ItemField::SUBJECTS_GEOGRAPHIC],
     )]
-    const PLACE = 'pla';
+    const PLACE = Core::PLACE;
 
+    // A person is an entity worth its own core/page (enrichable with a Wikidata bio/photo), so model
+    // it as a RELATION (obj→per, "created"/"created_by"), not a flat term set.
     #[VocabTerm(
         label: 'Person',
         uri: 'http://xmlns.com/foaf/0.1/Person',
         aiHint: 'Named person depicted in, associated with, or mentioned in the object.',
+        relation: true,
+        linkType: 'created',
+        reverseCode: 'created_by',
+        personName: true,
+        sourceFields: [ItemField::CREATOR],
     )]
-    const PERSON = 'per';
+    const PERSON = Core::PERSON;
 
     #[VocabTerm(
         label: 'Subject',
         uri: 'http://purl.org/dc/terms/subject',
         aiHint: 'Subject heading, keyword, or topical term describing the object.',
+        termSet: true,
+        sourceFields: [ItemField::SUBJECTS, ItemField::KEYWORDS],
     )]
-    const SUBJECT = 'obj';
+    const SUBJECT = Core::OBJECT;
+
+    #[VocabTerm(
+        label: 'Genre',
+        uri: 'http://id.loc.gov/vocabulary/graphicMaterials',
+        aiHint: 'Form or genre of the object, e.g. "Photographs", "Albumen prints", "Maps".',
+        termSet: true,
+        sourceFields: [ItemField::GENRE_SPECIFIC, ItemField::GENRE_BASIC, ItemField::TYPE, ItemField::TYPE_OF_RESOURCE],
+    )]
+    const GENRE = 'genre';
 
     #[VocabTerm(
         label: 'Organisation',
         uri: 'http://www.w3.org/ns/org#Organization',
         aiHint: 'Named organisation, institution, or corporate body associated with the object.',
     )]
-    const ORGANISATION = 'org';
+    const ORGANISATION = Core::ORGANISATION;
 
     #[VocabTerm(
         label: 'Period',
@@ -105,14 +124,19 @@ interface MuseumVocab
     )]
     const EPOCH = 'epoch';
 
+    // A collection is an entity (it groups objects and can be enriched), so model it as a RELATION:
+    // the collection contains the object (obj→coll "belongs_to", reverse "contains").
     #[VocabTerm(
         label: 'Collection',
         uri: 'http://purl.org/dc/terms/isPartOf',
         aiHint: 'Institutional or thematic collection within the holding museum.',
         aiExtractable: false,
-        termSet: true,
+        relation: true,
+        linkType: 'contains',
+        reverseCode: 'belongs_to',
+        sourceFields: [ItemField::COLLECTIONS],
     )]
-    const COLLECTION = 'coll';
+    const COLLECTION = Core::COLLECTION;
 
     #[VocabTerm(
         label: 'Department',
