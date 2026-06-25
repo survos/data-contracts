@@ -115,6 +115,10 @@ abstract class BaseItemDto
     #[Map(source: ['ResourceURL'])]
     public ?string $citationUrl = null;
 
+    /** ItemField::SOURCE_API_URL — machine-readable source API endpoint for this record (admin/technical;
+     *  e.g. museum-digital's JSON export). Not a user-facing display field. */
+    public ?string $sourceApiUrl = null;
+
     /** dcterms:rights */
     #[Map(source: ['estadoDerechosObra'])]
     public ?string $rights = null;

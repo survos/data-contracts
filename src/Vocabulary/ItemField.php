@@ -34,6 +34,7 @@ interface ItemField
     const URL         = 'url';
     const CITATION    = 'citation';
     const CITATION_URL = 'citationUrl';
+    const SOURCE_API_URL = 'sourceApiUrl';
     const LICENSE     = 'license';
     const RIGHTS      = 'rights';
     const SOURCE      = 'source';
