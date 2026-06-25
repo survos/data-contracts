@@ -120,7 +120,7 @@ abstract class BaseItemDto
     public ?string $rights = null;
 
     /** dcterms:license URI (rightsstatements.org) */
-    #[Map(source: ['license', 'rightsstatement_uri', 'license_uri'])]
+    #[Map(source: [DcTerms::LICENSE->value, 'license', 'rightsstatement_uri', 'license_uri'])]
     public ?string $rightsUri = null;
 
     /** dcterms:accessRights — e.g. "no restrictions", "creative commons" */
@@ -134,6 +134,13 @@ abstract class BaseItemDto
     /** dcterms:identifier — local accession number */
     #[Map(source: ['localIdentifier', 'object_inventory_number', 'objectInventoryNumber'])]
     public ?string $identifierLocal = null;
+
+    /**
+     * Wikidata Q-ids linked to this item (e.g. ["Q79875815"]) — authority reconciliation and the
+     * seed for metadata mining (pull dates/bios/coords/images from Wikidata). owl:sameAs in spirit.
+     */
+    #[Field(filterable: true)]
+    public ?array $wikidata = null;
 
     // ── Agents ────────────────────────────────────────────────────────────────
 
@@ -234,8 +241,12 @@ abstract class BaseItemDto
     /** Source of this data: import | ai | ocr | human */
     public string $source = 'import';
 
-    /** Confidence 0.0–1.0 (null = certain, i.e. human-entered) */
-    public ?float $confidence = 0.7;
+    /**
+     * Confidence 0.0–1.0; null = certain (human-entered or source-imported fact).
+     * Defaults to null so imported records don't carry a meaningless boilerplate score —
+     * only AI-derived claims set a real confidence (on the Claim, not the item DTO).
+     */
+    public ?float $confidence = null;
 
     // ── Class metadata (override in subclasses) ───────────────────────────────
 
