@@ -433,15 +433,20 @@ abstract class BaseItemDto
     private function applyMapAliases(array $row): void
     {
         foreach (self::aliasMap() as $prop => $sources) {
-            if (($this->$prop ?? null) !== null) {
-                continue; // already set by direct property-name match
+            if (($this->$prop ?? null) === null) {
+                foreach ($sources as $src) {
+                    if (($row[$src] ?? null) !== null && $row[$src] !== '' && $this->assignTolerant($prop, $row[$src])) {
+                        break;
+                    }
+                }
             }
-            foreach ($sources as $src) {
-                if (($row[$src] ?? null) !== null && $row[$src] !== '' && $this->assignTolerant($prop, $row[$src])) {
-                    // Consumed as an alias for $prop — drop it from unmapped so it doesn't ALSO
-                    // leak into extras (e.g. sourceId/ark→id, license→license were duplicated).
+            // Once the property is filled — by its direct name OR any alias — none of its declared
+            // source aliases are leftovers. Drop every one of them from unmapped so a redundant alias
+            // (e.g. dcterms:description when `description` came from the source field, or sourceId/ark→id)
+            // doesn't ALSO leak into extras, which should carry only genuinely unmapped keys.
+            if (($this->$prop ?? null) !== null) {
+                foreach ($sources as $src) {
                     unset($this->unmapped[$src]);
-                    break;
                 }
             }
         }
