@@ -87,6 +87,14 @@ abstract class BaseItemDto
     #[Map(source: [ItemField::DENSE_SUMMARY])]
     public ?string $denseSummary = null;
 
+    /** ai:observationProse — detailed AI visual observation (markdown). Rendered with the |markdown filter. */
+    #[Map(source: [ItemField::OBSERVATION_PROSE])]
+    public ?string $observationProse = null;
+
+    /** ai:caption — short AI-generated caption (also seeds the title when the source has none). */
+    #[Map(source: [ItemField::CAPTION])]
+    public ?string $caption = null;
+
     /**
      * search_summary - deterministic BM25-friendly text assembled from normalized fields.
      * Distinct from ai:denseSummary, which is an AI-generated retrieval summary.

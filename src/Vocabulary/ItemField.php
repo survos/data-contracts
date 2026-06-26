@@ -61,6 +61,10 @@ interface ItemField
         aiHint: 'Write a single retrieval-optimised paragraph of ≤ 400 characters. Pack in who, what, when, where, and material/technique.',
     )]
     const DENSE_SUMMARY = 'ai:denseSummary';
+    /** ai:observationProse — detailed AI visual observation (markdown prose). */
+    const OBSERVATION_PROSE = 'ai:observationProse';
+    /** ai:caption — short AI-generated caption/title. */
+    const CAPTION = 'ai:caption';
 
     const PAGE_URL = 'pageUrl';
     const DATE     = 'date';
