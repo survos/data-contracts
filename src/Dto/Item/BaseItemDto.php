@@ -46,6 +46,17 @@ abstract class BaseItemDto
     #[Field(facet: true, filterable: true)]
     public ?string $stage = null;
 
+    /**
+     * Distinct AI tasks applied to this item or any of its images — e.g. observe, analyze, ocr_mistral,
+     * enrich_from_hires, info. Derived from the item's claim sources during the folio build (normalized,
+     * 'ai:' prefix stripped). A multi-value facet, so you can filter to "items that had analysis" etc.
+     * Finer-grained than {@see $stage}: 'enriched' alone can't distinguish observe-only from observe+analyze.
+     *
+     * @var list<string>|null
+     */
+    #[Field(facet: true, filterable: true)]
+    public ?array $aiTasks = null;
+
     // ── Core DC fields (always present regardless of type) ───────────────────
 
     /** dcterms:title */
@@ -415,6 +426,18 @@ abstract class BaseItemDto
 
         // The only non-alias rule left: fall back to the subclass's declared content type.
         $dto->contentType ??= static::contentType();
+
+        // Pipeline-stage facet: 'enriched' once any AI claim is present (observe prose / dense summary /
+        // caption), else 'normalized'. Lets the folio filter normalized-only vs AI-enriched records.
+        $dto->stage ??= ($dto->denseSummary !== null || $dto->caption !== null || $dto->observationProse !== null)
+            ? 'enriched'
+            : 'normalized';
+
+        // Always expose a page/image count so it's filterable. The precise multi-page count (PDFs,
+        // multi-image objects) is set from the page table during the folio build; this is the floor
+        // for items without an emitted page list (e.g. fortepan → 1).
+        $dto->pageCount ??= $dto->imageCount ?? 1;
+
         return $dto;
     }
 

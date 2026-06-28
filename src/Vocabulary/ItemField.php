@@ -68,6 +68,7 @@ interface ItemField
 
     const PAGE_URL = 'pageUrl';
     const DATE     = 'date';
+    const YEAR     = 'year';
     const LANGUAGE = 'language';
 
     const LATITUDE  = 'schema:latitude';
