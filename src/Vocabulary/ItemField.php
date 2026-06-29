@@ -50,6 +50,14 @@ interface ItemField
     const IIIF_MANIFEST   = 'iiifManifest';
     const IIIF_INFO       = 'iiifInfo';
 
+    /**
+     * Ordered list of a row's SOURCE images (each: image url + optional thumb/caption), the input
+     * a normalizer hands to PageEmitter — which turns each entry into one page.jsonl row. These are
+     * inputs, NOT pages (cf. PAGE_URL, a single rendered page). One shared key so every provider
+     * that emits multiple images per row uses the same contract.
+     */
+    const IMAGES = 'images';
+
     #[VocabTerm(
         label: 'Search summary',
         aiHint: 'Deterministic BM25-friendly text assembled from normalized catalogue metadata.',

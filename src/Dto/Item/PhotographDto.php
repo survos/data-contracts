@@ -21,7 +21,8 @@ class PhotographDto extends BaseItemDto
     /** Physical dimensions */
     public ?string $dimensions = null;
 
-    /** Genre specific terms (TGM) e.g. "Portrait photographs", "Architectural photographs" */
+    /** Genre specific terms (TGM) e.g. "Portrait photographs", "Architectural photographs". A facet. */
+    #[Field(facet: true, filterable: true)]
     public ?array $genreSpecific = null;
 
     public static function contentType(): string { return ContentType::PHOTOGRAPH; }

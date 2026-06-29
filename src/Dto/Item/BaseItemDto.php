@@ -82,6 +82,10 @@ abstract class BaseItemDto
     #[Map(source: ['provenance', 'dcterms:provenance'])]
     public ?string $provenance = null;
 
+    /** Credit line / acknowledgment, e.g. "Gift of the Brooklyn Museum of Art, Paul F. Walter Collection". */
+    #[Map(source: ['credit', 'creditLine'])]
+    public ?string $credit = null;
+
     /**
      * AI pass 2: combines physical observation with provenance, period,
      * and cultural context into a researcher-facing narrative.
