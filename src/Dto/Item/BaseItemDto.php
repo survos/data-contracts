@@ -142,12 +142,19 @@ abstract class BaseItemDto
      *  e.g. museum-digital's JSON export). Not a user-facing display field. */
     public ?string $sourceApiUrl = null;
 
-    /** dcterms:rights */
+    /** dcterms:rights — rights/copyright statement as text (e.g. "CC0", "Copyrighted"). A top-level facet. */
     #[Map(source: ['estadoDerechosObra'])]
+    #[Field(facet: true, filterable: true)]
     public ?string $rights = null;
 
-    /** dcterms:license URI (rightsstatements.org) */
+    /**
+     * dcterms:license URI (rightsstatements.org). Also a facet: some sources (e.g. Cleveland) carry the
+     * rights value as a short licence code here rather than a URI (CC0 / Copyrighted), and that splits
+     * a collection cleanly. NOTE: if a subclass DTO redeclares this property, repeat #[Field] — PHP
+     * attributes are not inherited on a redeclared property.
+     */
     #[Map(source: [DcTerms::LICENSE->value, 'license', 'rightsstatement_uri', 'license_uri'])]
+    #[Field(facet: true, filterable: true)]
     public ?string $rightsUri = null;
 
     /** dcterms:accessRights — e.g. "no restrictions", "creative commons" */
@@ -165,8 +172,10 @@ abstract class BaseItemDto
     /**
      * Wikidata Q-ids linked to this item (e.g. ["Q79875815"]) — authority reconciliation and the
      * seed for metadata mining (pull dates/bios/coords/images from Wikidata). owl:sameAs in spirit.
+     *
+     * NOT a facet/filter: it's a per-item authority link (≈1 distinct Q-id per row), so faceting it
+     * just bloats item_facet (tens of thousands of single-use values) and adds noise to the sidebar.
      */
-    #[Field(filterable: true)]
     public ?array $wikidata = null;
 
     // ── Agents ────────────────────────────────────────────────────────────────
