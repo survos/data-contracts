@@ -232,7 +232,9 @@ abstract class BaseItemDto
     public ?string $county   = null;
     #[Field(facet: true, filterable: true)]
     public ?string $city     = null;
+    #[Map(source: [ItemField::LATITUDE])]
     public ?float  $latitude = null;
+    #[Map(source: [ItemField::LONGITUDE])]
     public ?float  $longitude= null;
 
     // ── Media ─────────────────────────────────────────────────────────────────
