@@ -111,6 +111,14 @@ abstract class BaseItemDto
     public ?string $caption = null;
 
     /**
+     * The source's own caption text, VERBATIM — never an AI summary. Some image sources (e.g. Fortepan)
+     * ship only a short caption; keep it on its own field so the UI shows it as the real "Source
+     * caption" instead of mislabelling the AI-filled `description` / `denseSummary`.
+     */
+    #[Map(source: ['sourceCaption'])]
+    public ?string $sourceCaption = null;
+
+    /**
      * search_summary - deterministic BM25-friendly text assembled from normalized fields.
      * Distinct from ai:denseSummary, which is an AI-generated retrieval summary.
      */
