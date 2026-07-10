@@ -30,20 +30,24 @@ abstract class BaseItemDto
     // ── Identity ──────────────────────────────────────────────────────────────
 
     #[Map(source: [ItemField::SOURCE_ID, ItemField::ARK, 'objectID', 'ObjectID', 'codigoDeCatalogacion', 'systemId'])]
+    #[Field(group: 'Identity')]
     public ?string $id = null {
         set(mixed $value) => $this->id = $value !== null ? (string) $value : null;
     }
     #[Map(source: [DcTerms::SOURCE->value, ItemField::CITATION_URL, ItemField::PAGE_URL, 'IsShownAt', 'cite', 'ResourceURL', 'objectURL', 'linkResource', 'frontendUrl', 'recordUrl', 'objectUrl'])]
+    #[Field(group: 'Identity')]
     public ?string $sourceUrl   = null;
+    #[Field(group: 'Identity')]
     public ?string $contentType = null;
+    #[Field(group: 'Identity')]
     public ?string $aggregator  = null;
 
     /** Original source asset format: 'pdf' (single document) or 'images' (page-image set). A facet. */
-    #[Field(facet: true, filterable: true)]
+    #[Field(facet: true, filterable: true, group: 'Identity')]
     public ?string $sourceFormat = null;
 
     /** Pipeline processing stage (raw / normalized / enriched). A facet so you can filter to enriched items; later this can be made dev-only. */
-    #[Field(facet: true, filterable: true)]
+    #[Field(facet: true, filterable: true, group: 'Identity')]
     public ?string $stage = null;
 
     /**
@@ -54,7 +58,7 @@ abstract class BaseItemDto
      *
      * @var list<string>|null
      */
-    #[Field(facet: true, filterable: true)]
+    #[Field(facet: true, filterable: true, group: 'Identity')]
     public ?array $aiTasks = null;
 
     // ── Core DC fields (always present regardless of type) ───────────────────
@@ -62,11 +66,13 @@ abstract class BaseItemDto
     /** dcterms:title */
     #[Map(source: ['title', DcTerms::TITLE->value, 'title_info_primary', 'title_info_primary_t', 'object_name', 'objectName', 'display_title', 'displayTitle', 'nativeName', 'label', 'titulo', 'titel'])]
     #[Translatable]
+    #[Field(group: 'Description')]
     public ?string $title = null;
 
     /** dcterms:description — short curatorial text from the source institution */
     #[Map(source: ['description', DcTerms::DESCRIPTION->value, 'object_description', 'objectDescription', 'objectSummary', 'descripcion', 'beschreibung'])]
     #[Translatable]
+    #[Field(group: 'Description')]
     public ?string $description = null;
 
     /**
@@ -76,14 +82,17 @@ abstract class BaseItemDto
      */
     #[Translatable]
     #[Map(source: ['object_material_technique', 'objectMaterialTechnique'])]
+    #[Field(group: 'Description')]
     public ?string $physicalDescription = null;
 
     /** Ownership history (museum provenance line, e.g. Walters' "provenance" extra). Free text. */
     #[Map(source: ['provenance', 'dcterms:provenance'])]
+    #[Field(group: 'Description')]
     public ?string $provenance = null;
 
     /** Credit line / acknowledgment, e.g. "Gift of the Brooklyn Museum of Art, Paul F. Walter Collection". */
     #[Map(source: ['credit', 'creditLine'])]
+    #[Field(group: 'Description')]
     public ?string $credit = null;
 
     /**
@@ -93,6 +102,7 @@ abstract class BaseItemDto
      */
     #[Translatable]
     #[Map(source: ['significanceStatement'])]
+    #[Field(group: 'Description')]
     public ?string $contextDescription = null;
 
     /**
@@ -100,14 +110,17 @@ abstract class BaseItemDto
      * Entity-rich, factual, no filler. Used by Meilisearch /chat, RAG, chatbots.
      */
     #[Map(source: [ItemField::DENSE_SUMMARY])]
+    #[Field(group: 'Description')]
     public ?string $denseSummary = null;
 
     /** ai:observationProse — detailed AI visual observation (markdown). Rendered with the |markdown filter. */
     #[Map(source: [ItemField::OBSERVATION_PROSE])]
+    #[Field(group: 'Description')]
     public ?string $observationProse = null;
 
     /** ai:caption — short AI-generated caption (also seeds the title when the source has none). */
     #[Map(source: [ItemField::CAPTION])]
+    #[Field(group: 'Description')]
     public ?string $caption = null;
 
     /**
@@ -116,6 +129,7 @@ abstract class BaseItemDto
      * caption" instead of mislabelling the AI-filled `description` / `denseSummary`.
      */
     #[Map(source: ['sourceCaption'])]
+    #[Field(group: 'Description')]
     public ?string $sourceCaption = null;
 
     /**
@@ -129,21 +143,26 @@ abstract class BaseItemDto
      * Long-form; rendered in a dedicated panel, not the field table. For multi-page items
      * this is the item-level concatenation; per-page text lives on the image core.
      */
+    #[Field(group: 'Description')]
     public ?string $ocrText = null;
 
     /** dcterms:date — display string, may be fuzzy ("ca. 1920") */
     #[Map(source: ['date', DcTerms::DATE->value, 'creationDate', 'CreationDate', 'DateText', 'dateMade', 'objectDate', 'accessionDate', 'lastUpdate'])]
+    #[Field(group: 'Description')]
     public ?string $date = null;
 
     /** Integer year for sorting/filtering. Facet (numeric → range slider in the grid). */
     #[PropertyMeta(label: 'Year', description: 'Coverage/production year.', sortable: true, facet: true)]
+    #[Field(group: 'Description')]
     public ?int $year = null;
 
     /** ItemField::CITATION — canonical URL or attribution string for the record */
+    #[Field(group: 'Rights & Attribution')]
     public ?string $citation = null;
 
     /** ItemField::CITATION_URL — deep link back to the source record (e.g. the NARA catalog page). Rendered as the "Original" link on the folio item page. */
     #[Map(source: ['ResourceURL'])]
+    #[Field(group: 'Rights & Attribution')]
     public ?string $citationUrl = null;
 
     /** ItemField::SOURCE_API_URL — machine-readable source API endpoint for this record (admin/technical;
@@ -152,7 +171,7 @@ abstract class BaseItemDto
 
     /** dcterms:rights — rights/copyright statement as text (e.g. "CC0", "Copyrighted"). A top-level facet. */
     #[Map(source: ['estadoDerechosObra'])]
-    #[Field(facet: true, filterable: true)]
+    #[Field(facet: true, filterable: true, group: 'Rights & Attribution')]
     public ?string $rights = null;
 
     /**
@@ -162,19 +181,22 @@ abstract class BaseItemDto
      * attributes are not inherited on a redeclared property.
      */
     #[Map(source: [DcTerms::LICENSE->value, 'license', 'rightsstatement_uri', 'license_uri'])]
-    #[Field(facet: true, filterable: true)]
+    #[Field(facet: true, filterable: true, group: 'Rights & Attribution')]
     public ?string $rightsUri = null;
 
     /** dcterms:accessRights — e.g. "no restrictions", "creative commons" */
     #[Map(source: ['reuse_allowed'])]
+    #[Field(group: 'Rights & Attribution')]
     public ?string $reuseAllowed = null;
 
     /** dcterms:language */
     #[Map(source: ['expected_language', 'expectedLanguage'])]
+    #[Field(group: 'Rights & Attribution')]
     public ?string $language = null;
 
     /** dcterms:identifier — local accession number */
     #[Map(source: ['localIdentifier', 'object_inventory_number', 'objectInventoryNumber'])]
+    #[Field(group: 'Rights & Attribution')]
     public ?string $identifierLocal = null;
 
     /**
@@ -190,65 +212,74 @@ abstract class BaseItemDto
 
     /** dcterms:creator — array of names */
     #[Map(source: [DcTerms::CREATOR->value, 'autores'])]
+    #[Field(group: 'Agents & Collections')]
     public ?array $creators = null;
 
     /** Holding institution */
+    #[Field(group: 'Agents & Collections')]
     public ?string $institution = null;
 
     /** Collection name(s) */
+    #[Field(group: 'Agents & Collections')]
     public ?array $collections = null;
 
     // ── Subjects ──────────────────────────────────────────────────────────────
 
     /** dcterms:subject — keyword/topical subjects (incl. AI keywords). A sidebar facet. */
     #[Map(source: [DcTerms::SUBJECT->value, ItemField::KEYWORDS])]
-    #[Field(facet: true, filterable: true)]
+    #[Field(facet: true, filterable: true, group: 'Subjects & Genre')]
     public ?array $subjects = null;
 
     /** dcterms:spatial — geographic subjects */
-    #[Field(facet: true, filterable: true)]
+    #[Field(facet: true, filterable: true, group: 'Subjects & Genre')]
     public ?array $subjectsGeographic = null;
 
     // ── Genre / form ──────────────────────────────────────────────────────────
 
     /** Broad genre/form terms (MODS genre @basic) — e.g. ["Photographs"]. A sidebar facet. */
-    #[Field(facet: true, filterable: true)]
+    #[Field(facet: true, filterable: true, group: 'Subjects & Genre')]
     public ?array $genreBasic = null;
 
     /** Specific genre/form terms (MODS genre @specific) — e.g. ["Albumen prints"]. A facet. */
-    #[Field(facet: true, filterable: true)]
+    #[Field(facet: true, filterable: true, group: 'Subjects & Genre')]
     public ?array $genreSpecific = null;
 
     /** MODS typeOfResource — coarse resource class, e.g. ["Still image"], ["Text"]. A facet. */
-    #[Field(facet: true, filterable: true)]
+    #[Field(facet: true, filterable: true, group: 'Subjects & Genre')]
     public ?array $typeOfResource = null;
 
     // ── Geography ─────────────────────────────────────────────────────────────
 
-    #[Field(facet: true, filterable: true)]
+    #[Field(facet: true, filterable: true, group: 'Geography')]
     #[Map(source: ['edm:country'])]
     public ?string $country  = null;
+    #[Field(group: 'Geography')]
     public ?string $state    = null;
+    #[Field(group: 'Geography')]
     public ?string $county   = null;
-    #[Field(facet: true, filterable: true)]
+    #[Field(facet: true, filterable: true, group: 'Geography')]
     public ?string $city     = null;
-    #[Map(source: [ItemField::LATITUDE])]
+    #[Field(group: 'Geography')]
     public ?float  $latitude = null;
-    #[Map(source: [ItemField::LONGITUDE])]
+    #[Field(group: 'Geography')]
     public ?float  $longitude= null;
 
     // ── Media ─────────────────────────────────────────────────────────────────
 
     /** IIIF Image API base URL — use for AI vision and imgProxy resizing */
+    #[Field(group: 'Media')]
     public ?string $iiifBase      = null;
     #[Map(source: ['identifier_iiif_manifest'])]
     public ?string $iiifManifest  = null;
+    #[Field(group: 'Media')]
     public ?string $thumbnailUrl  = null;
     #[Map(source: ['IsShownBy', 'edm:isShownBy'])]
+    #[Field(group: 'Media')]
     public ?string $largeImageUrl = null;
 
     /** Downloadable PDF of the document (e.g. DC document_access.pdf). When set, folio shows the
      *  pdf.js viewer instead of the image viewer; it is also the source for the split/OCR pipeline. */
+    #[Field(group: 'Media')]
     public ?string $pdfUrl = null;
 
     #[PropertyMeta(label: 'Image count', description: 'Number of images associated with the item.', sortable: true, facet: true)]
