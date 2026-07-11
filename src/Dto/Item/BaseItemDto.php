@@ -260,8 +260,10 @@ abstract class BaseItemDto
     #[Field(facet: true, filterable: true, group: 'Geography')]
     public ?string $city     = null;
     #[Field(group: 'Geography')]
+    #[Map(source: [ItemField::LATITUDE])]
     public ?float  $latitude = null;
     #[Field(group: 'Geography')]
+    #[Map(source: [ItemField::LONGITUDE])]
     public ?float  $longitude= null;
 
     // ── Media ─────────────────────────────────────────────────────────────────
