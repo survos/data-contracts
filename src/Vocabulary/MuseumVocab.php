@@ -88,7 +88,11 @@ interface MuseumVocab
         uri: 'http://purl.org/dc/terms/subject',
         aiHint: 'Subject heading, keyword, or topical term describing the object.',
         termSet: true,
-        sourceFields: [ItemField::SUBJECTS, ItemField::KEYWORDS],
+        // 'source_tags' is the fortepan.* family's own freeform (often AI-generated) visual tag
+        // field, e.g. "couch", "teddy bear" -- distinct from curated subject headings, but
+        // already sitting unused in extras on every fortepan-derived dataset (fortepan.hu,
+        // fortepan.us, and the fpeu family), so it's free to fold into the same term set.
+        sourceFields: [ItemField::SUBJECTS, ItemField::KEYWORDS, 'source_tags'],
     )]
     const SUBJECT = Core::OBJECT;
 
