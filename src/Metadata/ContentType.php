@@ -18,6 +18,7 @@ use Survos\DataContracts\Dto\Item\DrawingDto;
 use Survos\DataContracts\Dto\Item\PaintingDto;
 use Survos\DataContracts\Dto\Item\FilmDto;
 use Survos\DataContracts\Dto\Item\GenericItemDto;
+use Survos\DataContracts\Dto\Item\InterviewDto;
 use Survos\DataContracts\Dto\Item\ManuscriptDto;
 use Survos\DataContracts\Dto\Item\MapDto;
 use Survos\DataContracts\Dto\Item\NewspaperDto;
@@ -69,6 +70,9 @@ final class ContentType
     // ── Audio / Moving Image ─────────────────────────────────────────────────
     const FILM          = 'film';           // dcmitype:MovingImage
     const AUDIO         = 'audio';          // dcmitype:Sound
+    const INTERVIEW     = 'interview';      // LCGFT gf2014026115 — multi-speaker audio (oral history,
+                                             // testimony); distinct from AUDIO so templates/AI context
+                                             // know to expect dialogue, not a single-speaker recording.
 
     // ── Object / Artifact ────────────────────────────────────────────────────
     const OBJECT        = 'object';         // dcmitype:PhysicalObject (fallback)
@@ -104,6 +108,7 @@ final class ContentType
         self::EPHEMERA      => 'http://id.loc.gov/authorities/genreForms/gf2014026093',
         self::FILM          => 'http://purl.org/dc/dcmitype/MovingImage',
         self::AUDIO         => 'http://purl.org/dc/dcmitype/Sound',
+        self::INTERVIEW     => 'http://id.loc.gov/authorities/genreForms/gf2014026115',
         self::OBJECT        => 'http://purl.org/dc/dcmitype/PhysicalObject',
         self::PERSON        => 'http://xmlns.com/foaf/0.1/Person',
         self::COLLECTION    => 'http://purl.org/dc/dcmitype/Collection',
@@ -292,6 +297,14 @@ final class ContentType
         'periodicals'    => self::PERIODICAL,
         'sound recordings' => self::AUDIO,
         'motion pictures'  => self::FILM,
+        // More specific than 'sound recordings' — checked first via genre_basic (fromDcAttrs step 2)
+        // before type_of_resource's 'sound recording' => AUDIO fallback (step 3) ever runs, so an
+        // interview correctly wins over the generic audio classification when both terms are present
+        // (e.g. LOC subject headings carry 'Interviews' alongside original_format's 'sound recording').
+        'interview'        => self::INTERVIEW,
+        'interviews'       => self::INTERVIEW,
+        'oral history'     => self::INTERVIEW,
+        'oral histories'   => self::INTERVIEW,
         'object'           => self::OBJECT,
         'objects'          => self::OBJECT,
         'art objects'      => self::OBJECT,
@@ -551,6 +564,8 @@ final class ContentType
                 => EphemeraDto::class,
             self::AUDIO
                 => AudioDto::class,
+            self::INTERVIEW
+                => InterviewDto::class,
             self::FILM
                 => FilmDto::class,
             self::OBJECT
