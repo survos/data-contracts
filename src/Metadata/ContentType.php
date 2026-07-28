@@ -23,6 +23,7 @@ use Survos\DataContracts\Dto\Item\ManuscriptDto;
 use Survos\DataContracts\Dto\Item\MapDto;
 use Survos\DataContracts\Dto\Item\NewspaperDto;
 use Survos\DataContracts\Dto\Item\PhotographDto;
+use Survos\DataContracts\Dto\Item\PlaceDto;
 use Survos\DataContracts\Dto\Item\PostcardDto;
 use Survos\DataContracts\Vocabulary\ItemField;
 
@@ -82,6 +83,11 @@ final class ContentType
     // ── Agent cores ─────────────────────────────────────────────────────────────
     const PERSON        = 'person';         // foaf:Person; used with the compact folio core code `per`
 
+    // ── Place cores ─────────────────────────────────────────────────────────────
+    const PLACE         = 'place';          // schema:Place; used with the compact folio core code `pla`
+                                             // (Core::PLACE) — a described place (park, site, …), not a
+                                             // generic object. See PlaceDto.
+
     // ── Aggregations ─────────────────────────────────────────────────────────────
     const COLLECTION    = 'collection';     // dcmitype:Collection; the `coll` core — a folio / set of items
 
@@ -111,6 +117,7 @@ final class ContentType
         self::INTERVIEW     => 'http://id.loc.gov/authorities/genreForms/gf2014026115',
         self::OBJECT        => 'http://purl.org/dc/dcmitype/PhysicalObject',
         self::PERSON        => 'http://xmlns.com/foaf/0.1/Person',
+        self::PLACE         => 'https://schema.org/Place',
         self::COLLECTION    => 'http://purl.org/dc/dcmitype/Collection',
     ];
 
@@ -576,6 +583,8 @@ final class ContentType
                 => SculptureDto::class,
             self::PERSON
                 => PersonDto::class,
+            self::PLACE
+                => PlaceDto::class,
             self::COLLECTION
                 => CollectionDto::class,
             default => GenericItemDto::class,

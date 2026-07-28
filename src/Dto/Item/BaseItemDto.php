@@ -253,8 +253,22 @@ abstract class BaseItemDto
     #[Field(facet: true, filterable: true, group: 'Geography')]
     #[Map(source: ['edm:country'])]
     public ?string $country  = null;
-    #[Field(group: 'Geography')]
+
+    /** Primary/display state — see ItemField::STATE. Always set when a record has ≥1 state (the
+     *  "City, State, Country" line in PhotoGrid.html.twig reads this one, not $states). */
+    #[Field(facet: true, filterable: true, group: 'Geography')]
     public ?string $state    = null;
+
+    /**
+     * Every state/province a record touches — see ItemField::STATES. Only meaningfully distinct
+     * from $state for a source whose records can span more than one (e.g. NPS park units); a
+     * single-state source can leave this null and rely on $state alone.
+     *
+     * @var list<string>|null
+     */
+    #[Field(facet: true, filterable: true, group: 'Geography')]
+    public ?array $states    = null;
+
     #[Field(group: 'Geography')]
     public ?string $county   = null;
     #[Field(facet: true, filterable: true, group: 'Geography')]

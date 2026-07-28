@@ -83,4 +83,14 @@ interface ItemField
     const LONGITUDE = 'schema:longitude';
     const COUNTRY   = 'country';
     const CITY      = 'city';
+
+    /** Single primary state/province — first-class display value (e.g. the "City, State, Country"
+     *  line in PhotoGrid). A record touching more than one still sets this to the primary one. */
+    const STATE     = 'state';
+    /**
+     * Every state/province a record touches, e.g. a National Park spanning two states. A dataset
+     * whose source is naturally single-valued should just set STATE; one whose source can return
+     * multiple (like NPS) sets both — STATE as the primary/display value, STATES as the full facet.
+     */
+    const STATES    = 'states';
 }
