@@ -25,6 +25,8 @@ use Survos\DataContracts\Dto\Item\NewspaperDto;
 use Survos\DataContracts\Dto\Item\PhotographDto;
 use Survos\DataContracts\Dto\Item\PlaceDto;
 use Survos\DataContracts\Dto\Item\PostcardDto;
+use Survos\DataContracts\Dto\Item\StoryDto;
+use Survos\DataContracts\Dto\Item\StopDto;
 use Survos\DataContracts\Vocabulary\ItemField;
 
 /**
@@ -90,6 +92,12 @@ final class ContentType
 
     // ── Aggregations ─────────────────────────────────────────────────────────────
     const COLLECTION    = 'collection';     // dcmitype:Collection; the `coll` core — a folio / set of items
+
+    // ── Narrative / tours ─────────────────────────────────────────────────────────
+    const STORY         = 'story';          // A tour/story-contract story.v1 document, as a real
+                                             // queryable row (one per tour) — see StoryDto.
+    const STOP          = 'stop';           // One narrative stop within a story — see StopDto. Related
+                                             // to its story via a real `has_stop` Link, not a bare FK.
 
     // ── LOC URIs for RDF / zm Vocabulary interop ─────────────────────────────
     const URIS = [
@@ -587,6 +595,10 @@ final class ContentType
                 => PlaceDto::class,
             self::COLLECTION
                 => CollectionDto::class,
+            self::STORY
+                => StoryDto::class,
+            self::STOP
+                => StopDto::class,
             default => GenericItemDto::class,
         };
     }
