@@ -230,6 +230,16 @@ abstract class BaseItemDto
     #[Field(facet: true, filterable: true, group: 'Subjects & Genre')]
     public ?array $subjects = null;
 
+    /**
+     * Raw curator/source-supplied tags (e.g. Fortepan's Hungarian-curated cimke_en tags) —
+     * kept separate from $subjects (reserved for normalized dcterms:subject / AI-generated
+     * keywords) so the two can be diffed rather than one silently overwriting the other. Still
+     * real curatorial metadata the source site itself facets by, so it belongs in search too.
+     */
+    #[Map(source: ['tags', 'source_tags'])]
+    #[Field(facet: true, filterable: true, group: 'Subjects & Genre')]
+    public ?array $tags = null;
+
     /** dcterms:spatial — geographic subjects */
     #[Field(facet: true, filterable: true, group: 'Subjects & Genre')]
     public ?array $subjectsGeographic = null;
