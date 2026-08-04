@@ -225,9 +225,19 @@ abstract class BaseItemDto
 
     // ── Subjects ──────────────────────────────────────────────────────────────
 
-    /** dcterms:subject — keyword/topical subjects (incl. AI keywords). A sidebar facet. */
+    /**
+     * dcterms:subject — keyword/topical subjects (incl. AI keywords). A sidebar facet.
+     *
+     * #[Translatable], same as $tags below: each element is extracted/translated
+     * independently, so a locale-variant folio build (folio:build --locale=en) folds in
+     * translated subject text automatically. Missing before 2026-08-04 -- subjects stayed
+     * in the source language on every translated build even after title/description were
+     * correctly translated, since applyTranslations() only touches #[Translatable] fields.
+     */
     #[Map(source: [DcTerms::SUBJECT->value, ItemField::KEYWORDS])]
+    #[Translatable]
     #[Field(facet: true, filterable: true, group: 'Subjects & Genre')]
+    #[PropertyMeta(facet: true)]
     public ?array $subjects = null;
 
     /**
