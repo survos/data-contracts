@@ -244,6 +244,7 @@ abstract class BaseItemDto
     #[Map(source: ['tags', 'source_tags'])]
     #[Translatable]
     #[Field(facet: true, filterable: true, group: 'Subjects & Genre')]
+    #[PropertyMeta(label: 'Tags', description: 'Raw curator/source-supplied tags -- controlled vocabulary, not free text.', facet: true)]
     public ?array $tags = null;
 
     /** dcterms:spatial — geographic subjects */
