@@ -24,6 +24,7 @@ use Survos\DataContracts\Dto\Item\MapDto;
 use Survos\DataContracts\Dto\Item\NewspaperDto;
 use Survos\DataContracts\Dto\Item\PhotographDto;
 use Survos\DataContracts\Dto\Item\PlaceDto;
+use Survos\DataContracts\Dto\Item\PoiDto;
 use Survos\DataContracts\Dto\Item\PostcardDto;
 use Survos\DataContracts\Dto\Item\StoryDto;
 use Survos\DataContracts\Dto\Item\StopDto;
@@ -89,6 +90,9 @@ final class ContentType
     const PLACE         = 'place';          // schema:Place; used with the compact folio core code `pla`
                                              // (Core::PLACE) — a described place (park, site, …), not a
                                              // generic object. See PlaceDto.
+    const POI           = 'poi';            // schema:Place; a machine-resolved point of interest (church,
+                                             // school, shop, park) from OSM/Nominatim, as opposed to
+                                             // PLACE's hand-curated content. See PoiDto, survos/poi-bundle.
 
     // ── Aggregations ─────────────────────────────────────────────────────────────
     const COLLECTION    = 'collection';     // dcmitype:Collection; the `coll` core — a folio / set of items
@@ -126,6 +130,7 @@ final class ContentType
         self::OBJECT        => 'http://purl.org/dc/dcmitype/PhysicalObject',
         self::PERSON        => 'http://xmlns.com/foaf/0.1/Person',
         self::PLACE         => 'https://schema.org/Place',
+        self::POI           => 'https://schema.org/Place',
         self::COLLECTION    => 'http://purl.org/dc/dcmitype/Collection',
     ];
 
@@ -593,6 +598,8 @@ final class ContentType
                 => PersonDto::class,
             self::PLACE
                 => PlaceDto::class,
+            self::POI
+                => PoiDto::class,
             self::COLLECTION
                 => CollectionDto::class,
             self::STORY
