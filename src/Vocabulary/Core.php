@@ -57,4 +57,8 @@ final class Core
 
     /** Events. */
     public const EVENT = 'event';
+
+    /** Named points of interest — a church, school, shop, park, or similar OSM-derived feature.
+     *  See {@see \Survos\DataContracts\Dto\Item\PoiDto}. */
+    public const POI = 'poi';
 }
