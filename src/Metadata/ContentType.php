@@ -85,6 +85,10 @@ final class ContentType
 
     // ── Agent cores ─────────────────────────────────────────────────────────────
     const PERSON        = 'person';         // foaf:Person; used with the compact folio core code `per`
+    const ORGANIZATION  = 'organization';   // foaf:Organization; used with the compact folio core code
+                                             // `org` (Core::ORGANISATION) — publishers, companies,
+                                             // agencies, etc. Falls back to GenericItemDto (no dedicated
+                                             // OrganizationDto yet).
 
     // ── Place cores ─────────────────────────────────────────────────────────────
     const PLACE         = 'place';          // schema:Place; used with the compact folio core code `pla`
