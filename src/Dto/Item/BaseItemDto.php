@@ -356,6 +356,33 @@ abstract class BaseItemDto
             ?? (string) ($this->id ?? '');
     }
 
+    /**
+     * The main descriptive paragraph — richest available prose, in priority order.
+     * observationProse is AI-generated markdown; everything else is plain text.
+     *
+     * searchSummary is the last resort, not a peer of the others: some providers map real source
+     * prose into it when nothing better exists in their source schema (confirmed: md's n4 provider
+     * maps tobacco.org's own article `summary` field here) — when every richer field above is
+     * empty, showing that real content beats showing nothing, even unpolished.
+     *
+     * Single source of truth for {@see \Survos\FolioBundle\Twig\Components\FolioNarrative} and the
+     * markdown-response bypass in FolioController::rowShow().
+     */
+    public function mainText(): ?string
+    {
+        return $this->contextDescription
+            ?: ($this->observationProse
+                ?: ($this->description
+                    ?: ($this->sourceCaption
+                        ?: $this->searchSummary)));
+    }
+
+    /** Whether {@see mainText()} resolved to observationProse (AI-generated markdown). */
+    public function mainTextIsMarkdown(): bool
+    {
+        return $this->observationProse !== null && $this->mainText() === $this->observationProse;
+    }
+
     // ── Provenance (for zm Values) ────────────────────────────────────────────
 
     /** Source of this data: import | ai | ocr | human */
