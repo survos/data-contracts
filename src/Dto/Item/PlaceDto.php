@@ -15,6 +15,15 @@ use Survos\FieldBundle\Attribute\Field;
  */
 class PlaceDto extends BaseItemDto
 {
+    /**
+     * Type/category of place, e.g. "Plantation, Estate, or Ranch", "Port", "County or Parish" --
+     * a real, high-value facet for browsing places (what KIND of place is this?), distinct from
+     * $activities (what can you DO here?). First real source: Enslaved.org's Wikibase dump
+     * (App\Aggregator\Provider\WikibaseProvider in harvest, EntityVocab::PLACE_TYPE).
+     */
+    #[Field(facet: true, filterable: true, group: 'Identity')]
+    public ?string $placeType = null;
+
     /** Typical/seasonal weather conditions a visitor should expect. Free text, not a facet — highly
      *  source-specific prose, not a normalized value worth faceting on. */
     #[Field(group: 'Visiting')]
