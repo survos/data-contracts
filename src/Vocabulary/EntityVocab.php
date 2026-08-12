@@ -47,6 +47,13 @@ interface EntityVocab
     const OCCUPATION = 'occupations';
 
     #[VocabTerm(
+        label: 'Ethnicity',
+        aiHint: 'Ethnic or ethnolinguistic origin group as recorded by the source, e.g. "Igbo", "Afro-Creole".',
+        termSet: true,
+    )]
+    const ETHNICITY = 'ethnicity';
+
+    #[VocabTerm(
         label: 'Event Type',
         aiHint: 'Type or category of the event, e.g. "Birth", "Sale or Transfer", "Voyage".',
         termSet: true,

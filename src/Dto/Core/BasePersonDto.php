@@ -75,6 +75,17 @@ abstract class BasePersonDto
     #[PropertyMeta(searchable: true, facet: true)]
     public ?string $nationality = null;
 
+    /**
+     * Ethnic or ethnolinguistic origin group as recorded by the source, e.g. "Igbo", "Afro-Creole",
+     * "Angola" -- deliberately NOT folded into $nationality: nationality means modern citizenship,
+     * a narrower and often anachronistic concept for historical records (an enslaved or captured
+     * person's recorded ethnic/language-group origin predates and is distinct from any nation-state
+     * citizenship). First real source: Enslaved.org's Wikibase dump (wikibase provider,
+     * survos-sites/musdig#35, property P46 hasEthnolinguisticDescriptor).
+     */
+    #[PropertyMeta(searchable: true, facet: true)]
+    public ?string $ethnicity = null;
+
     /** @var string[]|null */
     #[PropertyMeta(searchable: true, facet: true)]
     public ?array $occupations = null;
