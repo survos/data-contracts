@@ -62,6 +62,16 @@ abstract class BasePersonDto
     #[PropertyMeta(facet: true)]
     public ?string $gender = null;
 
+    /**
+     * Legal, social, or life status of the person, e.g. "Enslaved Person", "Free Person",
+     * "Deceased" — deliberately generic (not "enslavementStatus" or similar), so any future
+     * person-oriented provider whose subjects carry some status vocabulary gets a real home for
+     * it instead of falling into $unmapped. First real source: Enslaved.org's Wikibase dump
+     * (wikibase provider, survos-sites/musdig#35).
+     */
+    #[PropertyMeta(facet: true)]
+    public ?string $status = null;
+
     #[PropertyMeta(searchable: true, facet: true)]
     public ?string $nationality = null;
 

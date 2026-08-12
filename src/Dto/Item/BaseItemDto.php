@@ -208,6 +208,17 @@ abstract class BaseItemDto
      */
     public ?array $wikidata = null;
 
+    /**
+     * GeoNames numeric identifier (e.g. "3562981" for Cuba) — authority reconciliation against
+     * the GeoNames geographical database, same spirit as $wikidata but a distinct authority
+     * (many sources reference GeoNames without also carrying a Wikidata Q-id, and vice versa).
+     * First real source: Enslaved.org's Wikibase dump (wikibase provider), which carries both
+     * GeoNames and Wikidata IDs directly on its Place entities.
+     *
+     * NOT a facet: same per-item-authority-link reasoning as $wikidata.
+     */
+    public ?string $geonamesId = null;
+
     // ── Agents ────────────────────────────────────────────────────────────────
 
     /** dcterms:creator — array of names */
