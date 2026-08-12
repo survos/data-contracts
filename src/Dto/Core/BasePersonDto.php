@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Survos\DataContracts\Dto\Core;
 
 use Survos\DataContracts\Attribute\PropertyMeta;
-use Survos\DataContracts\Metadata\ContentType;
+use Survos\DataContracts\Dto\AbstractEntityDto;
 use Survos\DataContracts\Vocabulary\ItemField;
 
 /**
@@ -13,22 +13,14 @@ use Survos\DataContracts\Vocabulary\ItemField;
  *
  * `per` is the compact folio core/vocabulary code; `person` is the semantic
  * content type used as dtoType/contentType.
+ *
+ * $id/$sourceUrl/$url/$contentType/$aggregator + contentType()/classUri()/classLabel() live on
+ * AbstractEntityDto now, shared with BaseItemDto (2026-08-12 -- previously independently
+ * duplicated with drifted #[PropertyMeta] flags this class alone can't reintroduce without
+ * re-diverging the two; see AbstractEntityDto's own docblock for what was traded off).
  */
-abstract class BasePersonDto
+abstract class BasePersonDto extends AbstractEntityDto
 {
-    #[PropertyMeta(searchable: true, sortable: true)]
-    public ?string $id = null {
-        set(mixed $value) => $this->id = $value !== null ? (string) $value : null;
-    }
-
-    #[PropertyMeta(facet: true)]
-    public ?string $contentType = null;
-
-    #[PropertyMeta(facet: true)]
-    public ?string $aggregator = null;
-
-    public ?string $sourceUrl = null;
-
     #[PropertyMeta(facet: true)]
     public ?string $language = null;
 
@@ -120,17 +112,9 @@ abstract class BasePersonDto
 
     public ?float $confidence = 0.7;
 
-    abstract public static function contentType(): string;
-
-    public static function classUri(): ?string
-    {
-        return ContentType::uri(static::contentType());
-    }
-
-    public static function classLabel(): string
-    {
-        return 'Person';
-    }
+    // contentType()/classUri()/classLabel() are inherited from AbstractEntityDto -- classLabel()'s
+    // generic ucfirst(static::contentType()) default produces the same "Person" this class used
+    // to hardcode (ContentType::PERSON = 'person').
 
     /** @param array<string,mixed> $row */
     public static function fromNormalized(array $row): static
@@ -149,6 +133,7 @@ abstract class BasePersonDto
 
         $dto->id ??= $row[ItemField::SOURCE_ID] ?? $row['sourceId'] ?? null;
         $dto->sourceUrl ??= $row[ItemField::CITATION_URL] ?? $row[ItemField::PAGE_URL] ?? $row[ItemField::URL] ?? null;
+        $dto->url ??= $row[ItemField::URL] ?? null;
         $dto->contentType ??= $row[ItemField::CONTENT_TYPE] ?? static::contentType();
         $dto->aggregator ??= $row[ItemField::AGGREGATOR] ?? null;
         $dto->language ??= $row[ItemField::LANGUAGE] ?? null;

@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Survos\DataContracts\Dto\Item;
 
 use Survos\DataContracts\Attribute\PropertyMeta;
-use Survos\DataContracts\Metadata\ContentType;
+use Survos\DataContracts\Dto\AbstractEntityDto;
 use Survos\DataContracts\Vocabulary\DcTerms;
 use Survos\DataContracts\Vocabulary\ItemField;
 use Survos\FieldBundle\Attribute\Field;
@@ -24,23 +24,13 @@ use Survos\Lingua\Contracts\Attribute\Translatable;
  *
  * All field names match the normalized JSONL keys from DcSetRecordListener,
  * FortepanSetRecordListener, etc. — the same names in 20_normalize/obj.jsonl.
+ *
+ * $id/$sourceUrl/$url/$contentType/$aggregator + contentType()/classUri()/classLabel() live on
+ * AbstractEntityDto now, shared with BasePersonDto (survos-sites/musdig#35 follow-up).
  */
-abstract class BaseItemDto
+abstract class BaseItemDto extends AbstractEntityDto
 {
     // ── Identity ──────────────────────────────────────────────────────────────
-
-    #[Map(source: [ItemField::SOURCE_ID, ItemField::ARK, 'objectID', 'ObjectID', 'codigoDeCatalogacion', 'systemId'])]
-    #[Field(group: 'Identity')]
-    public ?string $id = null {
-        set(mixed $value) => $this->id = $value !== null ? (string) $value : null;
-    }
-    #[Map(source: [DcTerms::SOURCE->value, ItemField::CITATION_URL, ItemField::PAGE_URL, 'IsShownAt', 'cite', 'ResourceURL', 'objectURL', 'linkResource', 'frontendUrl', 'recordUrl', 'objectUrl'])]
-    #[Field(group: 'Identity')]
-    public ?string $sourceUrl   = null;
-    #[Field(group: 'Identity')]
-    public ?string $contentType = null;
-    #[Field(group: 'Identity')]
-    public ?string $aggregator  = null;
 
     /** Original source asset format: 'pdf' (single document) or 'images' (page-image set). A facet. */
     #[Field(facet: true, filterable: true, group: 'Identity')]
@@ -406,30 +396,7 @@ abstract class BaseItemDto
      */
     public ?float $confidence = null;
 
-    // ── Class metadata (override in subclasses) ───────────────────────────────
-
-    /**
-     * The ContentType constant for this DTO class.
-     * e.g. ContentType::PHOTOGRAPH, ContentType::NEWSPAPER
-     */
-    abstract public static function contentType(): string;
-
-    /**
-     * LOC/DCMI URI for the content type.
-     * Used as zm ResourceClass and for RDF export.
-     */
-    public static function classUri(): ?string
-    {
-        return ContentType::uri(static::contentType());
-    }
-
-    /**
-     * Human-readable label for the zm ResourceTemplate.
-     */
-    public static function classLabel(): string
-    {
-        return ucfirst(static::contentType());
-    }
+    // contentType()/classUri()/classLabel() are inherited from AbstractEntityDto.
 
     // ── Hydration ─────────────────────────────────────────────────────────────
 
