@@ -24,6 +24,7 @@ use Survos\DataContracts\Dto\Item\MapDto;
 use Survos\DataContracts\Dto\Item\NewspaperDto;
 use Survos\DataContracts\Dto\Item\PhotographDto;
 use Survos\DataContracts\Dto\Item\PlaceDto;
+use Survos\DataContracts\Dto\Item\EventDto;
 use Survos\DataContracts\Dto\Item\PoiDto;
 use Survos\DataContracts\Dto\Item\PostcardDto;
 use Survos\DataContracts\Dto\Item\StoryDto;
@@ -89,6 +90,14 @@ final class ContentType
                                              // `org` (Core::ORGANISATION) — publishers, companies,
                                              // agencies, etc. Falls back to GenericItemDto (no dedicated
                                              // OrganizationDto yet).
+
+    // ── Event cores ─────────────────────────────────────────────────────────────
+    const EVENT         = 'event';          // schema:Event; used with the compact folio core code
+                                             // `event` (Core::EVENT) — a described event (sale, voyage,
+                                             // birth, …), not a generic object. See EventDto. Surface
+                                             // level only for now (date/eventType) -- deliberately not
+                                             // modeling event-as-attribute-vs-entity or participant
+                                             // rosters here (see survos-sites/musdig#35 follow-up).
 
     // ── Place cores ─────────────────────────────────────────────────────────────
     const PLACE         = 'place';          // schema:Place; used with the compact folio core code `pla`
@@ -602,6 +611,8 @@ final class ContentType
                 => PersonDto::class,
             self::PLACE
                 => PlaceDto::class,
+            self::EVENT
+                => EventDto::class,
             self::POI
                 => PoiDto::class,
             self::COLLECTION
