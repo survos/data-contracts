@@ -90,6 +90,17 @@ abstract class BasePersonDto
     #[PropertyMeta(searchable: true, facet: true)]
     public ?array $occupations = null;
 
+    /**
+     * Role(s) held in specific recorded contexts, e.g. "Registered Person", "Buyer", "Vessel
+     * Captain" -- distinct from $status (overall recorded condition): role is context-specific,
+     * a person can hold different roles in different records. First real source: Enslaved.org's
+     * Wikibase dump (property P17).
+     *
+     * @var string[]|null
+     */
+    #[PropertyMeta(searchable: true, facet: true)]
+    public ?array $role = null;
+
     /** @var string[]|null */
     #[PropertyMeta(searchable: true, facet: true)]
     public ?array $subjects = null;
