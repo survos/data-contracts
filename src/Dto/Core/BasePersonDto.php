@@ -156,8 +156,22 @@ abstract class BasePersonDto
         $dto->searchSummary ??= $row[ItemField::SEARCH_SUMMARY] ?? null;
         $dto->denseSummary ??= $row[ItemField::DENSE_SUMMARY] ?? null;
 
+        // These raw keys feed the fallback assignments above under an alternate name (sourceId
+        // -> id, citationUrl -> sourceUrl, title -> name, ...) -- excluding them here (matching
+        // BaseItemDto::applyMapAliases()'s equivalent unmapped-cleanup) keeps unmapped/extras
+        // genuinely unmapped instead of redundantly duplicating a value already on a named
+        // property. Without this, every person row carried e.g. both $sourceUrl (real) AND
+        // unmapped.citationUrl (the same value, unreachable by name).
+        $aliasKeysConsumed = [
+            ItemField::SOURCE_ID, 'sourceId',
+            ItemField::CITATION_URL, ItemField::PAGE_URL, ItemField::URL,
+            ItemField::CONTENT_TYPE, ItemField::AGGREGATOR, ItemField::LANGUAGE,
+            ItemField::TITLE, 'label',
+            ItemField::SEARCH_SUMMARY, ItemField::DENSE_SUMMARY,
+        ];
+
         foreach ($row as $key => $value) {
-            if (!in_array($key, $knownProps, true)) {
+            if (!in_array($key, $knownProps, true) && !in_array($key, $aliasKeysConsumed, true)) {
                 $dto->unmapped[$key] = $value;
             }
         }
