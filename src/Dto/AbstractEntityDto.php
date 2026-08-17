@@ -8,6 +8,7 @@ use Survos\DataContracts\Vocabulary\DcTerms;
 use Survos\DataContracts\Vocabulary\ItemField;
 use Survos\FieldBundle\Attribute\Field;
 use Survos\FieldBundle\Attribute\Map;
+use Survos\SchemaOrgBundle\Attribute\SchemaProperty;
 
 /**
  * Shared identity fields + class-metadata methods for every entity DTO, regardless of which
@@ -41,6 +42,9 @@ abstract class AbstractEntityDto
     /** The citable/reader-facing page for this record (e.g. a museum's public object page). */
     #[Map(source: [DcTerms::SOURCE->value, ItemField::CITATION_URL, ItemField::PAGE_URL, 'IsShownAt', 'cite', 'ResourceURL', 'objectURL', 'linkResource', 'frontendUrl', 'recordUrl', 'objectUrl'])]
     #[Field(group: 'Identity')]
+    // sameAs, not url: this is the SOURCE's public page for the record, not ours.
+    // Whatever app publishes this DTO owns `url` and sets it from its own route.
+    #[SchemaProperty('sameAs')]
     public ?string $sourceUrl = null;
 
     /**

@@ -5,8 +5,10 @@ namespace Survos\DataContracts\Dto\Item;
 
 use Survos\DataContracts\Metadata\ContentType;
 use Survos\FieldBundle\Attribute\Field;
+use Survos\SchemaOrgBundle\Attribute\SchemaOrg;
 
-class PhotographDto extends BaseItemDto
+#[SchemaOrg('Photograph')]
+class PhotographDto extends AbstractWorkDto
 {
     /** Who contributed the photo to the archive (e.g. the Fortepan donor). A sidebar facet. */
     #[Field(facet: true, filterable: true, group: 'Agents & Collections')]

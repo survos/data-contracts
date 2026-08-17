@@ -5,6 +5,7 @@ namespace Survos\DataContracts\Dto\Item;
 
 use Survos\DataContracts\Metadata\ContentType;
 use Survos\FieldBundle\Attribute\Field;
+use Survos\SchemaOrgBundle\Attribute\SchemaOrg;
 
 /**
  * A described EVENT — a sale, voyage, birth, or similar event-core row (Core::EVENT, 'event'), as
@@ -16,6 +17,7 @@ use Survos\FieldBundle\Attribute\Field;
  * event-as-attribute-vs-entity or real participant rosters here — that's real, separate,
  * deferred work (see survos-sites/musdig#35 follow-up discussion).
  */
+#[SchemaOrg('Event')]
 class EventDto extends BaseItemDto
 {
     /**

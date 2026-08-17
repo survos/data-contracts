@@ -10,6 +10,7 @@ use Survos\DataContracts\Vocabulary\ItemField;
 use Survos\FieldBundle\Attribute\Field;
 use Survos\FieldBundle\Attribute\Map;
 use Survos\Lingua\Contracts\Attribute\Translatable;
+use Survos\SchemaOrgBundle\Attribute\SchemaProperty;
 
 /**
  * Base DTO for all museum collection items.
@@ -30,6 +31,19 @@ use Survos\Lingua\Contracts\Attribute\Translatable;
  */
 abstract class BaseItemDto extends AbstractEntityDto
 {
+    /*
+     * Only Thing-level schema.org properties are declared on this base, on purpose.
+     *
+     * PlaceDto, PoiDto and EventDto extend it, and a Place is not a CreativeWork --
+     * so annotating $citation, $credit, $rightsUri, $language, $ocrText, $creators or
+     * $institution here would emit CreativeWork properties on Place and Event nodes,
+     * which is invalid. name/description/sameAs are on Thing and are safe everywhere.
+     *
+     * CreativeWork-specific mappings therefore belong either on a CreativeWork-only
+     * base (which this hierarchy does not currently have) or in the consuming app's
+     * schema class. See survos/schema-org-bundle docs/attributes.md.
+     */
+
     // ── Identity ──────────────────────────────────────────────────────────────
 
     /** Original source asset format: 'pdf' (single document) or 'images' (page-image set). A facet. */
@@ -57,12 +71,14 @@ abstract class BaseItemDto extends AbstractEntityDto
     #[Map(source: ['title', DcTerms::TITLE->value, 'title_info_primary', 'title_info_primary_t', 'object_name', 'objectName', 'display_title', 'displayTitle', 'nativeName', 'label', 'titulo', 'titel'])]
     #[Translatable]
     #[Field(group: 'Description')]
+    #[SchemaProperty('name')]
     public ?string $title = null;
 
     /** dcterms:description — short curatorial text from the source institution */
     #[Map(source: ['description', DcTerms::DESCRIPTION->value, 'object_description', 'objectDescription', 'objectSummary', 'descripcion', 'beschreibung'])]
     #[Translatable]
     #[Field(group: 'Description')]
+    #[SchemaProperty('description')]
     public ?string $description = null;
 
     /**
@@ -316,6 +332,9 @@ abstract class BaseItemDto extends AbstractEntityDto
     #[Map(source: ['identifier_iiif_manifest'])]
     public ?string $iiifManifest  = null;
     #[Field(group: 'Media')]
+    // image, not thumbnailUrl: image is on Thing so it stays valid on Place and Event,
+    // whereas thumbnailUrl is CreativeWork-only.
+    #[SchemaProperty('image')]
     public ?string $thumbnailUrl  = null;
     #[Map(source: ['IsShownBy', 'edm:isShownBy'])]
     #[Field(group: 'Media')]

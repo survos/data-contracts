@@ -4,8 +4,10 @@ declare(strict_types=1);
 namespace Survos\DataContracts\Dto\Item;
 
 use Survos\DataContracts\Metadata\ContentType;
+use Survos\SchemaOrgBundle\Attribute\SchemaOrg;
 
-class MapDto extends BaseItemDto
+#[SchemaOrg('Map')]
+class MapDto extends AbstractWorkDto
 {
     public ?string $scale       = null;
     public ?string $projection  = null;

@@ -5,6 +5,7 @@ namespace Survos\DataContracts\Dto\Item;
 
 use Survos\DataContracts\Metadata\ContentType;
 use Survos\FieldBundle\Attribute\Field;
+use Survos\SchemaOrgBundle\Attribute\SchemaOrg;
 
 /**
  * A described PLACE — a park, site, or similar place-core row (Core::PLACE, 'pla'), as opposed to
@@ -13,6 +14,7 @@ use Survos\FieldBundle\Attribute\Field;
  * provider (a museum campus, a historic site, a trail) gets a real home for them instead of
  * falling into $unmapped/extras.
  */
+#[SchemaOrg('Place')]
 class PlaceDto extends BaseItemDto
 {
     /**

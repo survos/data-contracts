@@ -6,12 +6,14 @@ namespace Survos\DataContracts\Dto\Item;
 use Survos\DataContracts\Attribute\ClassMeta;
 use Survos\DataContracts\Metadata\ContentType;
 use Survos\FieldBundle\Attribute\Field;
+use Survos\SchemaOrgBundle\Attribute\SchemaOrg;
 
 #[ClassMeta(
     label: 'Document',
     description: 'Generic text-primary item: broadsides, lists, clippings, forms, and any textual work that does not fit a more specific type.',
 )]
-class DocumentDto extends BaseItemDto
+#[SchemaOrg('ArchiveComponent')]
+class DocumentDto extends AbstractWorkDto
 {
     public ?string $extent           = null;
     public bool    $hasTranscription = false;

@@ -6,12 +6,14 @@ namespace Survos\DataContracts\Dto\Item;
 use Survos\DataContracts\Attribute\ClassMeta;
 use Survos\DataContracts\Attribute\PropertyMeta;
 use Survos\DataContracts\Metadata\ContentType;
+use Survos\SchemaOrgBundle\Attribute\SchemaOrg;
 
 #[ClassMeta(
     label: 'Book',
     description: 'Bound volumes: monographs, pamphlets, albums, and catalogues.',
 )]
-class BookDto extends BaseItemDto
+#[SchemaOrg('Book')]
+class BookDto extends AbstractWorkDto
 {
     public ?string $publisher = null;
     public ?string $pubPlace  = null;

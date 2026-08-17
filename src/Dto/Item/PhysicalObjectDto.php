@@ -16,7 +16,7 @@ use Survos\DataContracts\Vocabulary\MuseumVocab;
  * Born-digital content (digital-only photographs, audio, video) should
  * extend BaseItemDto directly rather than this class.
  */
-abstract class PhysicalObjectDto extends BaseItemDto
+abstract class PhysicalObjectDto extends AbstractWorkDto
 {
     /** MuseumVocab::MATERIAL — physical materials, e.g. ['Ink', 'Paper'] */
     public ?array $mat = null;

@@ -5,6 +5,7 @@ namespace Survos\DataContracts\Dto\Item;
 
 use Survos\DataContracts\Metadata\ContentType;
 use Survos\FieldBundle\Attribute\Field;
+use Survos\SchemaOrgBundle\Attribute\SchemaOrg;
 
 /**
  * A collection / series — an aggregation of items rather than a single object.
@@ -14,7 +15,8 @@ use Survos\FieldBundle\Attribute\Field;
  * collection is browsed by its dataset-level descriptors — provider, country, language, size —
  * so those are promoted to facets here. `subjects` (a parent facet) carries the dtoType mix.
  */
-class CollectionDto extends BaseItemDto
+#[SchemaOrg('Collection')]
+class CollectionDto extends AbstractWorkDto
 {
     /** Provider / aggregator (e.g. dc, smith, fortepan) — the "source" to browse collections by. */
     #[Field(facet: true, filterable: true)]

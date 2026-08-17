@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Survos\DataContracts\Dto\Item;
 
 use Survos\DataContracts\Attribute\PropertyMeta;
+use Survos\SchemaOrgBundle\Attribute\SchemaOrg;
 
 /**
  * Base DTO for works of art (sculpture, painting, drawing, print, …).
@@ -12,6 +13,7 @@ use Survos\DataContracts\Attribute\PropertyMeta;
  * the art-historical attributes (style, movement, signature) that distinguish art from generic
  * artifacts, specimens or documents. Concrete subclasses declare their ContentType.
  */
+#[SchemaOrg('VisualArtwork')]
 abstract class ArtworkDto extends PhysicalObjectDto
 {
     /** Artistic style (e.g. Baroque, Missioneiro, Gothic). */

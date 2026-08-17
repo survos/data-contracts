@@ -6,6 +6,7 @@ namespace Survos\DataContracts\Dto\Item;
 use Survos\DataContracts\Attribute\ClassMeta;
 use Survos\DataContracts\Metadata\ContentType;
 use Survos\FieldBundle\Attribute\Field;
+use Survos\SchemaOrgBundle\Attribute\SchemaOrg;
 
 /**
  * A named point of interest — a church, school, shop, park, or similar OSM-derived feature — as
@@ -19,6 +20,7 @@ use Survos\FieldBundle\Attribute\Field;
     label: 'Point of interest',
     description: 'A church, school, shop, park, or similar named place resolved from OpenStreetMap.',
 )]
+#[SchemaOrg('TouristAttraction')]
 class PoiDto extends BaseItemDto
 {
     /** OSM class/type joined as "class/type", e.g. "amenity/place_of_worship", "amenity/school",

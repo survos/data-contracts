@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Survos\DataContracts\Dto\Item;
 
 use Survos\DataContracts\Metadata\ContentType;
+use Survos\SchemaOrgBundle\Attribute\SchemaOrg;
 
 /**
  * A sculpture — a three-dimensional physical artwork (statue, bust, relief, statuette, …).
@@ -12,6 +13,7 @@ use Survos\DataContracts\Metadata\ContentType;
  * records from PhysicalObjectDto. Promoted from generic ArtifactDto so sculptures are categorized
  * and facetable; sculpture-specific fields (cast/edition, foundry, patina) can be added as needed.
  */
+#[SchemaOrg('Sculpture')]
 class SculptureDto extends ArtworkDto
 {
     public static function contentType(): string { return ContentType::SCULPTURE; }

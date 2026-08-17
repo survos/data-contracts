@@ -4,8 +4,10 @@ declare(strict_types=1);
 namespace Survos\DataContracts\Dto\Item;
 
 use Survos\DataContracts\Metadata\ContentType;
+use Survos\SchemaOrgBundle\Attribute\SchemaOrg;
 
-class NewspaperDto extends BaseItemDto
+#[SchemaOrg('Newspaper')]
+class NewspaperDto extends AbstractWorkDto
 {
     public ?string $publisher    = null;
     public ?string $pubPlace     = null;
