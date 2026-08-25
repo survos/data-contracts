@@ -37,6 +37,20 @@ final class ImageUrl
     public const IMAGE_EXTENSIONS = ['jpg', 'jpeg', 'png', 'gif', 'tif', 'tiff', 'webp', 'avif', 'bmp', 'jp2'];
 
     /**
+     * Schemes imgproxy can fetch. Object-storage schemes belong here alongside http(s) because
+     * imgproxy resolves them natively with its own credentials when IMGPROXY_USE_S3 is on — an
+     * `s3://bucket/key` source is not merely acceptable, it is the preferred one, since it keeps
+     * the fetch inside the object store instead of going back out over the public internet.
+     *
+     * Before this list existed, any non-http scheme was classified NotAnImage. That was harmless
+     * while every image URL was a public https link, and became wrong the moment folios started
+     * storing page.url as s3:// — it silently made every properly-mirrored row imageless, which is
+     * the exact opposite of the intended reward for mirroring it. Matches the schemes
+     * ImgproxyUrlBuilder::encodePlain() already documents as passing through untouched.
+     */
+    public const FETCHABLE_SCHEMES = ['http', 'https', 's3', 'gs', 'abs', 'swift'];
+
+    /**
      * False only when the URL carries an extension we know imgproxy cannot render.
      * Extension-less URLs (delivery services, IIIF bases) pass — see the class docblock.
      */
@@ -58,7 +72,7 @@ final class ImageUrl
         }
 
         $scheme = strtolower((string) (parse_url($url, PHP_URL_SCHEME) ?? ''));
-        if ($scheme !== '' && !in_array($scheme, ['http', 'https'], true)) {
+        if ($scheme !== '' && !in_array($scheme, self::FETCHABLE_SCHEMES, true)) {
             return ImageUrlVerdict::NotAnImage;
         }
 
