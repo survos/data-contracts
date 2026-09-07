@@ -10,6 +10,25 @@ use function rtrim;
 use function strtr;
 use function trim;
 
+/**
+ * The imgproxy-style media key, and the ONLY way to derive one.
+ *
+ * Never hand-roll this encoding. It is URL-safe base64 (`+/` → `-_`, padding stripped) and it is
+ * REVERSIBLE via {@see stringFromEncoded()} — deliberately, because it is what lets a resize URL
+ * carry its own source so rendering a thumbnail needs no database lookup. A second, subtly
+ * different encoding somewhere would produce URLs that resolve to nothing, or worse, to the wrong
+ * image.
+ *
+ * NOT the asset id. {@see MediaIdentity::idFromOriginalUrl()} is a one-way xxh3 hash used as the
+ * primary key both sides agree on. Same URL, two different values, each with its own job:
+ *
+ *   keyFromString()          → reversible, for URLs
+ *   idFromOriginalUrl()      → one-way, for keys
+ *   archivePathFromKey()     → uses BOTH: hashes the reversible key for the orig/aa/bb prefix
+ *
+ * Lives in data-contracts so mediary and its clients derive identical values without either
+ * depending on the other's code.
+ */
 final class MediaKeyService
 {
     static public function keyFromString(string $value): string
