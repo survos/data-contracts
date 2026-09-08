@@ -268,7 +268,13 @@ abstract class BaseItemDto extends AbstractEntityDto
      * build (folio:build --locale=es) folds in translated tag text automatically — no bespoke
      * per-request translation lookup needed in the facet UI.
      */
-    #[Map(source: ['tags', 'source_tags'])]
+    // `sourceTags` is the camelCase spelling the normalized contract requires -- source_tags fails
+    // fromNormalized()'s own assertion, so any provider still emitting it cannot build a folio at
+    // all. Both are listed because the snake form is what several providers historically wrote.
+    // Without the camel spelling here the tags fall through to `extras`: preserved, but untyped and
+    // therefore neither facetable, filterable nor translatable -- which for fortepan.us is 25,261
+    // of 26,374 rows and 6,102 distinct tags demoted to a blob.
+    #[Map(source: ['tags', 'source_tags', 'sourceTags'])]
     #[Translatable]
     #[Field(facet: true, filterable: true, group: 'Subjects & Genre')]
     #[PropertyMeta(label: 'Tags', description: 'Raw curator/source-supplied tags -- controlled vocabulary, not free text.', facet: true)]
