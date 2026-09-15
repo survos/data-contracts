@@ -32,6 +32,7 @@ interface ItemField
     const CREATOR     = 'creators'; // the normalized field is the array `creators` (BaseItemDto::$creators)
     const COLLECTIONS = 'collections';
     const URL         = 'url';
+    const PDF_URL     = 'pdfUrl';
     const CITATION    = 'citation';
     const CITATION_URL = 'citationUrl';
     const SOURCE_API_URL = 'sourceApiUrl';

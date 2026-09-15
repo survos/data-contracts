@@ -40,6 +40,8 @@ final class MediaSyncKeys
      * {@see OcrProvider} and skips its own local OCR pass.
      */
     public const string OCR_TEXT = 'ocr_text';
+    /** Recognition language hint (Tesseract language codes), not catalog metadata locale. */
+    public const string OCR_LANGUAGE = 'ocr_language';
     /** Context key: one of {@see OcrProvider}'s constants. Required alongside OCR_TEXT. */
     public const string OCR_PROVIDER = 'ocr_provider';
     /** Context key: the specific model/tool version, when the provider has one. */
