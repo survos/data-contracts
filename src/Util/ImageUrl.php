@@ -33,6 +33,13 @@ final class ImageUrl
 
     public const DOCUMENT_EXTENSIONS = ['pdf', 'doc', 'docx', 'epub'];
 
+    /**
+     * Audio is, like a PDF, the record's real asset rather than a wrong field -- LOC's "Voices
+     * Remembering Slavery" is nothing but .mp3 interviews. Without this it classified as
+     * Unverifiable, went to imgproxy, and every tile in the grid rendered as a broken image.
+     */
+    public const AUDIO_EXTENSIONS = ['mp3', 'wav', 'ogg', 'oga', 'm4a', 'aac', 'flac', 'opus'];
+
     /** Extensions we positively recognise as raster images. */
     public const IMAGE_EXTENSIONS = ['jpg', 'jpeg', 'png', 'gif', 'tif', 'tiff', 'webp', 'avif', 'bmp', 'jp2'];
 
@@ -56,8 +63,7 @@ final class ImageUrl
      */
     public static function looksLikeImage(string $url): bool
     {
-        return self::classify($url) !== ImageUrlVerdict::NotAnImage
-            && self::classify($url) !== ImageUrlVerdict::Document;
+        return !in_array(self::classify($url), [ImageUrlVerdict::NotAnImage, ImageUrlVerdict::Document, ImageUrlVerdict::Audio], true);
     }
 
     /**
@@ -83,6 +89,9 @@ final class ImageUrl
         }
         if (in_array($ext, self::DOCUMENT_EXTENSIONS, true)) {
             return ImageUrlVerdict::Document;
+        }
+        if (in_array($ext, self::AUDIO_EXTENSIONS, true)) {
+            return ImageUrlVerdict::Audio;
         }
         if (in_array($ext, self::NON_IMAGE_EXTENSIONS, true)) {
             return ImageUrlVerdict::NotAnImage;

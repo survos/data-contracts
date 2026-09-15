@@ -20,6 +20,9 @@ enum ImageUrlVerdict: string
     /** A document (PDF etc.). Real asset, but imgproxy cannot rasterise it. */
     case Document = 'document';
 
+    /** An audio recording (oral histories, field recordings). Real asset, nothing to rasterise. */
+    case Audio = 'audio';
+
     /** A viewer config, landing page, or data file mistakenly stored as the image. */
     case NotAnImage = 'not_an_image';
 
@@ -44,6 +47,7 @@ enum ImageUrlVerdict: string
             self::Image => 'Image',
             self::Unverifiable => 'Unverified (no extension)',
             self::Document => 'Document (not rasterisable)',
+            self::Audio => 'Audio',
             self::NotAnImage => 'Not an image',
             self::Empty => 'No image URL',
         };
