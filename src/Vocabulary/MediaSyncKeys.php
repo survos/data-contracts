@@ -33,6 +33,13 @@ final class MediaSyncKeys
     public const string AI_QUEUE = 'ai_queue';
 
     /**
+     * Context key: float, the most requests per second mediary may make to this item's source
+     * host when it fetches the original. A processing DIRECTIVE like {@see AI_QUEUE}: small
+     * library hosts 429 a burst from several archive workers. Absent or <= 0 = mediary's default.
+     */
+    public const string SOURCE_RATE = 'source_rate';
+
+    /**
      * Context keys: OCR the producer already holds, handed over at ingest instead of being
      * regenerated. A harvester of NDNP newspapers has publisher ALTO for every page — word
      * coordinates included — so letting mediary re-OCR the same page with a general model is both
