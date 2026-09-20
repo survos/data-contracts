@@ -47,11 +47,15 @@ abstract class BaseItemDto extends AbstractEntityDto
     // ── Identity ──────────────────────────────────────────────────────────────
 
     /** Original source asset format: 'pdf' (single document) or 'images' (page-image set). A facet. */
-    #[Field(facet: true, filterable: true, group: 'Identity')]
+    #[Field(facet: true, filterable: true, group: 'Admin')]
     public ?string $sourceFormat = null;
 
-    /** Pipeline processing stage (raw / normalized / enriched). A facet so you can filter to enriched items; later this can be made dev-only. */
-    #[Field(facet: true, filterable: true, group: 'Identity')]
+    /**
+     * Pipeline processing stage (raw / normalized / enriched). A facet so you can filter to
+     * enriched items. Grouped under Admin -- plumbing a visitor neither knows nor wants, and the
+     * sidebar starts an Admin block collapsed.
+     */
+    #[Field(facet: true, filterable: true, group: 'Admin')]
     public ?string $stage = null;
 
     /**
@@ -161,6 +165,44 @@ abstract class BaseItemDto extends AbstractEntityDto
     #[PropertyMeta(label: 'Year', description: 'Coverage/production year.', sortable: true, facet: true)]
     #[Field(group: 'Description')]
     public ?int $year = null;
+
+    // ── Merit (AI, merit_score) ───────────────────────────────────────────────
+    // 0-100 per criterion, from the merit_score task's claims (merit:overall etc., folded in by
+    // ClaimProjector). Numeric facets, so the grid gives each one a range slider: "creative and
+    // historical" is meritOriginality/meritCaptivates and meritHistoricalSignificance both high.
+    // Null for anything never scored, and a facet only appears where values exist.
+
+    #[PropertyMeta(label: 'Merit: Overall', description: 'How strong a keeper this photograph is for a public archive — the weighed call, not an average of the criteria below.', sortable: true, facet: true)]
+    #[Field(group: 'Merit')]
+    public ?int $meritOverall = null;
+
+    #[PropertyMeta(label: 'Merit: Action', description: 'Tells a story: funny, tragic, or a situation people recognize.', sortable: true, facet: true)]
+    #[Field(group: 'Merit')]
+    public ?int $meritAction = null;
+
+    #[PropertyMeta(label: 'Merit: Cultural Practice', description: 'Communicates a specific cultural practice.', sortable: true, facet: true)]
+    #[Field(group: 'Merit')]
+    public ?int $meritCulturalPractice = null;
+
+    #[PropertyMeta(label: 'Merit: Historical Significance', description: 'A recognizable historical moment, or an amateur\'s vantage point on one.', sortable: true, facet: true)]
+    #[Field(group: 'Merit')]
+    public ?int $meritHistoricalSignificance = null;
+
+    #[PropertyMeta(label: 'Merit: Captivates', description: 'A touching detail, accidental framing, light or expression that elevates it.', sortable: true, facet: true)]
+    #[Field(group: 'Merit')]
+    public ?int $meritCaptivates = null;
+
+    #[PropertyMeta(label: 'Merit: In the Act', description: 'Someone visibly taking a photograph.', sortable: true, facet: true)]
+    #[Field(group: 'Merit')]
+    public ?int $meritInTheAct = null;
+
+    #[PropertyMeta(label: 'Merit: Quality', description: 'Technical and physical condition: focus, exposure, damage.', sortable: true, facet: true)]
+    #[Field(group: 'Merit')]
+    public ?int $meritQuality = null;
+
+    #[PropertyMeta(label: 'Merit: Originality', description: 'How distinctive it is next to typical archive submissions.', sortable: true, facet: true)]
+    #[Field(group: 'Merit')]
+    public ?int $meritOriginality = null;
 
     /** ItemField::CITATION — canonical URL or attribution string for the record */
     #[Field(group: 'Rights & Attribution')]
