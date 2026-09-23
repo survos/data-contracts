@@ -183,4 +183,25 @@ interface MuseumVocab
         aiHint: 'Text inscribed, painted, stamped, or otherwise applied to the object — transcribe verbatim.',
     )]
     const INSCRIPTION = 'inscription';
+
+    /**
+     * Icon for each vocabulary code, as ux_icons aliases: templates call `ux_icon(code)` for a
+     * term set or relation group. Registered by every bundle that renders these codes
+     * (data-bundle, folio-bundle), so an app gets them whichever of those it installs.
+     */
+    const ICONS = [
+        self::PERSON       => 'tabler:user',
+        self::COLLECTION   => 'tabler:folder',
+        self::ORGANISATION => 'tabler:building',
+        self::SUBJECT      => 'tabler:tag',
+        self::PLACE        => 'tabler:map-pin',
+        self::GENRE        => 'tabler:category',
+        self::CULTURE      => 'tabler:world',
+        self::MEDIUM       => 'tabler:palette',
+        self::TECHNIQUE    => 'tabler:brush',
+        self::MATERIAL     => 'tabler:cube',
+        self::PERIOD       => 'tabler:calendar',
+        self::EPOCH        => 'tabler:hourglass',
+        self::DEPARTMENT   => 'tabler:sitemap',
+    ];
 }
