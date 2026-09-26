@@ -440,14 +440,16 @@ class DataPaths
         $stageDir = $this->stageDir($datasetKey, $stage);
 
         if ($file !== null && $file !== '') {
-            return [rtrim($stageDir, '/') . '/' . ltrim($file, '/')];
+            $path = rtrim($stageDir, '/') . '/' . ltrim($file, '/');
+            return str_ends_with($path, '.jsonl') ? [$path, $path.'.gz'] : [$path];
         }
 
         if ($stage === 'meta' || $stage === '00_meta') {
             return [$stageDir];
         }
 
-        $candidates = [rtrim($stageDir, '/') . '/' . $this->defaultObjectFilename];
+        $path = rtrim($stageDir, '/') . '/' . $this->defaultObjectFilename;
+        $candidates = [$path, $path.'.gz'];
 
         if ($stage === 'raw' || $stage === '05_raw') {
             $candidates[] = $candidates[0] . '.gz';
