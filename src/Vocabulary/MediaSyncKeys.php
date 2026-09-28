@@ -39,6 +39,9 @@ final class MediaSyncKeys
      */
     public const string SOURCE_RATE = 'source_rate';
 
+    /** Wire key for {@see \Survos\DataContracts\Dto\BatchItemDto::$archive}; read it through the DTO, not directly. */
+    public const string ARCHIVE = 'archive';
+
     /**
      * Context keys: OCR the producer already holds, handed over at ingest instead of being
      * regenerated. A harvester of NDNP newspapers has publisher ALTO for every page — word
