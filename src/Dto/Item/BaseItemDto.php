@@ -431,7 +431,9 @@ abstract class BaseItemDto extends AbstractEntityDto
      * searchSummary is the last resort, not a peer of the others: some providers map real source
      * prose into it when nothing better exists in their source schema (confirmed: md's n4 provider
      * maps tobacco.org's own article `summary` field here) — when every richer field above is
-     * empty, showing that real content beats showing nothing, even unpolished.
+     * empty, showing that real content beats showing nothing, even unpolished. denseSummary, the AI
+     * summary, comes after every source field: it is for records whose source says nothing about
+     * them (an oral history's catalogue entry is just its title and the rights statement).
      *
      * Single source of truth for {@see \Survos\FolioBundle\Twig\Components\FolioNarrative} and the
      * markdown-response bypass in FolioController::rowShow().
@@ -442,7 +444,8 @@ abstract class BaseItemDto extends AbstractEntityDto
             ?: ($this->observationProse
                 ?: ($this->description
                     ?: ($this->sourceCaption
-                        ?: $this->searchSummary)));
+                        ?: ($this->searchSummary
+                            ?: $this->denseSummary))));
     }
 
     /** Whether {@see mainText()} resolved to observationProse (AI-generated markdown). */
