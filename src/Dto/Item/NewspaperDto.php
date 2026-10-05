@@ -25,7 +25,7 @@ class NewspaperDto extends AbstractWorkDto
      *
      * @var list<string>|null
      */
-    #[Field(facet: true, filterable: true, group: 'Availability')]
+    #[Field(facet: true, filterable: true, group: 'Availability', order: 1)]
     public ?array $digitizedIn = null;
 
     /**
