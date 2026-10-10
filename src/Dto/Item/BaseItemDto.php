@@ -387,6 +387,9 @@ abstract class BaseItemDto extends AbstractEntityDto
     #[Map(source: ['IsShownBy', 'edm:isShownBy'])]
     #[Field(group: 'Media')]
     public ?string $largeImageUrl = null;
+    /** See ItemField::DISPLAY_IMAGE_URL — source for the small imgproxy presets when set. */
+    #[Field(group: 'Media')]
+    public ?string $displayImageUrl = null;
 
     /** Downloadable PDF of the document (e.g. DC document_access.pdf). When set, folio shows the
      *  pdf.js viewer instead of the image viewer; it is also the source for the split/OCR pipeline. */

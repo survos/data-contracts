@@ -47,6 +47,9 @@ interface ItemField
 
     const THUMBNAIL_URL   = 'thumbnailUrl';
     const LARGE_IMAGE_URL = 'largeImageUrl';
+    /** A provider-declared rendition big enough for every display preset (≥ ~700px), used as the
+     *  imgproxy source instead of a slow full-size original. Opt-in: thumbnailUrl is often 200-300px. */
+    const DISPLAY_IMAGE_URL = 'displayImageUrl';
     const IIIF_BASE       = 'iiifBase';
     const IIIF_MANIFEST   = 'iiifManifest';
     const IIIF_INFO       = 'iiifInfo';
