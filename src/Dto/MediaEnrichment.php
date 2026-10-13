@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Survos\DataContracts\Dto;
@@ -45,7 +46,7 @@ final class MediaEnrichment
         $byTask = [];
         foreach ($completed as $entry) {
             $task = $entry['task'] ?? null;
-            if (!is_string($task) || $task === '') {
+            if (!is_string($task) || '' === $task) {
                 continue;
             }
             if (!isset($entry['result']) || !is_array($entry['result'])) {
@@ -79,10 +80,10 @@ final class MediaEnrichment
             ?? self::string($basicDescription['_debug']['image_source'] ?? null);
 
         $hasText = self::bool($enrich['has_text'] ?? null);
-        if ($hasText === null) {
-            $hasText = self::string($ocrMistral['text'] ?? null) !== null
-                || self::string($ocr['text'] ?? null) !== null
-                || self::string($handwriting['text'] ?? null) !== null;
+        if (null === $hasText) {
+            $hasText = null !== self::string($ocrMistral['text'] ?? null)
+                || null !== self::string($ocr['text'] ?? null)
+                || null !== self::string($handwriting['text'] ?? null);
         }
 
         return new self(
@@ -170,7 +171,7 @@ final class MediaEnrichment
 
     private static function string(mixed $value): ?string
     {
-        return is_string($value) && trim($value) !== '' ? $value : null;
+        return is_string($value) && '' !== trim($value) ? $value : null;
     }
 
     private static function bool(mixed $value): ?bool
@@ -180,7 +181,7 @@ final class MediaEnrichment
         }
 
         if (is_int($value)) {
-            return $value !== 0;
+            return 0 !== $value;
         }
 
         if (is_string($value)) {
@@ -229,7 +230,7 @@ final class MediaEnrichment
                 }
 
                 $string = trim((string) $item);
-                if ($string !== '') {
+                if ('' !== $string) {
                     $out[$string] = $string;
                 }
             }

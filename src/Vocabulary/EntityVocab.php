@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Survos\DataContracts\Vocabulary;
@@ -29,14 +30,14 @@ interface EntityVocab
         aiHint: 'Gender of the person, e.g. "Male", "Female".',
         termSet: true,
     )]
-    const GENDER = 'gender';
+    public const GENDER = 'gender';
 
     #[VocabTerm(
         label: 'Status',
         aiHint: 'Legal, social, or life status of the person, e.g. "Enslaved Person", "Free Person", "Deceased".',
         termSet: true,
     )]
-    const STATUS = 'status';
+    public const STATUS = 'status';
 
     #[VocabTerm(
         label: 'Occupation',
@@ -44,28 +45,28 @@ interface EntityVocab
         aiHint: 'Occupation, trade, or role the person is recorded as having, e.g. "Maritime", "Agriculture".',
         termSet: true,
     )]
-    const OCCUPATION = 'occupations';
+    public const OCCUPATION = 'occupations';
 
     #[VocabTerm(
         label: 'Ethnicity',
         aiHint: 'Ethnic or ethnolinguistic origin group as recorded by the source, e.g. "Igbo", "Afro-Creole".',
         termSet: true,
     )]
-    const ETHNICITY = 'ethnicity';
+    public const ETHNICITY = 'ethnicity';
 
     #[VocabTerm(
         label: 'Event Type',
         aiHint: 'Type or category of the event, e.g. "Birth", "Sale or Transfer", "Voyage".',
         termSet: true,
     )]
-    const EVENT_TYPE = 'eventType';
+    public const EVENT_TYPE = 'eventType';
 
     #[VocabTerm(
         label: 'Place Type',
         aiHint: 'Type of place, e.g. "Plantation, Estate, or Ranch", "Port", "County or Parish".',
         termSet: true,
     )]
-    const PLACE_TYPE = 'placeType';
+    public const PLACE_TYPE = 'placeType';
 
     /**
      * Role a person held in a specific recorded context, e.g. "Registered Person", "Buyer",
@@ -81,7 +82,7 @@ interface EntityVocab
         aiHint: 'Role the person held in this record, e.g. "Registered Person", "Buyer", "Vessel Captain".',
         termSet: true,
     )]
-    const ROLE = 'role';
+    public const ROLE = 'role';
 
     /**
      * Contributing project/dataset that sourced this record, e.g. "SlaveVoyages", "Maranhao
@@ -93,7 +94,7 @@ interface EntityVocab
         aiHint: 'Contributing project or dataset that sourced this record, e.g. "SlaveVoyages".',
         termSet: true,
     )]
-    const PROJECT = 'project';
+    public const PROJECT = 'project';
 
     /**
      * Type/format of a source/document record, e.g. "Bill of Sale, Invoice, or Receipt",
@@ -105,5 +106,5 @@ interface EntityVocab
         aiHint: 'Type or format of the source record, e.g. "Bill of Sale, Invoice, or Receipt", "Census or Register".',
         termSet: true,
     )]
-    const SOURCE_TYPE = 'sourceType';
+    public const SOURCE_TYPE = 'sourceType';
 }

@@ -123,7 +123,7 @@ abstract class BasePersonDto extends AbstractEntityDto
         $knownProps = array_keys(get_object_vars($dto));
 
         foreach ($knownProps as $prop) {
-            if ($prop === 'unmapped') {
+            if ('unmapped' === $prop) {
                 continue;
             }
             if (array_key_exists($prop, $row)) {
@@ -169,7 +169,7 @@ abstract class BasePersonDto extends AbstractEntityDto
     {
         return array_filter(
             get_object_vars($this),
-            static fn (mixed $value): bool => $value !== null && $value !== [] && $value !== ''
+            static fn (mixed $value): bool => null !== $value && [] !== $value && '' !== $value
         );
     }
 }

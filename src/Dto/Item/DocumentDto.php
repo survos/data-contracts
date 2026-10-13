@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Survos\DataContracts\Dto\Item;
@@ -16,8 +17,8 @@ use Survos\SchemaOrgBundle\Attribute\SchemaOrg;
 #[SchemaOrg('ArchiveComponent')]
 class DocumentDto extends AbstractWorkDto
 {
-    public ?string $extent           = null;
-    public bool    $hasTranscription = false;
+    public ?string $extent = null;
+    public bool $hasTranscription = false;
 
     /**
      * Words of text in this record. A newspaper block runs from a one-line notice to a column-long
@@ -51,5 +52,8 @@ class DocumentDto extends AbstractWorkDto
     #[Field(facet: true, filterable: true, group: 'Provenance')]
     public ?string $project = null;
 
-    public static function contentType(): string { return ContentType::DOCUMENT; }
+    public static function contentType(): string
+    {
+        return ContentType::DOCUMENT;
+    }
 }

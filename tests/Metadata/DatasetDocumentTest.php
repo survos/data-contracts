@@ -1,6 +1,7 @@
 <?php
 
 declare(strict_types=1);
+
 namespace Survos\DataContracts\Tests\Metadata;
 
 use PHPUnit\Framework\TestCase;
@@ -27,6 +28,7 @@ final class DatasetDocumentTest extends TestCase
         self::assertArrayNotHasKey('titleRecord', $doc['dataset']['extras']);
         self::assertSame(200, $doc['dataset']['extras']['coverage']['pages']);
     }
+
     public function testParentReplacementCannotEraseAnotherWritersFields(): void
     {
         $identity = ['datasetKey' => 'loc/1', 'aggregator' => 'loc'];
@@ -36,5 +38,4 @@ final class DatasetDocumentTest extends TestCase
         $doc = DatasetDocument::update($doc, $identity + ['extras' => ['coverage' => []]], 'title');
         self::assertSame(200, $doc['dataset']['extras']['coverage']['pages']);
     }
-
 }

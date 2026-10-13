@@ -48,7 +48,7 @@ final class MediaKeyAndIdentityTest extends TestCase
     {
         self::assertSame(
             MediaIdentity::idFromOriginalUrl(self::URL),
-            MediaIdentity::idFromOriginalUrl('  ' . self::URL . "\n"),
+            MediaIdentity::idFromOriginalUrl('  '.self::URL."\n"),
         );
     }
 
@@ -86,7 +86,7 @@ final class MediaKeyAndIdentityTest extends TestCase
     #[Test]
     public function archivePathBucketsOnTheHashedKeyAndKeepsTheKeyAsTheFilename(): void
     {
-        $key  = MediaKeyService::keyFromString(self::URL);
+        $key = MediaKeyService::keyFromString(self::URL);
         $path = MediaKeyService::archivePathFromKey($key, 'jpg');
 
         // Two things worth pinning, because neither is what the name suggests:
@@ -100,7 +100,7 @@ final class MediaKeyAndIdentityTest extends TestCase
         // orig/<2>/<2>/<long hex>.<ext>. Two different layouts; do not assume this function
         // produces the other one.
         self::assertMatchesRegularExpression('#^o/[0-9a-f]/[0-9a-f]{2}/#', $path);
-        self::assertStringEndsWith('/' . $key . '.jpg', $path);
+        self::assertStringEndsWith('/'.$key.'.jpg', $path);
         self::assertSame(self::URL, MediaKeyService::stringFromEncoded(basename($path, '.jpg')));
     }
 

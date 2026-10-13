@@ -1,35 +1,36 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Survos\DataContracts\Metadata;
 
-use Symfony\Component\String\Inflector\EnglishInflector;
 use Survos\DataContracts\Dto\Core\PersonDto;
 use Survos\DataContracts\Dto\Item\ArtifactDto;
-use Survos\DataContracts\Dto\Item\CoinDto;
-use Survos\DataContracts\Dto\Item\CollectionDto;
-use Survos\DataContracts\Dto\Item\SculptureDto;
-use Survos\DataContracts\Dto\Item\EphemeraDto;
 use Survos\DataContracts\Dto\Item\AudioDto;
 use Survos\DataContracts\Dto\Item\BookDto;
+use Survos\DataContracts\Dto\Item\CoinDto;
+use Survos\DataContracts\Dto\Item\CollectionDto;
 use Survos\DataContracts\Dto\Item\CorrespondenceDto;
 use Survos\DataContracts\Dto\Item\DocumentDto;
 use Survos\DataContracts\Dto\Item\DrawingDto;
-use Survos\DataContracts\Dto\Item\PaintingDto;
+use Survos\DataContracts\Dto\Item\EphemeraDto;
+use Survos\DataContracts\Dto\Item\EventDto;
 use Survos\DataContracts\Dto\Item\FilmDto;
 use Survos\DataContracts\Dto\Item\GenericItemDto;
 use Survos\DataContracts\Dto\Item\InterviewDto;
 use Survos\DataContracts\Dto\Item\ManuscriptDto;
 use Survos\DataContracts\Dto\Item\MapDto;
 use Survos\DataContracts\Dto\Item\NewspaperDto;
+use Survos\DataContracts\Dto\Item\PaintingDto;
 use Survos\DataContracts\Dto\Item\PhotographDto;
 use Survos\DataContracts\Dto\Item\PlaceDto;
-use Survos\DataContracts\Dto\Item\EventDto;
 use Survos\DataContracts\Dto\Item\PoiDto;
 use Survos\DataContracts\Dto\Item\PostcardDto;
-use Survos\DataContracts\Dto\Item\StoryDto;
+use Survos\DataContracts\Dto\Item\SculptureDto;
 use Survos\DataContracts\Dto\Item\StopDto;
+use Survos\DataContracts\Dto\Item\StoryDto;
 use Survos\DataContracts\Vocabulary\ItemField;
+use Symfony\Component\String\Inflector\EnglishInflector;
 
 /**
  * Canonical content-type slugs used across ssai, zm, md, and mus.
@@ -48,110 +49,110 @@ final class ContentType
     private static ?EnglishInflector $inflector = null;
 
     // ── Photographic / Visual ────────────────────────────────────────────────
-    const PHOTOGRAPH    = 'photograph';     // TGM tgm007965 / LCGFT gf2017027258
-    const POSTCARD      = 'postcard';       // TGM tgm008060 / marcgt postcard
-    const STEREOGRAPH   = 'stereograph';    // TGM tgm009325
-    const SLIDE         = 'slide';          // TGM tgm009126 (lantern slides, 35mm)
-    const NEGATIVE      = 'negative';       // TGM tgm006437 (film/glass/nitrate)
-    const PRINT         = 'print';          // TGM tgm007912 (photomechanical, engraving, etc.)
-    const DRAWING       = 'drawing';        // LCGFT gf2017027085
-    const PAINTING      = 'painting';       // LCGFT gf2017027245
-    const POSTER        = 'poster';         // TGM tgm008100
+    public const PHOTOGRAPH = 'photograph';     // TGM tgm007965 / LCGFT gf2017027258
+    public const POSTCARD = 'postcard';       // TGM tgm008060 / marcgt postcard
+    public const STEREOGRAPH = 'stereograph';    // TGM tgm009325
+    public const SLIDE = 'slide';          // TGM tgm009126 (lantern slides, 35mm)
+    public const NEGATIVE = 'negative';       // TGM tgm006437 (film/glass/nitrate)
+    public const PRINT = 'print';          // TGM tgm007912 (photomechanical, engraving, etc.)
+    public const DRAWING = 'drawing';        // LCGFT gf2017027085
+    public const PAINTING = 'painting';       // LCGFT gf2017027245
+    public const POSTER = 'poster';         // TGM tgm008100
 
     // ── Cartographic ────────────────────────────────────────────────────────
-    const MAP           = 'map';            // LCGFT gf2011026055 / marcgt map
-    const ATLAS         = 'atlas';          // marcgt atlas
-    const GLOBE         = 'globe';          // marcgt globe
+    public const MAP = 'map';            // LCGFT gf2011026055 / marcgt map
+    public const ATLAS = 'atlas';          // marcgt atlas
+    public const GLOBE = 'globe';          // marcgt globe
 
     // ── Textual ──────────────────────────────────────────────────────────────
-    const NEWSPAPER     = 'newspaper';      // LCGFT gf2014026139 / marcgt newspaper
-    const PERIODICAL    = 'periodical';     // LCGFT gf2014026156 / marcgt periodical
-    const MANUSCRIPT    = 'manuscript';     // LCGFT gf2022026088 / marcgt manuscript
-    const CORRESPONDENCE= 'correspondence'; // LCGFT gf2014026051
-    const BOOK          = 'book';           // marcgt book
-    const DOCUMENT      = 'document';       // dcmitype:Text (generic)
-    const EPHEMERA      = 'ephemera';       // LCGFT gf2014026093
+    public const NEWSPAPER = 'newspaper';      // LCGFT gf2014026139 / marcgt newspaper
+    public const PERIODICAL = 'periodical';     // LCGFT gf2014026156 / marcgt periodical
+    public const MANUSCRIPT = 'manuscript';     // LCGFT gf2022026088 / marcgt manuscript
+    public const CORRESPONDENCE = 'correspondence'; // LCGFT gf2014026051
+    public const BOOK = 'book';           // marcgt book
+    public const DOCUMENT = 'document';       // dcmitype:Text (generic)
+    public const EPHEMERA = 'ephemera';       // LCGFT gf2014026093
 
     // ── Audio / Moving Image ─────────────────────────────────────────────────
-    const FILM          = 'film';           // dcmitype:MovingImage
-    const AUDIO         = 'audio';          // dcmitype:Sound
-    const INTERVIEW     = 'interview';      // LCGFT gf2014026115 — multi-speaker audio (oral history,
-                                             // testimony); distinct from AUDIO so templates/AI context
-                                             // know to expect dialogue, not a single-speaker recording.
+    public const FILM = 'film';           // dcmitype:MovingImage
+    public const AUDIO = 'audio';          // dcmitype:Sound
+    public const INTERVIEW = 'interview';      // LCGFT gf2014026115 — multi-speaker audio (oral history,
+    // testimony); distinct from AUDIO so templates/AI context
+    // know to expect dialogue, not a single-speaker recording.
 
     // ── Object / Artifact ────────────────────────────────────────────────────
-    const OBJECT        = 'object';         // dcmitype:PhysicalObject (fallback)
-    const COIN          = 'coin';           // nmo:NumismaticObject (numismatic specimen)
-    const SCULPTURE     = 'sculpture';      // LCGFT gf2017027252 (statue, bust, relief, …)
+    public const OBJECT = 'object';         // dcmitype:PhysicalObject (fallback)
+    public const COIN = 'coin';           // nmo:NumismaticObject (numismatic specimen)
+    public const SCULPTURE = 'sculpture';      // LCGFT gf2017027252 (statue, bust, relief, …)
 
     // ── Agent cores ─────────────────────────────────────────────────────────────
-    const PERSON        = 'person';         // foaf:Person; used with the compact folio core code `per`
-    const ORGANIZATION  = 'organization';   // foaf:Organization; used with the compact folio core code
-                                             // `org` (Core::ORGANISATION) — publishers, companies,
-                                             // agencies, etc. Falls back to GenericItemDto (no dedicated
-                                             // OrganizationDto yet).
+    public const PERSON = 'person';         // foaf:Person; used with the compact folio core code `per`
+    public const ORGANIZATION = 'organization';   // foaf:Organization; used with the compact folio core code
+    // `org` (Core::ORGANISATION) — publishers, companies,
+    // agencies, etc. Falls back to GenericItemDto (no dedicated
+    // OrganizationDto yet).
 
     // ── Event cores ─────────────────────────────────────────────────────────────
-    const EVENT         = 'event';          // schema:Event; used with the compact folio core code
-                                             // `event` (Core::EVENT) — a described event (sale, voyage,
-                                             // birth, …), not a generic object. See EventDto. Surface
-                                             // level only for now (date/eventType) -- deliberately not
-                                             // modeling event-as-attribute-vs-entity or participant
-                                             // rosters here (see survos-sites/musdig#35 follow-up).
+    public const EVENT = 'event';          // schema:Event; used with the compact folio core code
+    // `event` (Core::EVENT) — a described event (sale, voyage,
+    // birth, …), not a generic object. See EventDto. Surface
+    // level only for now (date/eventType) -- deliberately not
+    // modeling event-as-attribute-vs-entity or participant
+    // rosters here (see survos-sites/musdig#35 follow-up).
 
     // ── Place cores ─────────────────────────────────────────────────────────────
-    const PLACE         = 'place';          // schema:Place; used with the compact folio core code `pla`
-                                             // (Core::PLACE) — a described place (park, site, …), not a
-                                             // generic object. See PlaceDto.
-    const POI           = 'poi';            // schema:Place; a machine-resolved point of interest (church,
-                                             // school, shop, park) from OSM/Nominatim, as opposed to
-                                             // PLACE's hand-curated content. See PoiDto, survos/poi-bundle.
+    public const PLACE = 'place';          // schema:Place; used with the compact folio core code `pla`
+    // (Core::PLACE) — a described place (park, site, …), not a
+    // generic object. See PlaceDto.
+    public const POI = 'poi';            // schema:Place; a machine-resolved point of interest (church,
+    // school, shop, park) from OSM/Nominatim, as opposed to
+    // PLACE's hand-curated content. See PoiDto, survos/poi-bundle.
 
     // ── Aggregations ─────────────────────────────────────────────────────────────
-    const COLLECTION    = 'collection';     // dcmitype:Collection; the `coll` core — a folio / set of items
+    public const COLLECTION = 'collection';     // dcmitype:Collection; the `coll` core — a folio / set of items
 
     // ── Narrative / tours ─────────────────────────────────────────────────────────
-    const STORY         = 'story';          // A tour/story-contract story.v1 document, as a real
-                                             // queryable row (one per tour) — see StoryDto.
-    const STOP          = 'stop';           // One narrative stop within a story — see StopDto. Related
-                                             // to its story via a real `has_stop` Link, not a bare FK.
+    public const STORY = 'story';          // A tour/story-contract story.v1 document, as a real
+    // queryable row (one per tour) — see StoryDto.
+    public const STOP = 'stop';           // One narrative stop within a story — see StopDto. Related
+    // to its story via a real `has_stop` Link, not a bare FK.
 
     // ── LOC URIs for RDF / zm Vocabulary interop ─────────────────────────────
-    const URIS = [
-        self::PHOTOGRAPH    => 'http://id.loc.gov/vocabulary/graphicMaterials/tgm007965',
-        self::POSTCARD      => 'http://id.loc.gov/vocabulary/graphicMaterials/tgm008060',
-        self::STEREOGRAPH   => 'http://id.loc.gov/vocabulary/graphicMaterials/tgm009325',
-        self::SLIDE         => 'http://id.loc.gov/vocabulary/graphicMaterials/tgm009126',
-        self::NEGATIVE      => 'http://id.loc.gov/vocabulary/graphicMaterials/tgm006437',
-        self::PRINT         => 'http://id.loc.gov/vocabulary/graphicMaterials/tgm007912',
-        self::DRAWING       => 'http://id.loc.gov/authorities/genreForms/gf2017027085',
-        self::PAINTING      => 'http://id.loc.gov/authorities/genreForms/gf2017027245',
-        self::POSTER        => 'http://id.loc.gov/vocabulary/graphicMaterials/tgm008100',
-        self::MAP           => 'http://id.loc.gov/authorities/genreForms/gf2011026055',
-        self::ATLAS         => 'http://id.loc.gov/vocabulary/marcgt/atlas',
-        self::GLOBE         => 'http://id.loc.gov/vocabulary/marcgt/globe',
-        self::NEWSPAPER     => 'http://id.loc.gov/authorities/genreForms/gf2014026139',
-        self::PERIODICAL    => 'http://id.loc.gov/authorities/genreForms/gf2014026156',
-        self::MANUSCRIPT    => 'http://id.loc.gov/authorities/genreForms/gf2022026088',
-        self::CORRESPONDENCE=> 'http://id.loc.gov/authorities/genreForms/gf2014026051',
-        self::BOOK          => 'http://id.loc.gov/vocabulary/marcgt/book',
-        self::DOCUMENT      => 'http://purl.org/dc/dcmitype/Text',
-        self::EPHEMERA      => 'http://id.loc.gov/authorities/genreForms/gf2014026093',
-        self::FILM          => 'http://purl.org/dc/dcmitype/MovingImage',
-        self::AUDIO         => 'http://purl.org/dc/dcmitype/Sound',
-        self::INTERVIEW     => 'http://id.loc.gov/authorities/genreForms/gf2014026115',
-        self::OBJECT        => 'http://purl.org/dc/dcmitype/PhysicalObject',
-        self::PERSON        => 'http://xmlns.com/foaf/0.1/Person',
-        self::PLACE         => 'https://schema.org/Place',
-        self::POI           => 'https://schema.org/Place',
-        self::COLLECTION    => 'http://purl.org/dc/dcmitype/Collection',
+    public const URIS = [
+        self::PHOTOGRAPH => 'http://id.loc.gov/vocabulary/graphicMaterials/tgm007965',
+        self::POSTCARD => 'http://id.loc.gov/vocabulary/graphicMaterials/tgm008060',
+        self::STEREOGRAPH => 'http://id.loc.gov/vocabulary/graphicMaterials/tgm009325',
+        self::SLIDE => 'http://id.loc.gov/vocabulary/graphicMaterials/tgm009126',
+        self::NEGATIVE => 'http://id.loc.gov/vocabulary/graphicMaterials/tgm006437',
+        self::PRINT => 'http://id.loc.gov/vocabulary/graphicMaterials/tgm007912',
+        self::DRAWING => 'http://id.loc.gov/authorities/genreForms/gf2017027085',
+        self::PAINTING => 'http://id.loc.gov/authorities/genreForms/gf2017027245',
+        self::POSTER => 'http://id.loc.gov/vocabulary/graphicMaterials/tgm008100',
+        self::MAP => 'http://id.loc.gov/authorities/genreForms/gf2011026055',
+        self::ATLAS => 'http://id.loc.gov/vocabulary/marcgt/atlas',
+        self::GLOBE => 'http://id.loc.gov/vocabulary/marcgt/globe',
+        self::NEWSPAPER => 'http://id.loc.gov/authorities/genreForms/gf2014026139',
+        self::PERIODICAL => 'http://id.loc.gov/authorities/genreForms/gf2014026156',
+        self::MANUSCRIPT => 'http://id.loc.gov/authorities/genreForms/gf2022026088',
+        self::CORRESPONDENCE => 'http://id.loc.gov/authorities/genreForms/gf2014026051',
+        self::BOOK => 'http://id.loc.gov/vocabulary/marcgt/book',
+        self::DOCUMENT => 'http://purl.org/dc/dcmitype/Text',
+        self::EPHEMERA => 'http://id.loc.gov/authorities/genreForms/gf2014026093',
+        self::FILM => 'http://purl.org/dc/dcmitype/MovingImage',
+        self::AUDIO => 'http://purl.org/dc/dcmitype/Sound',
+        self::INTERVIEW => 'http://id.loc.gov/authorities/genreForms/gf2014026115',
+        self::OBJECT => 'http://purl.org/dc/dcmitype/PhysicalObject',
+        self::PERSON => 'http://xmlns.com/foaf/0.1/Person',
+        self::PLACE => 'https://schema.org/Place',
+        self::POI => 'https://schema.org/Place',
+        self::COLLECTION => 'http://purl.org/dc/dcmitype/Collection',
     ];
 
     /**
      * Whether this content type benefits from OCR.
      * Drives the AI pipeline decision: run OCR → text extraction, or skip.
      */
-    const OCR_TYPES = [
+    public const OCR_TYPES = [
         self::NEWSPAPER,
         self::MANUSCRIPT,
         self::CORRESPONDENCE,
@@ -167,7 +168,7 @@ final class ContentType
     /**
      * Whether this content type benefits from visual AI description.
      */
-    const VISUAL_AI_TYPES = [
+    public const VISUAL_AI_TYPES = [
         self::PHOTOGRAPH,
         self::POSTCARD,
         self::STEREOGRAPH,
@@ -188,162 +189,162 @@ final class ContentType
      * genre_specific is the most precise — check it first.
      * Synonyms / alternate spellings are included.
      */
-    const GENRE_SPECIFIC_MAP = [
+    public const GENRE_SPECIFIC_MAP = [
         // Photographs
-        'photograph'              => self::PHOTOGRAPH,
-        'photographic prints'     => self::PHOTOGRAPH,
-        'portrait photographs'    => self::PHOTOGRAPH,
-        'group portraits'         => self::PHOTOGRAPH,
+        'photograph' => self::PHOTOGRAPH,
+        'photographic prints' => self::PHOTOGRAPH,
+        'portrait photographs' => self::PHOTOGRAPH,
+        'group portraits' => self::PHOTOGRAPH,
         'architectural photographs' => self::PHOTOGRAPH,
-        'travel photography'      => self::PHOTOGRAPH,
-        'cabinet photographs'     => self::PHOTOGRAPH,
-        'cartes de visite'        => self::PHOTOGRAPH,
+        'travel photography' => self::PHOTOGRAPH,
+        'cabinet photographs' => self::PHOTOGRAPH,
+        'cartes de visite' => self::PHOTOGRAPH,
         // Postcards
-        'postcard'                => self::POSTCARD,
-        'photographic postcard'   => self::POSTCARD,
-        'postcards'               => self::POSTCARD,
-        'advertising cards'       => self::POSTCARD,
+        'postcard' => self::POSTCARD,
+        'photographic postcard' => self::POSTCARD,
+        'postcards' => self::POSTCARD,
+        'advertising cards' => self::POSTCARD,
         // Stereographs
-        'stereograph'             => self::STEREOGRAPH,
-        'stereographs'            => self::STEREOGRAPH,
+        'stereograph' => self::STEREOGRAPH,
+        'stereographs' => self::STEREOGRAPH,
         // Slides
-        'slide'                   => self::SLIDE,
-        'photographic slide'      => self::SLIDE,
-        'lantern slides'          => self::SLIDE,
-        'slides'                  => self::SLIDE,
+        'slide' => self::SLIDE,
+        'photographic slide' => self::SLIDE,
+        'lantern slides' => self::SLIDE,
+        'slides' => self::SLIDE,
         // Negatives (all types)
-        'negative'                => self::NEGATIVE,
-        'film negative'           => self::NEGATIVE,
-        'glass negative'          => self::NEGATIVE,
-        'glass plate negative'    => self::NEGATIVE,
-        'film negatives'          => self::NEGATIVE,
-        'glass negatives'         => self::NEGATIVE,
-        'nitrate negatives'       => self::NEGATIVE,
-        'dry plate negatives'     => self::NEGATIVE,
-        'negatives'               => self::NEGATIVE,
+        'negative' => self::NEGATIVE,
+        'film negative' => self::NEGATIVE,
+        'glass negative' => self::NEGATIVE,
+        'glass plate negative' => self::NEGATIVE,
+        'film negatives' => self::NEGATIVE,
+        'glass negatives' => self::NEGATIVE,
+        'nitrate negatives' => self::NEGATIVE,
+        'dry plate negatives' => self::NEGATIVE,
+        'negatives' => self::NEGATIVE,
         // Prints (non-photo)
-        'print'                   => self::PRINT,
-        'lithograph'              => self::PRINT,
-        'etching'                 => self::PRINT,
-        'engraving'               => self::PRINT,
-        'lithographs'             => self::PRINT,
-        'etchings'                => self::PRINT,
-        'engravings'              => self::PRINT,
-        'chromolithographs'       => self::PRINT,
-        'drypoints'               => self::PRINT,
-        'woodcuts'                => self::PRINT,
-        'photomechanical prints'  => self::PRINT,
+        'print' => self::PRINT,
+        'lithograph' => self::PRINT,
+        'etching' => self::PRINT,
+        'engraving' => self::PRINT,
+        'lithographs' => self::PRINT,
+        'etchings' => self::PRINT,
+        'engravings' => self::PRINT,
+        'chromolithographs' => self::PRINT,
+        'drypoints' => self::PRINT,
+        'woodcuts' => self::PRINT,
+        'photomechanical prints' => self::PRINT,
         'periodical illustrations' => self::PRINT,
-        'portrait prints'         => self::PRINT,
-        'rotogravures'            => self::PRINT,
-        'albumen prints'          => self::PHOTOGRAPH,
-        'gelatin silver prints'   => self::PHOTOGRAPH,
+        'portrait prints' => self::PRINT,
+        'rotogravures' => self::PRINT,
+        'albumen prints' => self::PHOTOGRAPH,
+        'gelatin silver prints' => self::PHOTOGRAPH,
         // Maps
-        'map'                     => self::MAP,
-        'topographic maps'        => self::MAP,
-        'nautical charts'         => self::MAP,
-        'wall maps'               => self::MAP,
-        'world maps'              => self::MAP,
-        'military maps'           => self::MAP,
-        'manuscript maps'         => self::MAP,
-        'pictorial maps'          => self::MAP,
-        'thematic maps'           => self::MAP,
+        'map' => self::MAP,
+        'topographic maps' => self::MAP,
+        'nautical charts' => self::MAP,
+        'wall maps' => self::MAP,
+        'world maps' => self::MAP,
+        'military maps' => self::MAP,
+        'manuscript maps' => self::MAP,
+        'pictorial maps' => self::MAP,
+        'thematic maps' => self::MAP,
         // Documents/text
-        'document'                => self::DOCUMENT,
-        'newspaper clipping'      => self::NEWSPAPER,
-        'letter'                  => self::CORRESPONDENCE,
-        'telegram'                => self::CORRESPONDENCE,
-        'broadsides'              => self::DOCUMENT,
+        'document' => self::DOCUMENT,
+        'newspaper clipping' => self::NEWSPAPER,
+        'letter' => self::CORRESPONDENCE,
+        'telegram' => self::CORRESPONDENCE,
+        'broadsides' => self::DOCUMENT,
         'receipts (acknowledgments)' => self::CORRESPONDENCE,
-        'lists'                   => self::DOCUMENT,
-        'clippings'               => self::DOCUMENT,
+        'lists' => self::DOCUMENT,
+        'clippings' => self::DOCUMENT,
         'anti-slavery newspapers' => self::NEWSPAPER,
         // Plans/drawings
-        'drawing'                 => self::DRAWING,
-        'planning drawings'       => self::DRAWING,
-        'architectural drawings'  => self::DRAWING,
+        'drawing' => self::DRAWING,
+        'planning drawings' => self::DRAWING,
+        'architectural drawings' => self::DRAWING,
         // Cartoons / caricatures
-        'cartoons'                => self::DRAWING,
-        'caricatures'             => self::DRAWING,
-        'cartoon'                 => self::DRAWING,
-        'editorial cartoons'      => self::DRAWING,
-        'comic strips'            => self::DRAWING,
-        'illustrations'           => self::DRAWING,
+        'cartoons' => self::DRAWING,
+        'caricatures' => self::DRAWING,
+        'cartoon' => self::DRAWING,
+        'editorial cartoons' => self::DRAWING,
+        'comic strips' => self::DRAWING,
+        'illustrations' => self::DRAWING,
         // Paintings
-        'painting'                => self::PAINTING,
-        'oil paintings'           => self::PAINTING,
-        'watercolors'             => self::PAINTING,
-        'watercolours'            => self::PAINTING,
-        'gouaches'                => self::PAINTING,
+        'painting' => self::PAINTING,
+        'oil paintings' => self::PAINTING,
+        'watercolors' => self::PAINTING,
+        'watercolours' => self::PAINTING,
+        'gouaches' => self::PAINTING,
         // Sculpture (EN + PT)
-        'sculpture'               => self::SCULPTURE,
-        'sculptures'              => self::SCULPTURE,
-        'escultura'               => self::SCULPTURE,
-        'esculturas'              => self::SCULPTURE,
-        'statue'                  => self::SCULPTURE,
-        'statues'                 => self::SCULPTURE,
-        'estatua'                 => self::SCULPTURE,
-        'estátua'                 => self::SCULPTURE,
-        'statuette'               => self::SCULPTURE,
-        'estatueta'               => self::SCULPTURE,
-        'bust'                    => self::SCULPTURE,
-        'busts'                   => self::SCULPTURE,
-        'busto'                   => self::SCULPTURE,
-        'relief'                  => self::SCULPTURE,
-        'bas-relief'              => self::SCULPTURE,
-        'relevo'                  => self::SCULPTURE,
-        'imaginaria'             => self::SCULPTURE,
-        'imaginária'             => self::SCULPTURE,
+        'sculpture' => self::SCULPTURE,
+        'sculptures' => self::SCULPTURE,
+        'escultura' => self::SCULPTURE,
+        'esculturas' => self::SCULPTURE,
+        'statue' => self::SCULPTURE,
+        'statues' => self::SCULPTURE,
+        'estatua' => self::SCULPTURE,
+        'estátua' => self::SCULPTURE,
+        'statuette' => self::SCULPTURE,
+        'estatueta' => self::SCULPTURE,
+        'bust' => self::SCULPTURE,
+        'busts' => self::SCULPTURE,
+        'busto' => self::SCULPTURE,
+        'relief' => self::SCULPTURE,
+        'bas-relief' => self::SCULPTURE,
+        'relevo' => self::SCULPTURE,
+        'imaginaria' => self::SCULPTURE,
+        'imaginária' => self::SCULPTURE,
     ];
 
     /**
      * Maps DC genre_basic values (LCGFT terms) to ContentType constants.
      * Fallback when genre_specific doesn't match.
      */
-    const GENRE_BASIC_MAP = [
-        'photograph'     => self::PHOTOGRAPH,
-        'photographs'    => self::PHOTOGRAPH,
-        'photo'          => self::PHOTOGRAPH,  // synonym
-        'foto'           => self::PHOTOGRAPH,  // synonym (Spanish/German)
-        'picture'        => self::PHOTOGRAPH,  // synonym
-        'postcard'       => self::POSTCARD,
-        'cards'          => self::POSTCARD,    // DC uses 'Cards' for postcard collections
-        'map'            => self::MAP,
-        'maps'           => self::MAP,
-        'newspaper'      => self::NEWSPAPER,
-        'newspapers'     => self::NEWSPAPER,
-        'manuscript'     => self::MANUSCRIPT,
-        'manuscripts'    => self::MANUSCRIPT,
+    public const GENRE_BASIC_MAP = [
+        'photograph' => self::PHOTOGRAPH,
+        'photographs' => self::PHOTOGRAPH,
+        'photo' => self::PHOTOGRAPH,  // synonym
+        'foto' => self::PHOTOGRAPH,  // synonym (Spanish/German)
+        'picture' => self::PHOTOGRAPH,  // synonym
+        'postcard' => self::POSTCARD,
+        'cards' => self::POSTCARD,    // DC uses 'Cards' for postcard collections
+        'map' => self::MAP,
+        'maps' => self::MAP,
+        'newspaper' => self::NEWSPAPER,
+        'newspapers' => self::NEWSPAPER,
+        'manuscript' => self::MANUSCRIPT,
+        'manuscripts' => self::MANUSCRIPT,
         'correspondence' => self::CORRESPONDENCE,
-        'print'          => self::PRINT,
-        'prints'         => self::PRINT,
-        'drawing'        => self::DRAWING,
-        'drawings'       => self::DRAWING,
-        'painting'       => self::PAINTING,
-        'paintings'      => self::PAINTING,
-        'poster'         => self::POSTER,
-        'posters'        => self::POSTER,
-        'ephemera'       => self::EPHEMERA,
-        'book'           => self::BOOK,
-        'books'          => self::BOOK,
-        'periodical'     => self::PERIODICAL,
-        'periodicals'    => self::PERIODICAL,
+        'print' => self::PRINT,
+        'prints' => self::PRINT,
+        'drawing' => self::DRAWING,
+        'drawings' => self::DRAWING,
+        'painting' => self::PAINTING,
+        'paintings' => self::PAINTING,
+        'poster' => self::POSTER,
+        'posters' => self::POSTER,
+        'ephemera' => self::EPHEMERA,
+        'book' => self::BOOK,
+        'books' => self::BOOK,
+        'periodical' => self::PERIODICAL,
+        'periodicals' => self::PERIODICAL,
         'sound recordings' => self::AUDIO,
-        'motion pictures'  => self::FILM,
+        'motion pictures' => self::FILM,
         // More specific than 'sound recordings' — checked first via genre_basic (fromDcAttrs step 2)
         // before type_of_resource's 'sound recording' => AUDIO fallback (step 3) ever runs, so an
         // interview correctly wins over the generic audio classification when both terms are present
         // (e.g. LOC subject headings carry 'Interviews' alongside original_format's 'sound recording').
-        'interview'        => self::INTERVIEW,
-        'interviews'       => self::INTERVIEW,
-        'oral history'     => self::INTERVIEW,
-        'oral histories'   => self::INTERVIEW,
-        'object'           => self::OBJECT,
-        'objects'          => self::OBJECT,
-        'art objects'      => self::OBJECT,
-        'albums (books)'   => self::BOOK,
+        'interview' => self::INTERVIEW,
+        'interviews' => self::INTERVIEW,
+        'oral history' => self::INTERVIEW,
+        'oral histories' => self::INTERVIEW,
+        'object' => self::OBJECT,
+        'objects' => self::OBJECT,
+        'art objects' => self::OBJECT,
+        'albums (books)' => self::BOOK,
         'musical notation' => self::DOCUMENT,
-        'music'            => self::AUDIO,
+        'music' => self::AUDIO,
     ];
 
     private const GENRE_SUFFIX_MAP = [
@@ -366,22 +367,22 @@ final class ContentType
      * Maps DC type_of_resource values (DCMI Type) to ContentType constants.
      * Final fallback when neither genre_specific nor genre_basic matches.
      */
-    const TYPE_OF_RESOURCE_MAP = [
-        'still image'    => self::PHOTOGRAPH,
-        'still images'   => self::PHOTOGRAPH,
-        'text'           => self::DOCUMENT,
-        'cartographic'   => self::MAP,
-        'moving image'   => self::FILM,
-        'moving images'  => self::FILM,
-        'audio'          => self::AUDIO,
-        'sound recording'=> self::AUDIO,
-        'sound recordings'=> self::AUDIO,
-        'notated music'  => self::DOCUMENT,
-        'manuscript'     => self::MANUSCRIPT,
+    public const TYPE_OF_RESOURCE_MAP = [
+        'still image' => self::PHOTOGRAPH,
+        'still images' => self::PHOTOGRAPH,
+        'text' => self::DOCUMENT,
+        'cartographic' => self::MAP,
+        'moving image' => self::FILM,
+        'moving images' => self::FILM,
+        'audio' => self::AUDIO,
+        'sound recording' => self::AUDIO,
+        'sound recordings' => self::AUDIO,
+        'notated music' => self::DOCUMENT,
+        'manuscript' => self::MANUSCRIPT,
         'mixed material' => self::DOCUMENT,
-        'artifact'       => self::OBJECT,
-        'software'       => self::DOCUMENT,
-        'dataset'        => self::DOCUMENT,
+        'artifact' => self::OBJECT,
+        'software' => self::DOCUMENT,
+        'dataset' => self::DOCUMENT,
     ];
 
     /**
@@ -397,14 +398,14 @@ final class ContentType
     public static function fromDcAttrs(array $attrs): string
     {
         // 1. genre_specific — most precise
-        foreach ((array)($attrs[ItemField::GENRE_SPECIFIC] ?? []) as $g) {
+        foreach ((array) ($attrs[ItemField::GENRE_SPECIFIC] ?? []) as $g) {
             if ($type = self::lookupGenreType((string) $g, self::GENRE_SPECIFIC_MAP, self::GENRE_BASIC_MAP)) {
                 return $type;
             }
         }
 
         // 2. genre_basic
-        foreach ((array)($attrs[ItemField::GENRE_BASIC] ?? []) as $g) {
+        foreach ((array) ($attrs[ItemField::GENRE_BASIC] ?? []) as $g) {
             if ($type = self::lookupGenreType((string) $g, self::GENRE_BASIC_MAP, self::GENRE_SPECIFIC_MAP)) {
                 return $type;
             }
@@ -414,7 +415,7 @@ final class ContentType
         $typeRaw = $attrs['type_of_resource'] ?? '';
         foreach ((array) $typeRaw as $value) {
             $type = self::lookupMappedType((string) $value, self::TYPE_OF_RESOURCE_MAP);
-            if ($type !== null) {
+            if (null !== $type) {
                 return $type;
             }
         }
@@ -447,22 +448,22 @@ final class ContentType
         // (genre_specific is the most precise signal; camel/snake both accepted).
         $dcAttrs = array_filter([
             ItemField::GENRE_SPECIFIC => $record[ItemField::GENRE_SPECIFIC] ?? $record['genreSpecific'] ?? null,
-            ItemField::GENRE_BASIC    => $record[ItemField::GENRE_BASIC] ?? $record['genreBasic'] ?? null,
-            'type_of_resource'        => $record['type_of_resource'] ?? $record['typeOfResource'] ?? null,
+            ItemField::GENRE_BASIC => $record[ItemField::GENRE_BASIC] ?? $record['genreBasic'] ?? null,
+            'type_of_resource' => $record['type_of_resource'] ?? $record['typeOfResource'] ?? null,
         ]);
         if ($dcAttrs) {
             $resolved = self::fromDcAttrs($dcAttrs);
-            if ($resolved !== self::OBJECT) {
+            if (self::OBJECT !== $resolved) {
                 return $resolved;
             }
         }
 
         // Common type/classification fields used by museum APIs
         $candidates = ['type', 'classification', 'objectType', 'object_type',
-                       'category', 'tipo', 'classe', 'klasse'];
+            'category', 'tipo', 'classe', 'klasse'];
         foreach ($candidates as $field) {
             $value = $record[$field] ?? null;
-            if ($value === null || $value === '' || $value === []) {
+            if (null === $value || '' === $value || [] === $value) {
                 continue;
             }
             foreach ((array) $value as $v) {
@@ -513,7 +514,7 @@ final class ContentType
     private static function lookupKeys(string $value): array
     {
         $key = strtolower(trim($value));
-        if ($key === '') {
+        if ('' === $key) {
             return [];
         }
 
@@ -522,18 +523,18 @@ final class ContentType
 
         foreach ($inflector->singularize($key) as $singular) {
             $singular = strtolower(trim($singular));
-            if ($singular !== '') {
+            if ('' !== $singular) {
                 $keys[] = $singular;
             }
         }
 
         $lastSpace = strrpos($key, ' ');
-        if ($lastSpace !== false) {
+        if (false !== $lastSpace) {
             $prefix = substr($key, 0, $lastSpace + 1);
             $lastWord = substr($key, $lastSpace + 1);
             foreach ($inflector->singularize($lastWord) as $singularLastWord) {
                 $singularLastWord = strtolower(trim($singularLastWord));
-                if ($singularLastWord !== '') {
+                if ('' !== $singularLastWord) {
                     $keys[] = $prefix.$singularLastWord;
                 }
             }
@@ -573,54 +574,30 @@ final class ContentType
     public static function dtoClass(string $contentType): string
     {
         return match ($contentType) {
-            self::PHOTOGRAPH, self::STEREOGRAPH, self::SLIDE, self::NEGATIVE
-                => PhotographDto::class,
-            self::POSTCARD
-                => PostcardDto::class,
-            self::DRAWING, self::PRINT, self::POSTER
-                => DrawingDto::class,
-            self::PAINTING
-                => PaintingDto::class,
-            self::MAP, self::ATLAS
-                => MapDto::class,
-            self::NEWSPAPER, self::PERIODICAL
-                => NewspaperDto::class,
-            self::CORRESPONDENCE
-                => CorrespondenceDto::class,
-            self::MANUSCRIPT
-                => ManuscriptDto::class,
-            self::BOOK
-                => BookDto::class,
-            self::DOCUMENT
-                => DocumentDto::class,
-            self::EPHEMERA
-                => EphemeraDto::class,
-            self::AUDIO
-                => AudioDto::class,
-            self::INTERVIEW
-                => InterviewDto::class,
-            self::FILM
-                => FilmDto::class,
-            self::OBJECT
-                => ArtifactDto::class,
-            self::COIN
-                => CoinDto::class,
-            self::SCULPTURE
-                => SculptureDto::class,
-            self::PERSON
-                => PersonDto::class,
-            self::PLACE
-                => PlaceDto::class,
-            self::EVENT
-                => EventDto::class,
-            self::POI
-                => PoiDto::class,
-            self::COLLECTION
-                => CollectionDto::class,
-            self::STORY
-                => StoryDto::class,
-            self::STOP
-                => StopDto::class,
+            self::PHOTOGRAPH, self::STEREOGRAPH, self::SLIDE, self::NEGATIVE => PhotographDto::class,
+            self::POSTCARD => PostcardDto::class,
+            self::DRAWING, self::PRINT, self::POSTER => DrawingDto::class,
+            self::PAINTING => PaintingDto::class,
+            self::MAP, self::ATLAS => MapDto::class,
+            self::NEWSPAPER, self::PERIODICAL => NewspaperDto::class,
+            self::CORRESPONDENCE => CorrespondenceDto::class,
+            self::MANUSCRIPT => ManuscriptDto::class,
+            self::BOOK => BookDto::class,
+            self::DOCUMENT => DocumentDto::class,
+            self::EPHEMERA => EphemeraDto::class,
+            self::AUDIO => AudioDto::class,
+            self::INTERVIEW => InterviewDto::class,
+            self::FILM => FilmDto::class,
+            self::OBJECT => ArtifactDto::class,
+            self::COIN => CoinDto::class,
+            self::SCULPTURE => SculptureDto::class,
+            self::PERSON => PersonDto::class,
+            self::PLACE => PlaceDto::class,
+            self::EVENT => EventDto::class,
+            self::POI => PoiDto::class,
+            self::COLLECTION => CollectionDto::class,
+            self::STORY => StoryDto::class,
+            self::STOP => StopDto::class,
             default => GenericItemDto::class,
         };
     }

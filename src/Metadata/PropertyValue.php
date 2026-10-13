@@ -14,7 +14,7 @@ final readonly class PropertyValue
         public string $updatedAt,
         public array $provenance = [],
     ) {
-        if (!in_array($source, ['meta', 'build', 'human', 'import'], true) || $owner === '') {
+        if (!in_array($source, ['meta', 'build', 'human', 'import'], true) || '' === $owner) {
             throw new \InvalidArgumentException('Metadata requires a valid source and nonempty owner.');
         }
         new \DateTimeImmutable($updatedAt);
@@ -33,6 +33,7 @@ final readonly class PropertyValue
                 throw new \InvalidArgumentException('Missing property field: '.$key);
             }
         }
+
         return new self($data['value'], $data['source'], $data['owner'], $data['updatedAt'], $data['provenance'] ?? []);
     }
 

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Survos\DataContracts\Dto\Item;
@@ -12,9 +13,12 @@ use Survos\DataContracts\Metadata\ContentType;
 )]
 class CorrespondenceDto extends DocumentDto
 {
-    public ?array  $from     = null;
-    public ?array  $to       = null;
+    public ?array $from = null;
+    public ?array $to = null;
     public ?string $sentFrom = null;
 
-    public static function contentType(): string { return ContentType::CORRESPONDENCE; }
+    public static function contentType(): string
+    {
+        return ContentType::CORRESPONDENCE;
+    }
 }

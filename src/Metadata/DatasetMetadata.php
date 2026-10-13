@@ -15,6 +15,7 @@ final class DatasetMetadata
                 $title[substr($key, strlen(PropertyKey::TITLE_PREFIX))] = $value;
             }
         }
+
         return $title;
     }
 
@@ -48,6 +49,7 @@ final class DatasetMetadata
         foreach ($result as $key => $property) {
             PropertyKey::validate($key, $property->value);
         }
+
         return $result;
     }
 
@@ -60,13 +62,14 @@ final class DatasetMetadata
             $encoded[$key] = $property->toArray();
             if (in_array($key, [PropertyKey::LABEL, PropertyKey::DESCRIPTION, PropertyKey::TAGS], true)) {
                 $dataset[$key] = $property->value;
-            } elseif ($key === PropertyKey::CONTENT_TYPE) {
+            } elseif (PropertyKey::CONTENT_TYPE === $key) {
                 $dataset['extras'][$key] = $property->value;
             } elseif (str_starts_with($key, PropertyKey::TITLE_PREFIX)) {
                 $dataset['extras'][PropertyKey::TITLE_RECORD][substr($key, strlen(PropertyKey::TITLE_PREFIX))] = $property->value;
             }
         }
         $dataset['extras'][PropertyKey::PROPERTIES] = $encoded;
+
         return $dataset;
     }
 }

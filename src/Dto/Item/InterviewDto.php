@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Survos\DataContracts\Dto\Item;
@@ -15,5 +16,8 @@ class InterviewDto extends AudioDto
     /** Known participants when available, e.g. ["Interviewer: John Henry Faulk", "Interviewee: Harriet Smith"]. Speaker-turn text itself lives on each Row's Page.dialogue, not here. */
     public ?array $speakers = null;
 
-    public static function contentType(): string { return ContentType::INTERVIEW; }
+    public static function contentType(): string
+    {
+        return ContentType::INTERVIEW;
+    }
 }

@@ -210,7 +210,7 @@ enum DcTerms: string
     /** Full URI, e.g. 'http://purl.org/dc/terms/title'. */
     public function uri(): string
     {
-        return self::NAMESPACE_URI . $this->localName();
+        return self::NAMESPACE_URI.$this->localName();
     }
 
     /** Human-readable label derived from the case name. */

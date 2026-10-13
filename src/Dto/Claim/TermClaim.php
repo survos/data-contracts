@@ -15,10 +15,11 @@ namespace Survos\DataContracts\Dto\Claim;
 readonly class TermClaim implements \JsonSerializable
 {
     public function __construct(
-        public string  $term,
-        public ?int    $confidence = null,
-        public ?string $basis      = null,
-    ) {}
+        public string $term,
+        public ?int $confidence = null,
+        public ?string $basis = null,
+    ) {
+    }
 
     public static function from(mixed $value): self
     {
@@ -32,9 +33,9 @@ readonly class TermClaim implements \JsonSerializable
 
         if (is_array($value)) {
             return new self(
-                term:       (string) ($value['term'] ?? $value['name'] ?? $value['value'] ?? ''),
+                term: (string) ($value['term'] ?? $value['name'] ?? $value['value'] ?? ''),
                 confidence: isset($value['confidence']) ? (int) $value['confidence'] : null,
-                basis:      isset($value['basis'])      ? (string) $value['basis']    : null,
+                basis: isset($value['basis']) ? (string) $value['basis'] : null,
             );
         }
 
@@ -44,9 +45,9 @@ readonly class TermClaim implements \JsonSerializable
     public function jsonSerialize(): array
     {
         return array_filter([
-            'term'       => $this->term,
+            'term' => $this->term,
             'confidence' => $this->confidence,
-            'basis'      => $this->basis,
-        ], static fn($v) => $v !== null);
+            'basis' => $this->basis,
+        ], static fn ($v) => null !== $v);
     }
 }

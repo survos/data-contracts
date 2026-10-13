@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Survos\DataContracts\Dto\Item;
@@ -51,5 +52,8 @@ class PoiDto extends BaseItemDto
     #[Field(group: 'Geography')]
     public ?int $parentGeonameId = null;
 
-    public static function contentType(): string { return ContentType::POI; }
+    public static function contentType(): string
+    {
+        return ContentType::POI;
+    }
 }

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Survos\DataContracts\Dto\Item;
@@ -16,12 +17,15 @@ use Survos\SchemaOrgBundle\Attribute\SchemaOrg;
 class BookDto extends AbstractWorkDto
 {
     public ?string $publisher = null;
-    public ?string $pubPlace  = null;
-    public ?string $edition   = null;
-    public ?string $extent    = null;
-    public ?string $isbn      = null;
+    public ?string $pubPlace = null;
+    public ?string $edition = null;
+    public ?string $extent = null;
+    public ?string $isbn = null;
     #[PropertyMeta(label: 'Has transcription', facet: true)]
-    public bool    $hasTranscription = false;
+    public bool $hasTranscription = false;
 
-    public static function contentType(): string { return ContentType::BOOK; }
+    public static function contentType(): string
+    {
+        return ContentType::BOOK;
+    }
 }

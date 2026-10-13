@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Survos\DataContracts\Dto\Item;
@@ -15,9 +16,12 @@ use Survos\SchemaOrgBundle\Attribute\SchemaOrg;
 class FilmDto extends AbstractWorkDto
 {
     /** Physical format e.g. "16mm", "35mm", "VHS", "Digital" */
-    public ?string $format   = null;
+    public ?string $format = null;
     public ?string $duration = null;
-    public bool    $hasTranscription = false;
+    public bool $hasTranscription = false;
 
-    public static function contentType(): string { return ContentType::FILM; }
+    public static function contentType(): string
+    {
+        return ContentType::FILM;
+    }
 }

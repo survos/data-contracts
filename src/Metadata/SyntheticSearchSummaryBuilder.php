@@ -90,7 +90,7 @@ final class SyntheticSearchSummaryBuilder
 
         $sentences = [];
         $opening = $this->opening($contentType, $title, $date);
-        if ($opening !== null) {
+        if (null !== $opening) {
             $sentences[] = $opening;
         }
 
@@ -102,7 +102,7 @@ final class SyntheticSearchSummaryBuilder
 
         foreach (self::TERM_FIELDS as $field => $label) {
             $values = $this->unique($this->scalars($row[$field] ?? null));
-            if ($values === []) {
+            if ([] === $values) {
                 continue;
             }
 
@@ -110,7 +110,7 @@ final class SyntheticSearchSummaryBuilder
         }
 
         $concepts = $this->concepts($row);
-        if ($concepts !== []) {
+        if ([] !== $concepts) {
             $sentences[] = sprintf('Related search terms: %s.', implode('; ', $concepts));
         }
 
@@ -123,19 +123,19 @@ final class SyntheticSearchSummaryBuilder
     {
         $label = ucfirst(str_replace('_', ' ', $contentType));
 
-        if ($title !== null && $date !== null) {
+        if (null !== $title && null !== $date) {
             return sprintf('%s titled "%s", dated %s.', $label, $title, $date);
         }
 
-        if ($title !== null) {
+        if (null !== $title) {
             return sprintf('%s titled "%s".', $label, $title);
         }
 
-        if ($date !== null) {
+        if (null !== $date) {
             return sprintf('%s dated %s.', $label, $date);
         }
 
-        return $label === '' ? null : sprintf('%s catalogue record.', $label);
+        return '' === $label ? null : sprintf('%s catalogue record.', $label);
     }
 
     /**
@@ -148,7 +148,7 @@ final class SyntheticSearchSummaryBuilder
 
         foreach ($sentences as $sentence) {
             $sentence = $this->sentence($sentence);
-            if ($sentence === '') {
+            if ('' === $sentence) {
                 continue;
             }
 
@@ -167,13 +167,13 @@ final class SyntheticSearchSummaryBuilder
     private function sentence(string $text): string
     {
         $text = trim(preg_replace('/\s+/', ' ', $text) ?? $text);
-        if ($text === '') {
+        if ('' === $text) {
             return '';
         }
 
         return str_ends_with($text, '.') || str_ends_with($text, '?') || str_ends_with($text, '!')
             ? $text
-            : $text . '.';
+            : $text.'.';
     }
 
     private function truncate(string $text, int $maxLength): string
@@ -194,11 +194,12 @@ final class SyntheticSearchSummaryBuilder
             $cut = mb_substr($cut, 0, $lastStop);
         }
 
-        return rtrim($cut, " \t\n\r\0\x0B.,;") . '…';
+        return rtrim($cut, " \t\n\r\0\x0B.,;").'…';
     }
 
     /**
      * @param array<string,mixed> $row
+     *
      * @return list<string>
      */
     private function concepts(array $row): array
@@ -216,16 +217,16 @@ final class SyntheticSearchSummaryBuilder
                 $this->scoreConcept($scores, $tokens[$i], 1);
 
                 if (isset($tokens[$i + 1])) {
-                    $this->scoreConcept($scores, $tokens[$i] . ' ' . $tokens[$i + 1], 4);
+                    $this->scoreConcept($scores, $tokens[$i].' '.$tokens[$i + 1], 4);
                 }
 
                 if (isset($tokens[$i + 2])) {
-                    $this->scoreConcept($scores, $tokens[$i] . ' ' . $tokens[$i + 1] . ' ' . $tokens[$i + 2], 5);
+                    $this->scoreConcept($scores, $tokens[$i].' '.$tokens[$i + 1].' '.$tokens[$i + 2], 5);
                 }
             }
         }
 
-        if ($scores === []) {
+        if ([] === $scores) {
             return [];
         }
 
@@ -266,12 +267,12 @@ final class SyntheticSearchSummaryBuilder
      */
     private function stopWordMap(): array
     {
-        if ($this->stopWords !== null) {
+        if (null !== $this->stopWords) {
             return $this->stopWords;
         }
 
         $provider = $this->stopWordsProvider;
-        if ($provider === null && class_exists('voku\\helper\\StopWords')) {
+        if (null === $provider && class_exists('voku\\helper\\StopWords')) {
             $class = 'voku\\helper\\StopWords';
             $provider = new $class();
         }
@@ -284,7 +285,7 @@ final class SyntheticSearchSummaryBuilder
 
         $words = [];
         foreach ($provider->getStopWordsFromLanguage('en') as $word) {
-            if (is_string($word) && $word !== '') {
+            if (is_string($word) && '' !== $word) {
                 $words[mb_strtolower($word)] = true;
             }
         }
@@ -297,7 +298,7 @@ final class SyntheticSearchSummaryBuilder
      */
     private function scalars(mixed $value): array
     {
-        if ($value === null || $value === '' || $value === []) {
+        if (null === $value || '' === $value || [] === $value) {
             return [];
         }
 
@@ -313,7 +314,7 @@ final class SyntheticSearchSummaryBuilder
         foreach ($value as $item) {
             if (\is_scalar($item)) {
                 $text = trim((string) $item);
-                if ($text !== '') {
+                if ('' !== $text) {
                     $out[] = $text;
                 }
             }
@@ -333,6 +334,7 @@ final class SyntheticSearchSummaryBuilder
 
     /**
      * @param list<string> $values
+     *
      * @return list<string>
      */
     private function unique(array $values): array
@@ -342,7 +344,7 @@ final class SyntheticSearchSummaryBuilder
 
         foreach ($values as $value) {
             $value = trim($value);
-            if ($value === '') {
+            if ('' === $value) {
                 continue;
             }
 

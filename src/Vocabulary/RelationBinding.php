@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Survos\DataContracts\Vocabulary;
 
-use ReflectionClass;
 use Survos\DataContracts\Attribute\VocabTerm;
 
 /**
@@ -13,7 +12,7 @@ use Survos\DataContracts\Attribute\VocabTerm;
  * with typed edges obj→<code>. Derived by reflection so the relation producer and any consumer read
  * one declaration. A vocab is either a term set or a relation, never both.
  *
- * @see \Survos\DataContracts\Attribute\VocabTerm
+ * @see VocabTerm
  */
 final class RelationBinding
 {
@@ -22,19 +21,19 @@ final class RelationBinding
 
     /**
      * @return array<string, array{sourceFields: list<string>, linkType: string, reverseCode: ?string, personName: bool, contentType: string}>
-     *         entity core code (e.g. 'per') => relation spec
+     *                                                                                                                                         entity core code (e.g. 'per') => relation spec
      */
     public static function relations(): array
     {
-        if (self::$cache !== null) {
+        if (null !== self::$cache) {
             return self::$cache;
         }
 
         $map = [];
-        foreach ((new ReflectionClass(MuseumVocab::class))->getReflectionConstants() as $const) {
+        foreach ((new \ReflectionClass(MuseumVocab::class))->getReflectionConstants() as $const) {
             foreach ($const->getAttributes(VocabTerm::class) as $attr) {
                 $meta = $attr->newInstance();
-                if (!$meta->relation || $meta->linkType === null) {
+                if (!$meta->relation || null === $meta->linkType) {
                     continue;
                 }
                 $code = (string) $const->getValue();

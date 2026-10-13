@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Survos\DataContracts\Dto\Item;
@@ -49,5 +50,8 @@ class PlaceDto extends BaseItemDto
     #[Field(facet: true, filterable: true, group: 'Visiting')]
     public ?array $activities = null;
 
-    public static function contentType(): string { return ContentType::PLACE; }
+    public static function contentType(): string
+    {
+        return ContentType::PLACE;
+    }
 }

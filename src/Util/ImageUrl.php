@@ -73,17 +73,17 @@ final class ImageUrl
     public static function classify(string $url): ImageUrlVerdict
     {
         $url = trim($url);
-        if ($url === '') {
+        if ('' === $url) {
             return ImageUrlVerdict::Empty;
         }
 
         $scheme = strtolower((string) (parse_url($url, PHP_URL_SCHEME) ?? ''));
-        if ($scheme !== '' && !in_array($scheme, self::FETCHABLE_SCHEMES, true)) {
+        if ('' !== $scheme && !in_array($scheme, self::FETCHABLE_SCHEMES, true)) {
             return ImageUrlVerdict::NotAnImage;
         }
 
         $ext = self::extension($url);
-        if ($ext === null) {
+        if (null === $ext) {
             // Extension-less: a delivery endpoint or IIIF base. Assume good.
             return ImageUrlVerdict::Unverifiable;
         }
@@ -111,19 +111,19 @@ final class ImageUrl
     public static function extension(string $url): ?string
     {
         $path = (string) (parse_url($url, PHP_URL_PATH) ?? '');
-        if ($path === '') {
+        if ('' === $path) {
             return null;
         }
 
         $ext = strtolower(pathinfo($path, PATHINFO_EXTENSION));
 
-        return $ext === '' ? null : $ext;
+        return '' === $ext ? null : $ext;
     }
 
     /** True when the Content-Type of a fetched response is a renderable image. */
     public static function isImageContentType(?string $contentType): bool
     {
-        if ($contentType === null || $contentType === '') {
+        if (null === $contentType || '' === $contentType) {
             return false;
         }
 

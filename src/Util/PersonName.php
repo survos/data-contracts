@@ -32,14 +32,14 @@ final class PersonName
         $birth = null;
         $death = null;
 
-        if (preg_match(self::LIFE_DATES, $raw, $m) === 1) {
+        if (1 === preg_match(self::LIFE_DATES, $raw, $m)) {
             $birth = (int) $m[1];
-            $death = isset($m[2]) && $m[2] !== '' ? (int) $m[2] : null;
+            $death = isset($m[2]) && '' !== $m[2] ? (int) $m[2] : null;
             $name = trim(preg_replace(self::LIFE_DATES, '', $raw) ?? $raw, " ,(\t");
         }
 
         return [
-            'kind' => self::classify($name, $birth !== null),
+            'kind' => self::classify($name, null !== $birth),
             'name' => $name,
             'birth' => $birth,
             'death' => $death,
@@ -55,7 +55,7 @@ final class PersonName
 
         // Inverted personal name: exactly one comma, and the part after it looks like a forename
         // (not an institutional qualifier). Crude but catches "Smith, John" vs "Library, British".
-        if (preg_match('/^[^,]+,\s+\p{Lu}[\p{L}.\-]*\s*$/u', $name) === 1) {
+        if (1 === preg_match('/^[^,]+,\s+\p{Lu}[\p{L}.\-]*\s*$/u', $name)) {
             return 'person';
         }
 

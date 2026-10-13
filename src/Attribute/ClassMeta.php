@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Survos\DataContracts\Attribute;
@@ -18,5 +19,6 @@ class ClassMeta
 
         /** What this type covers — used verbatim in AI classification prompts */
         public readonly ?string $description = null,
-    ) {}
+    ) {
+    }
 }

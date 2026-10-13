@@ -10,18 +10,21 @@ final class DatasetDocument
     /** One-time adoption of pre-contract work/vault snapshots; newer fields win, unknown fields survive. */
     public static function mergeLegacy(array $primary, array $secondary): array
     {
-        if (isset($primary['_metadata'])) { return $primary; }
+        if (isset($primary['_metadata'])) {
+            return $primary;
+        }
         $dataset = [];
         foreach (self::flatten($primary['dataset'] ?? []) + self::flatten($secondary['dataset'] ?? []) as $path => $value) {
             self::assign($dataset, explode('/', $path), $value);
         }
+
         return ['dataset' => $dataset];
     }
 
     public static function update(array $existing, array $incoming, string $owner, array $overrides = [], array $provenance = []): array
     {
         $fields = $existing['_metadata']['fields'] ?? [];
-        if ($fields === []) {
+        if ([] === $fields) {
             foreach (self::flatten($existing['dataset'] ?? []) as $path => $value) {
                 $fields[$path] = PropertyValue::create($value, 'import', 'legacy')->toArray();
             }
@@ -43,7 +46,9 @@ final class DatasetDocument
                     break;
                 }
             }
-            if ($conflict) { continue; }
+            if ($conflict) {
+                continue;
+            }
             foreach ($fields as $existingPath => $field) {
                 if (in_array($field['owner'], [$owner, 'legacy'], true)
                     && (str_starts_with($existingPath, $path.'/') || str_starts_with($path, $existingPath.'/'))) {
@@ -51,10 +56,10 @@ final class DatasetDocument
                 }
             }
             $old = isset($fields[$path]) ? PropertyValue::fromArray($fields[$path]) : null;
-            if ($old !== null && !in_array($old->owner, [$owner, 'legacy'], true)) {
+            if (null !== $old && !in_array($old->owner, [$owner, 'legacy'], true)) {
                 continue;
             }
-            if ($old !== null && $old->owner === $owner && json_encode($old->value, JSON_THROW_ON_ERROR) === json_encode($value, JSON_THROW_ON_ERROR) && $old->provenance === $provenance) {
+            if (null !== $old && $old->owner === $owner && json_encode($old->value, JSON_THROW_ON_ERROR) === json_encode($value, JSON_THROW_ON_ERROR) && $old->provenance === $provenance) {
                 continue;
             }
             $fields[$path] = PropertyValue::create($value, 'meta', $owner, $provenance)->toArray();
@@ -74,7 +79,9 @@ final class DatasetDocument
                 default => str_starts_with($key, PropertyKey::TITLE_PREFIX)
                     ? 'extras/titleRecord/'.substr($key, strlen(PropertyKey::TITLE_PREFIX)) : 'extras/'.$key,
             };
-            if ($key === PropertyKey::TAGS && !isset($fields[$path])) { $path = 'extras/tags'; }
+            if (PropertyKey::TAGS === $key && !isset($fields[$path])) {
+                $path = 'extras/tags';
+            }
             if (isset($fields[$path])) {
                 $origin = $fields[$path];
                 if (str_starts_with($key, PropertyKey::TITLE_PREFIX) && isset($dataset['extras']['titleRecord']['source'])) {
@@ -89,10 +96,11 @@ final class DatasetDocument
             }
             PropertyKey::validate($key, $value);
             $old = $existing['dataset']['extras'][PropertyKey::PROPERTIES][$key] ?? null;
-            $properties[$key] = $old !== null && $old['source'] === 'human' && json_encode($old['value'], JSON_THROW_ON_ERROR) === json_encode($value, JSON_THROW_ON_ERROR)
+            $properties[$key] = null !== $old && 'human' === $old['source'] && json_encode($old['value'], JSON_THROW_ON_ERROR) === json_encode($value, JSON_THROW_ON_ERROR)
                 ? PropertyValue::fromArray($old)
                 : PropertyValue::create($value, 'human', 'dataset.overrides', ['sourceRef' => '_meta/dataset.overrides.json']);
         }
+
         return ['dataset' => DatasetMetadata::apply($dataset, $properties), '_metadata' => ['version' => 1, 'fields' => $fields]];
     }
 
@@ -100,7 +108,9 @@ final class DatasetDocument
     {
         $result = [];
         foreach ($data as $key => $value) {
-            if ($key === PropertyKey::PROPERTIES || $value === null) { continue; }
+            if (PropertyKey::PROPERTIES === $key || null === $value) {
+                continue;
+            }
             $path = $prefix.str_replace(['~', '/'], ['~0', '~1'], (string) $key);
             if (is_array($value) && !array_is_list($value)) {
                 $result += self::flatten($value, $path.'/');
@@ -108,13 +118,18 @@ final class DatasetDocument
                 $result[$path] = $value;
             }
         }
+
         return $result;
     }
 
     private static function assign(array &$data, array $parts, mixed $value): void
     {
         $key = str_replace(['~1', '~0'], ['/', '~'], array_shift($parts));
-        if ($parts === []) { $data[$key] = $value; return; }
+        if ([] === $parts) {
+            $data[$key] = $value;
+
+            return;
+        }
         $data[$key] ??= [];
         self::assign($data[$key], $parts, $value);
     }

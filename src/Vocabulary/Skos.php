@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Survos\DataContracts\Vocabulary;
@@ -15,24 +16,24 @@ namespace Survos\DataContracts\Vocabulary;
  */
 enum Skos: string
 {
-    case PREF_LABEL  = 'skos:prefLabel';
-    case ALT_LABEL   = 'skos:altLabel';
-    case HIDDEN_LABEL= 'skos:hiddenLabel';
-    case NOTE        = 'skos:note';
-    case SCOPE_NOTE  = 'skos:scopeNote';
-    case DEFINITION  = 'skos:definition';
-    case BROADER     = 'skos:broader';
-    case NARROWER    = 'skos:narrower';
-    case RELATED     = 'skos:related';
+    case PREF_LABEL = 'skos:prefLabel';
+    case ALT_LABEL = 'skos:altLabel';
+    case HIDDEN_LABEL = 'skos:hiddenLabel';
+    case NOTE = 'skos:note';
+    case SCOPE_NOTE = 'skos:scopeNote';
+    case DEFINITION = 'skos:definition';
+    case BROADER = 'skos:broader';
+    case NARROWER = 'skos:narrower';
+    case RELATED = 'skos:related';
     case EXACT_MATCH = 'skos:exactMatch';
     case CLOSE_MATCH = 'skos:closeMatch';
-    case IN_SCHEME   = 'skos:inScheme';
+    case IN_SCHEME = 'skos:inScheme';
 
     public const NAMESPACE_URI = 'http://www.w3.org/2004/02/skos/core#';
     public const PREFIX = 'skos';
 
     /** rdf:type URI for a skos:Concept node. */
-    public const CONCEPT_TYPE = self::NAMESPACE_URI . 'Concept';
+    public const CONCEPT_TYPE = self::NAMESPACE_URI.'Concept';
 
     public function localName(): string
     {
@@ -41,6 +42,6 @@ enum Skos: string
 
     public function uri(): string
     {
-        return self::NAMESPACE_URI . $this->localName();
+        return self::NAMESPACE_URI.$this->localName();
     }
 }

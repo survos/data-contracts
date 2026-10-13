@@ -23,14 +23,13 @@ final class PropertyKey
             throw new \InvalidArgumentException('Invalid metadata key: '.$key);
         }
         $valid = match ($key) {
-            self::LABEL, self::DESCRIPTION, self::CONTENT_TYPE => $value === null || is_string($value),
+            self::LABEL, self::DESCRIPTION, self::CONTENT_TYPE => null === $value || is_string($value),
             self::ROW_COUNT, self::SCHEMA_VERSION, 'title.issueCount' => is_int($value) && $value >= 0,
             self::TAGS => is_array($value) && array_is_list($value) && array_all($value, static fn (mixed $item): bool => is_string($item)),
-            'title.source', 'title.essay' => $value === null || is_string($value),
-            'title.firstIssue', 'title.lastIssue' => $value === null || (is_string($value) && preg_match('/^\d{4}-\d{2}-\d{2}$/D', $value) === 1),
+            'title.source', 'title.essay' => null === $value || is_string($value),
+            'title.firstIssue', 'title.lastIssue' => null === $value || (is_string($value) && 1 === preg_match('/^\d{4}-\d{2}-\d{2}$/D', $value)),
             'title.title', 'title.essayContributor', 'title.datesOfPublication', 'title.frequency',
-            'title.createdPublished', 'title.notes', 'title.subjectHeadings', 'title.precedingTitles', 'title.oclc' =>
-                $value === null || is_string($value) || (is_array($value) && array_is_list($value) && array_all($value, static fn (mixed $item): bool => is_string($item))),
+            'title.createdPublished', 'title.notes', 'title.subjectHeadings', 'title.precedingTitles', 'title.oclc' => null === $value || is_string($value) || (is_array($value) && array_is_list($value) && array_all($value, static fn (mixed $item): bool => is_string($item))),
             default => true,
         };
         if (!$valid) {

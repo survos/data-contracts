@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Survos\DataContracts\Dto\Item;
@@ -344,12 +345,12 @@ abstract class BaseItemDto extends AbstractEntityDto
 
     #[Field(facet: true, filterable: true, group: 'Geography')]
     #[Map(source: ['edm:country'])]
-    public ?string $country  = null;
+    public ?string $country = null;
 
     /** Primary/display state — see ItemField::STATE. Always set when a record has ≥1 state (the
      *  "City, State, Country" line in PhotoGrid.html.twig reads this one, not $states). */
     #[Field(facet: true, filterable: true, group: 'Geography')]
-    public ?string $state    = null;
+    public ?string $state = null;
 
     /**
      * Every state/province a record touches — see ItemField::STATES. Only meaningfully distinct
@@ -359,31 +360,31 @@ abstract class BaseItemDto extends AbstractEntityDto
      * @var list<string>|null
      */
     #[Field(facet: true, filterable: true, group: 'Geography')]
-    public ?array $states    = null;
+    public ?array $states = null;
 
     #[Field(group: 'Geography')]
-    public ?string $county   = null;
+    public ?string $county = null;
     #[Field(facet: true, filterable: true, group: 'Geography')]
-    public ?string $city     = null;
+    public ?string $city = null;
     #[Field(group: 'Geography')]
     #[Map(source: [ItemField::LATITUDE])]
-    public ?float  $latitude = null;
+    public ?float $latitude = null;
     #[Field(group: 'Geography')]
     #[Map(source: [ItemField::LONGITUDE])]
-    public ?float  $longitude= null;
+    public ?float $longitude = null;
 
     // ── Media ─────────────────────────────────────────────────────────────────
 
     /** IIIF Image API base URL — use for AI vision and imgProxy resizing */
     #[Field(group: 'Media')]
-    public ?string $iiifBase      = null;
+    public ?string $iiifBase = null;
     #[Map(source: ['identifier_iiif_manifest'])]
-    public ?string $iiifManifest  = null;
+    public ?string $iiifManifest = null;
     #[Field(group: 'Media')]
     // image, not thumbnailUrl: image is on Thing so it stays valid on Place and Event,
     // whereas thumbnailUrl is CreativeWork-only.
     #[SchemaProperty('image')]
-    public ?string $thumbnailUrl  = null;
+    public ?string $thumbnailUrl = null;
     #[Map(source: ['IsShownBy', 'edm:isShownBy'])]
     #[Field(group: 'Media')]
     public ?string $largeImageUrl = null;
@@ -454,7 +455,7 @@ abstract class BaseItemDto extends AbstractEntityDto
     /** Whether {@see mainText()} resolved to observationProse (AI-generated markdown). */
     public function mainTextIsMarkdown(): bool
     {
-        return $this->observationProse !== null && $this->mainText() === $this->observationProse;
+        return null !== $this->observationProse && $this->mainText() === $this->observationProse;
     }
 
     // ── Provenance (for zm Values) ────────────────────────────────────────────
@@ -501,7 +502,9 @@ abstract class BaseItemDto extends AbstractEntityDto
         foreach (DcTerms::cases() as $term) {
             $key = $term->value;            // 'dcterms:title'
             $prop = $term->localName();     // 'title'
-            if (!array_key_exists($key, $meta)) continue;
+            if (!array_key_exists($key, $meta)) {
+                continue;
+            }
             // Map to DTO property using camelCase conversion for multi-word terms
             // e.g. 'isPartOf' → $dto->collections (special cases below)
             $camel = lcfirst(str_replace(' ', '', ucwords(str_replace('_', ' ', $prop))));
@@ -511,19 +514,19 @@ abstract class BaseItemDto extends AbstractEntityDto
         }
 
         // Special mappings where dcterms localName ≠ DTO property
-        $dto->id           ??= $meta[ItemField::SOURCE_ID]         ?? null;
-        $dto->sourceUrl    ??= $meta[DcTerms::SOURCE->value]       ?? null;
-        $dto->contentType  ??= $contentType                        ?? ($dto instanceof static ? static::contentType() : null);
-        $dto->aggregator   ??= $meta[ItemField::AGGREGATOR]        ?? null;
-        $dto->creators     ??= $meta[DcTerms::CREATOR->value]      ?? null;
-        $dto->subjects     ??= $meta[DcTerms::SUBJECT->value]      ?? null;
-        $dto->collections  ??= $meta[DcTerms::IS_PART_OF->value]   ?? null;
-        $dto->rights       ??= $meta[DcTerms::RIGHTS->value]       ?? null;
-        $dto->rightsUri    ??= $meta[DcTerms::LICENSE->value]      ?? $meta['license_uri'] ?? null;
-        $dto->iiifBase     ??= $meta[ItemField::IIIF_BASE]         ?? null;
-        $dto->iiifManifest ??= $meta[ItemField::IIIF_MANIFEST]     ?? null;
-        $dto->thumbnailUrl ??= $meta[ItemField::THUMBNAIL_URL]     ?? null;
-        $dto->denseSummary ??= $meta[ItemField::DENSE_SUMMARY]     ?? null;
+        $dto->id ??= $meta[ItemField::SOURCE_ID] ?? null;
+        $dto->sourceUrl ??= $meta[DcTerms::SOURCE->value] ?? null;
+        $dto->contentType ??= $contentType ?? ($dto instanceof static ? static::contentType() : null);
+        $dto->aggregator ??= $meta[ItemField::AGGREGATOR] ?? null;
+        $dto->creators ??= $meta[DcTerms::CREATOR->value] ?? null;
+        $dto->subjects ??= $meta[DcTerms::SUBJECT->value] ?? null;
+        $dto->collections ??= $meta[DcTerms::IS_PART_OF->value] ?? null;
+        $dto->rights ??= $meta[DcTerms::RIGHTS->value] ?? null;
+        $dto->rightsUri ??= $meta[DcTerms::LICENSE->value] ?? $meta['license_uri'] ?? null;
+        $dto->iiifBase ??= $meta[ItemField::IIIF_BASE] ?? null;
+        $dto->iiifManifest ??= $meta[ItemField::IIIF_MANIFEST] ?? null;
+        $dto->thumbnailUrl ??= $meta[ItemField::THUMBNAIL_URL] ?? null;
+        $dto->denseSummary ??= $meta[ItemField::DENSE_SUMMARY] ?? null;
 
         return $dto;
     }
@@ -536,29 +539,29 @@ abstract class BaseItemDto extends AbstractEntityDto
     {
         // Build dcterms: keyed map from DTO properties
         $meta = array_filter([
-            DcTerms::TITLE->value         => $this->title,
-            DcTerms::DESCRIPTION->value   => $this->description,
-            DcTerms::DATE->value          => $this->date,
-            DcTerms::CREATOR->value       => $this->creators,
-            DcTerms::SUBJECT->value       => $this->subjects,
-            DcTerms::IS_PART_OF->value    => $this->collections,
-            DcTerms::PUBLISHER->value     => $this->institution,
-            DcTerms::LANGUAGE->value      => $this->language,
-            DcTerms::EXTENT->value        => $this->extent ?? null,
-            DcTerms::RIGHTS->value        => $this->rights,
-            DcTerms::LICENSE->value       => $this->rightsUri,
+            DcTerms::TITLE->value => $this->title,
+            DcTerms::DESCRIPTION->value => $this->description,
+            DcTerms::DATE->value => $this->date,
+            DcTerms::CREATOR->value => $this->creators,
+            DcTerms::SUBJECT->value => $this->subjects,
+            DcTerms::IS_PART_OF->value => $this->collections,
+            DcTerms::PUBLISHER->value => $this->institution,
+            DcTerms::LANGUAGE->value => $this->language,
+            DcTerms::EXTENT->value => $this->extent ?? null,
+            DcTerms::RIGHTS->value => $this->rights,
+            DcTerms::LICENSE->value => $this->rightsUri,
             DcTerms::ACCESS_RIGHTS->value => $this->reuseAllowed ?? null,
-            DcTerms::SOURCE->value        => $this->sourceUrl,
-            DcTerms::IDENTIFIER->value    => $this->identifierLocal,
-            ItemField::CONTENT_TYPE       => static::contentType(),
-            ItemField::AGGREGATOR         => $this->aggregator,
-            ItemField::SOURCE_ID          => $this->id,
-            ItemField::IIIF_BASE          => $this->iiifBase,
-            ItemField::IIIF_MANIFEST      => $this->iiifManifest,
-            ItemField::THUMBNAIL_URL      => $this->thumbnailUrl,
-            ItemField::SEARCH_SUMMARY     => $this->searchSummary,
-            ItemField::DENSE_SUMMARY      => $this->denseSummary,
-        ], static fn($v) => $v !== null && $v !== '' && $v !== []);
+            DcTerms::SOURCE->value => $this->sourceUrl,
+            DcTerms::IDENTIFIER->value => $this->identifierLocal,
+            ItemField::CONTENT_TYPE => static::contentType(),
+            ItemField::AGGREGATOR => $this->aggregator,
+            ItemField::SOURCE_ID => $this->id,
+            ItemField::IIIF_BASE => $this->iiifBase,
+            ItemField::IIIF_MANIFEST => $this->iiifManifest,
+            ItemField::THUMBNAIL_URL => $this->thumbnailUrl,
+            ItemField::SEARCH_SUMMARY => $this->searchSummary,
+            ItemField::DENSE_SUMMARY => $this->denseSummary,
+        ], static fn ($v) => null !== $v && '' !== $v && [] !== $v);
 
         return $meta;
     }
@@ -570,18 +573,18 @@ abstract class BaseItemDto extends AbstractEntityDto
     public static function fromNormalized(array $row): static
     {
         assert(
-            !array_filter(array_keys($row), static fn(string $k): bool => str_contains($k, '_') && !str_starts_with($k, 'ai:')),
-            'Normalized row keys must be camelCase; found snake_case: ' . implode(', ', array_filter(array_keys($row), static fn(string $k): bool => str_contains($k, '_') && !str_starts_with($k, 'ai:')))
+            !array_filter(array_keys($row), static fn (string $k): bool => str_contains($k, '_') && !str_starts_with($k, 'ai:')),
+            'Normalized row keys must be camelCase; found snake_case: '.implode(', ', array_filter(array_keys($row), static fn (string $k): bool => str_contains($k, '_') && !str_starts_with($k, 'ai:')))
         );
 
         $dto = new static();
         $knownProps = array_keys(get_object_vars($dto));
 
         foreach ($knownProps as $prop) {
-            if ($prop === 'unmapped') {
+            if ('unmapped' === $prop) {
                 continue;
             }
-            if (array_key_exists($prop, $row) && $row[$prop] !== '') {
+            if (array_key_exists($prop, $row) && '' !== $row[$prop]) {
                 // '' is treated as absent (blankToNull semantics) so a #[Map] alias fallback can fill
                 // the field from the next source; toMeili filters '' out of dto_data anyway.
                 $dto->assignTolerant($prop, $row[$prop]);
@@ -604,7 +607,7 @@ abstract class BaseItemDto extends AbstractEntityDto
 
         // Pipeline-stage facet: 'enriched' once any AI claim is present (observe prose / dense summary /
         // caption), else 'normalized'. Lets the folio filter normalized-only vs AI-enriched records.
-        $dto->stage ??= ($dto->denseSummary !== null || $dto->caption !== null || $dto->observationProse !== null)
+        $dto->stage ??= (null !== $dto->denseSummary || null !== $dto->caption || null !== $dto->observationProse)
             ? 'enriched'
             : 'normalized';
 
@@ -633,7 +636,7 @@ abstract class BaseItemDto extends AbstractEntityDto
         foreach (self::aliasMap() as $prop => $sources) {
             if (($this->$prop ?? null) === null) {
                 foreach ($sources as $src) {
-                    if (($row[$src] ?? null) !== null && $row[$src] !== '' && $this->assignTolerant($prop, $row[$src])) {
+                    if (($row[$src] ?? null) !== null && '' !== $row[$src] && $this->assignTolerant($prop, $row[$src])) {
                         break;
                     }
                 }
@@ -663,17 +666,20 @@ abstract class BaseItemDto extends AbstractEntityDto
     {
         try {
             $this->$prop = $value; // property hooks handle coercion (e.g. int id → string)
+
             return true;
         } catch (\TypeError) {
         }
         if (is_scalar($value)) {
             try {
                 $this->$prop = (string) $value; // e.g. int year → ?string date
+
                 return true;
             } catch (\TypeError) {
             }
         }
         $this->unmapped[$prop] = $value;
+
         return false;
     }
 
@@ -694,7 +700,7 @@ abstract class BaseItemDto extends AbstractEntityDto
             foreach ($p->getAttributes(Map::class) as $attr) {
                 $sources = [...$sources, ...$attr->newInstance()->sources()];
             }
-            if ($sources !== []) {
+            if ([] !== $sources) {
                 $map[$p->getName()] = $sources;
             }
         }
@@ -710,7 +716,7 @@ abstract class BaseItemDto extends AbstractEntityDto
     {
         return array_filter(
             get_object_vars($this),
-            static fn($v) => $v !== null && $v !== [] && $v !== ''
+            static fn ($v) => null !== $v && [] !== $v && '' !== $v
         );
     }
 
@@ -723,23 +729,23 @@ abstract class BaseItemDto extends AbstractEntityDto
     public function toValueMap(): array
     {
         return array_filter([
-            DcTerms::TITLE->value      => $this->title,
-            DcTerms::DESCRIPTION->value=> $this->description,
-            DcTerms::DATE->value       => $this->date,
-            DcTerms::CREATOR->value    => $this->creators,
-            DcTerms::SUBJECT->value    => array_unique(array_filter(array_merge(
+            DcTerms::TITLE->value => $this->title,
+            DcTerms::DESCRIPTION->value => $this->description,
+            DcTerms::DATE->value => $this->date,
+            DcTerms::CREATOR->value => $this->creators,
+            DcTerms::SUBJECT->value => array_unique(array_filter(array_merge(
                 $this->subjects ?? [],
                 $this->subjectsGeographic ?? [],
             ))) ?: null,
-            DcTerms::LANGUAGE->value   => $this->language,
-            DcTerms::RIGHTS->value     => $this->rights,
-            DcTerms::LICENSE->value    => $this->rightsUri,
+            DcTerms::LANGUAGE->value => $this->language,
+            DcTerms::RIGHTS->value => $this->rights,
+            DcTerms::LICENSE->value => $this->rightsUri,
             DcTerms::IDENTIFIER->value => $this->identifierLocal,
-            DcTerms::SOURCE->value     => $this->sourceUrl,
-            ItemField::LATITUDE        => $this->latitude,
-            ItemField::LONGITUDE       => $this->longitude,
-            ItemField::SEARCH_SUMMARY  => $this->searchSummary,
-            ItemField::DENSE_SUMMARY   => $this->denseSummary,
-        ], static fn($v) => $v !== null && $v !== [] && $v !== '');
+            DcTerms::SOURCE->value => $this->sourceUrl,
+            ItemField::LATITUDE => $this->latitude,
+            ItemField::LONGITUDE => $this->longitude,
+            ItemField::SEARCH_SUMMARY => $this->searchSummary,
+            ItemField::DENSE_SUMMARY => $this->denseSummary,
+        ], static fn ($v) => null !== $v && [] !== $v && '' !== $v);
     }
 }

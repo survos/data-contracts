@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Survos\DataContracts\Dto\Item;
@@ -27,5 +28,8 @@ class EventDto extends BaseItemDto
     #[Field(facet: true, filterable: true, group: 'Identity')]
     public ?string $eventType = null;
 
-    public static function contentType(): string { return ContentType::EVENT; }
+    public static function contentType(): string
+    {
+        return ContentType::EVENT;
+    }
 }

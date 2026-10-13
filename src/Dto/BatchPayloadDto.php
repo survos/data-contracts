@@ -29,9 +29,9 @@ use Symfony\Component\Serializer\Attribute\SerializedName;
 final class BatchPayloadDto
 {
     /**
-     * @param list<string>                              $urls         image URLs to register
-     * @param array<string, array<string, mixed>>       $context      per-URL flat hint map, keyed by url
-     * @param array<string, list<array<string,mixed>>>  $sourceClaims per-URL modeled @import claims, keyed by url
+     * @param list<string>                             $urls         image URLs to register
+     * @param array<string, array<string, mixed>>      $context      per-URL flat hint map, keyed by url
+     * @param array<string, list<array<string,mixed>>> $sourceClaims per-URL modeled @import claims, keyed by url
      */
     public function __construct(
         public string $client = '',
@@ -79,7 +79,7 @@ final class BatchPayloadDto
     {
         return array_values(array_unique(array_filter(
             $this->urls,
-            static fn ($u): bool => is_string($u) && $u !== '' && !self::isFetchable($u),
+            static fn ($u): bool => is_string($u) && '' !== $u && !self::isFetchable($u),
         )));
     }
 
@@ -101,13 +101,13 @@ final class BatchPayloadDto
      */
     private static function isFetchable(mixed $u): bool
     {
-        if (!is_string($u) || $u === '') {
+        if (!is_string($u) || '' === $u) {
             return false;
         }
 
         $scheme = strtolower((string) parse_url($u, PHP_URL_SCHEME));
 
-        return ($scheme === 'http' || $scheme === 'https')
-            && parse_url($u, PHP_URL_HOST) !== null;
+        return ('http' === $scheme || 'https' === $scheme)
+            && null !== parse_url($u, PHP_URL_HOST);
     }
 }

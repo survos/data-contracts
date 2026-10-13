@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Survos\DataContracts\Dto\Item;
 
-use Survos\DataContracts\Metadata\ContentType;
-
 /**
  * DTO for cartoons and caricatures — drawings made for satirical,
  * editorial, or humorous purposes.
@@ -18,7 +16,6 @@ use Survos\DataContracts\Metadata\ContentType;
  */
 final class CartoonDto extends DrawingDto
 {
-
     /** Object type classification from source, e.g. ['Cartoons', 'Caricatures'] */
     public ?array $type = null;
 

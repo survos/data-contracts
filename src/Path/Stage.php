@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Survos\DataContracts\Path;
@@ -22,27 +23,27 @@ namespace Survos\DataContracts\Path;
  */
 enum Stage: string
 {
-    case Meta      = 'meta';
-    case Raw       = 'raw';
-    case Extract   = 'extract';
+    case Meta = 'meta';
+    case Raw = 'raw';
+    case Extract = 'extract';
     case Normalize = 'normalize';
-    case Intl      = 'intl';
-    case Terms     = 'terms';
-    case Ai        = 'ai';
-    case Enrich    = 'enrich';   // the "assemble" step → _folio
+    case Intl = 'intl';
+    case Terms = 'terms';
+    case Ai = 'ai';
+    case Enrich = 'enrich';   // the "assemble" step → _folio
 
     /** Work-tree directory name. Throws for stages with no work dir (Ai → vault). */
     public function dir(): string
     {
         return match ($this) {
-            self::Meta      => '_meta',
-            self::Raw       => '_raw',
-            self::Extract   => 'extract',
+            self::Meta => '_meta',
+            self::Raw => '_raw',
+            self::Extract => 'extract',
             self::Normalize => 'norm',
-            self::Intl      => 'trans',
-            self::Terms     => 'voc',
-            self::Enrich    => '_folio',
-            self::Ai        => throw new \LogicException('AI claims live in the vault; use DataPaths::aiDir(), not a work stage dir.'),
+            self::Intl => 'trans',
+            self::Terms => 'voc',
+            self::Enrich => '_folio',
+            self::Ai => throw new \LogicException('AI claims live in the vault; use DataPaths::aiDir(), not a work stage dir.'),
         };
     }
 
@@ -55,11 +56,9 @@ enum Stage: string
         $k = strtolower(trim($key, '/'));
 
         return self::tryFrom($k) ?? match ($k) {
-            'normalized'           => self::Normalize,
+            'normalized' => self::Normalize,
             'enriched', 'assemble' => self::Enrich,
-            default => throw new \InvalidArgumentException(
-                sprintf('Unknown stage "%s". Reference a Stage case; do not pass raw strings.', $key)
-            ),
+            default => throw new \InvalidArgumentException(sprintf('Unknown stage "%s". Reference a Stage case; do not pass raw strings.', $key)),
         };
     }
 

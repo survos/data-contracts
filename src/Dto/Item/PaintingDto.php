@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Survos\DataContracts\Dto\Item;
@@ -14,5 +15,8 @@ use Survos\SchemaOrgBundle\Attribute\SchemaOrg;
 #[SchemaOrg('Painting')]
 class PaintingDto extends ArtworkDto
 {
-    public static function contentType(): string { return ContentType::PAINTING; }
+    public static function contentType(): string
+    {
+        return ContentType::PAINTING;
+    }
 }

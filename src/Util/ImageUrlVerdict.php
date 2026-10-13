@@ -32,13 +32,13 @@ enum ImageUrlVerdict: string
     /** Should this URL ever be handed to imgproxy? */
     public function isRenderable(): bool
     {
-        return $this === self::Image || $this === self::Unverifiable;
+        return self::Image === $this || self::Unverifiable === $this;
     }
 
     /** Does this indicate a harvest bug worth logging, as opposed to expected data? */
     public function isHarvestDefect(): bool
     {
-        return $this === self::NotAnImage;
+        return self::NotAnImage === $this;
     }
 
     public function label(): string

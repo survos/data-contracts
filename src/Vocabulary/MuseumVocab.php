@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Survos\DataContracts\Vocabulary;
@@ -34,7 +35,7 @@ interface MuseumVocab
         aiHint: 'Named cultural group, civilisation, or ethnic origin, e.g. "Roman", "Aztec", "Edo period Japan".',
         termSet: true,
     )]
-    const CULTURE = 'cul';
+    public const CULTURE = 'cul';
 
     #[VocabTerm(
         label: 'Technique',
@@ -42,7 +43,7 @@ interface MuseumVocab
         aiHint: 'Method or process of manufacture, e.g. "Lost-wax casting", "Oil on canvas", "Woodblock print".',
         termSet: true,
     )]
-    const TECHNIQUE = 'tec';
+    public const TECHNIQUE = 'tec';
 
     #[VocabTerm(
         label: 'Material',
@@ -50,7 +51,7 @@ interface MuseumVocab
         aiHint: 'Physical substance(s) the object is made from, e.g. "Terracotta", "Gold and turquoise", "Silk".',
         termSet: true,
     )]
-    const MATERIAL = 'mat';
+    public const MATERIAL = 'mat';
 
     #[VocabTerm(
         label: 'Medium',
@@ -58,7 +59,7 @@ interface MuseumVocab
         aiHint: 'Combined material and technique shorthand as used by the holding institution.',
         termSet: true,
     )]
-    const MEDIUM = 'med';
+    public const MEDIUM = 'med';
 
     #[VocabTerm(
         label: 'Place',
@@ -67,7 +68,7 @@ interface MuseumVocab
         termSet: true,
         sourceFields: [ItemField::SUBJECTS_GEOGRAPHIC],
     )]
-    const PLACE = Core::PLACE;
+    public const PLACE = Core::PLACE;
 
     // A person is an entity worth its own core/page (enrichable with a Wikidata bio/photo), so model
     // it as a RELATION (obj→per, "created"/"created_by"), not a flat term set.
@@ -81,7 +82,7 @@ interface MuseumVocab
         personName: true,
         sourceFields: [ItemField::CREATOR],
     )]
-    const PERSON = Core::PERSON;
+    public const PERSON = Core::PERSON;
 
     #[VocabTerm(
         label: 'Subject',
@@ -94,7 +95,7 @@ interface MuseumVocab
         // fortepan.us, and the fpeu family), so it's free to fold into the same term set.
         sourceFields: [ItemField::SUBJECTS, ItemField::KEYWORDS, 'source_tags'],
     )]
-    const SUBJECT = Core::OBJECT;
+    public const SUBJECT = Core::OBJECT;
 
     #[VocabTerm(
         label: 'Genre',
@@ -103,14 +104,14 @@ interface MuseumVocab
         termSet: true,
         sourceFields: [ItemField::GENRE_SPECIFIC, ItemField::GENRE_BASIC, ItemField::TYPE, ItemField::TYPE_OF_RESOURCE],
     )]
-    const GENRE = 'genre';
+    public const GENRE = 'genre';
 
     #[VocabTerm(
         label: 'Organisation',
         uri: 'http://www.w3.org/ns/org#Organization',
         aiHint: 'Named organisation, institution, or corporate body associated with the object.',
     )]
-    const ORGANISATION = Core::ORGANISATION;
+    public const ORGANISATION = Core::ORGANISATION;
 
     #[VocabTerm(
         label: 'Period',
@@ -118,7 +119,7 @@ interface MuseumVocab
         aiHint: 'Named historical period, dynasty, or style era, e.g. "Ming Dynasty", "Victorian", "Art Deco".',
         termSet: true,
     )]
-    const PERIOD = 'period';
+    public const PERIOD = 'period';
 
     #[VocabTerm(
         label: 'Epoch',
@@ -126,7 +127,7 @@ interface MuseumVocab
         aiHint: 'Broad archaeological or geological era, broader than period, e.g. "Bronze Age", "Neolithic", "Classical Antiquity".',
         termSet: true,
     )]
-    const EPOCH = 'epoch';
+    public const EPOCH = 'epoch';
 
     // A collection is an entity (it groups objects and can be enriched), so model it as a RELATION:
     // the collection contains the object (obj→coll "belongs_to", reverse "contains").
@@ -140,7 +141,7 @@ interface MuseumVocab
         reverseCode: 'belongs_to',
         sourceFields: [ItemField::COLLECTIONS],
     )]
-    const COLLECTION = Core::COLLECTION;
+    public const COLLECTION = Core::COLLECTION;
 
     #[VocabTerm(
         label: 'Department',
@@ -148,60 +149,60 @@ interface MuseumVocab
         aiExtractable: false,
         termSet: true,
     )]
-    const DEPARTMENT = 'dept';
+    public const DEPARTMENT = 'dept';
 
     #[VocabTerm(
         label: 'Accession number',
         aiHint: 'Institutional catalog or accession number assigned by the holding museum.',
         aiExtractable: false,
     )]
-    const ACCESSION = 'accession';
+    public const ACCESSION = 'accession';
 
     #[VocabTerm(
         label: 'Dimensions',
         uri: 'http://purl.org/dc/terms/extent',
         aiHint: 'Physical dimensions as a free-text string, e.g. "34.2 × 22.1 cm", "H. 45 cm, W. 30 cm".',
     )]
-    const DIMENSIONS = 'dimensions';
+    public const DIMENSIONS = 'dimensions';
 
     #[VocabTerm(
         label: 'Provenance',
         uri: 'http://purl.org/dc/terms/provenance',
         aiHint: 'Ownership and acquisition history of the object.',
     )]
-    const PROVENANCE = 'provenance';
+    public const PROVENANCE = 'provenance';
 
     #[VocabTerm(
         label: 'Credit line',
         aiHint: 'Donor attribution text for display, e.g. "Gift of John Smith, 1987".',
         aiExtractable: false,
     )]
-    const CREDIT = 'credit';
+    public const CREDIT = 'credit';
 
     #[VocabTerm(
         label: 'Inscription',
         aiHint: 'Text inscribed, painted, stamped, or otherwise applied to the object — transcribe verbatim.',
     )]
-    const INSCRIPTION = 'inscription';
+    public const INSCRIPTION = 'inscription';
 
     /**
      * Icon for each vocabulary code, as ux_icons aliases: templates call `ux_icon(code)` for a
      * term set or relation group. Registered by every bundle that renders these codes
      * (data-bundle, folio-bundle), so an app gets them whichever of those it installs.
      */
-    const ICONS = [
-        self::PERSON       => 'tabler:user',
-        self::COLLECTION   => 'tabler:folder',
+    public const ICONS = [
+        self::PERSON => 'tabler:user',
+        self::COLLECTION => 'tabler:folder',
         self::ORGANISATION => 'tabler:building',
-        self::SUBJECT      => 'tabler:tag',
-        self::PLACE        => 'tabler:map-pin',
-        self::GENRE        => 'tabler:category',
-        self::CULTURE      => 'tabler:world',
-        self::MEDIUM       => 'tabler:palette',
-        self::TECHNIQUE    => 'tabler:brush',
-        self::MATERIAL     => 'tabler:cube',
-        self::PERIOD       => 'tabler:calendar',
-        self::EPOCH        => 'tabler:hourglass',
-        self::DEPARTMENT   => 'tabler:sitemap',
+        self::SUBJECT => 'tabler:tag',
+        self::PLACE => 'tabler:map-pin',
+        self::GENRE => 'tabler:category',
+        self::CULTURE => 'tabler:world',
+        self::MEDIUM => 'tabler:palette',
+        self::TECHNIQUE => 'tabler:brush',
+        self::MATERIAL => 'tabler:cube',
+        self::PERIOD => 'tabler:calendar',
+        self::EPOCH => 'tabler:hourglass',
+        self::DEPARTMENT => 'tabler:sitemap',
     ];
 }

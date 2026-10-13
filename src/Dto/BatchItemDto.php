@@ -41,13 +41,13 @@ final class BatchItemDto
     public function toArray(): array
     {
         $out = $this->sourceMeta;
-        if ($this->dataset !== null && $this->dataset !== '') {
+        if (null !== $this->dataset && '' !== $this->dataset) {
             $out[MediaSyncKeys::DATASET] = $this->dataset;
         }
-        if ($this->recordKey !== null && $this->recordKey !== '') {
+        if (null !== $this->recordKey && '' !== $this->recordKey) {
             $out[MediaSyncKeys::RECORD_KEY] = $this->recordKey;
         }
-        if ($this->aiQueue !== []) {
+        if ([] !== $this->aiQueue) {
             $out[MediaSyncKeys::AI_QUEUE] = array_values($this->aiQueue);
         }
         // Only the exception travels; an absent key means archive, as it always has.
@@ -66,12 +66,12 @@ final class BatchItemDto
      */
     public static function fromArray(array $ctx): self
     {
-        $dataset   = $ctx[MediaSyncKeys::DATASET] ?? null;
+        $dataset = $ctx[MediaSyncKeys::DATASET] ?? null;
         $recordKey = $ctx[MediaSyncKeys::RECORD_KEY] ?? null;
-        $aiQueue   = is_array($ctx[MediaSyncKeys::AI_QUEUE] ?? null) ? $ctx[MediaSyncKeys::AI_QUEUE] : [];
+        $aiQueue = is_array($ctx[MediaSyncKeys::AI_QUEUE] ?? null) ? $ctx[MediaSyncKeys::AI_QUEUE] : [];
         // Only a real false opts out: archiving by mistake costs storage, skipping it by mistake
         // loses the copy.
-        $archive   = ($ctx[MediaSyncKeys::ARCHIVE] ?? true) !== false;
+        $archive = ($ctx[MediaSyncKeys::ARCHIVE] ?? true) !== false;
 
         unset(
             $ctx[MediaSyncKeys::DATASET],

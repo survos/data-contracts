@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Survos\DataContracts\Vocabulary;
@@ -16,43 +17,43 @@ use Survos\DataContracts\Attribute\VocabTerm;
  */
 interface ItemField
 {
-    const ID          = 'id';
-    const TITLE       = 'title';
-    const DESCRIPTION = 'description';
-    const PHYSICAL_DESCRIPTION = 'physicalDescription';
-    const CONTEXT_DESCRIPTION  = 'contextDescription';
-    const NOTES       = 'notes';
-    const TYPE        = 'type';
-    const GENRE_SPECIFIC = 'genreSpecific';
-    const GENRE_BASIC    = 'genreBasic';
-    const TYPE_OF_RESOURCE = 'typeOfResource';
-    const KEYWORDS    = 'keywords';
-    const SUBJECTS              = 'subjects';
-    const SUBJECTS_GEOGRAPHIC   = 'subjectsGeographic';
-    const CREATOR     = 'creators'; // the normalized field is the array `creators` (BaseItemDto::$creators)
-    const COLLECTIONS = 'collections';
-    const URL         = 'url';
-    const PDF_URL     = 'pdfUrl';
-    const CITATION    = 'citation';
-    const CITATION_URL = 'citationUrl';
-    const SOURCE_API_URL = 'sourceApiUrl';
-    const LICENSE     = 'license';
-    const RIGHTS      = 'rights';
-    const SOURCE      = 'source';
+    public const ID = 'id';
+    public const TITLE = 'title';
+    public const DESCRIPTION = 'description';
+    public const PHYSICAL_DESCRIPTION = 'physicalDescription';
+    public const CONTEXT_DESCRIPTION = 'contextDescription';
+    public const NOTES = 'notes';
+    public const TYPE = 'type';
+    public const GENRE_SPECIFIC = 'genreSpecific';
+    public const GENRE_BASIC = 'genreBasic';
+    public const TYPE_OF_RESOURCE = 'typeOfResource';
+    public const KEYWORDS = 'keywords';
+    public const SUBJECTS = 'subjects';
+    public const SUBJECTS_GEOGRAPHIC = 'subjectsGeographic';
+    public const CREATOR = 'creators'; // the normalized field is the array `creators` (BaseItemDto::$creators)
+    public const COLLECTIONS = 'collections';
+    public const URL = 'url';
+    public const PDF_URL = 'pdfUrl';
+    public const CITATION = 'citation';
+    public const CITATION_URL = 'citationUrl';
+    public const SOURCE_API_URL = 'sourceApiUrl';
+    public const LICENSE = 'license';
+    public const RIGHTS = 'rights';
+    public const SOURCE = 'source';
 
-    const SOURCE_ID    = 'sourceId';
-    const CONTENT_TYPE = 'contentType';
-    const AGGREGATOR   = 'aggregator';
-    const ARK          = 'ark';
+    public const SOURCE_ID = 'sourceId';
+    public const CONTENT_TYPE = 'contentType';
+    public const AGGREGATOR = 'aggregator';
+    public const ARK = 'ark';
 
-    const THUMBNAIL_URL   = 'thumbnailUrl';
-    const LARGE_IMAGE_URL = 'largeImageUrl';
+    public const THUMBNAIL_URL = 'thumbnailUrl';
+    public const LARGE_IMAGE_URL = 'largeImageUrl';
     /** A provider-declared rendition big enough for every display preset (≥ ~700px), used as the
      *  imgproxy source instead of a slow full-size original. Opt-in: thumbnailUrl is often 200-300px. */
-    const DISPLAY_IMAGE_URL = 'displayImageUrl';
-    const IIIF_BASE       = 'iiifBase';
-    const IIIF_MANIFEST   = 'iiifManifest';
-    const IIIF_INFO       = 'iiifInfo';
+    public const DISPLAY_IMAGE_URL = 'displayImageUrl';
+    public const IIIF_BASE = 'iiifBase';
+    public const IIIF_MANIFEST = 'iiifManifest';
+    public const IIIF_INFO = 'iiifInfo';
 
     /**
      * Ordered list of a row's SOURCE images (each: image url + optional thumb/caption), the input
@@ -60,41 +61,41 @@ interface ItemField
      * inputs, NOT pages (cf. PAGE_URL, a single rendered page). One shared key so every provider
      * that emits multiple images per row uses the same contract.
      */
-    const IMAGES = 'images';
+    public const IMAGES = 'images';
 
     #[VocabTerm(
         label: 'Search summary',
         aiHint: 'Deterministic BM25-friendly text assembled from normalized catalogue metadata.',
     )]
-    const SEARCH_SUMMARY = 'searchSummary';
+    public const SEARCH_SUMMARY = 'searchSummary';
 
     #[VocabTerm(
         label: 'Dense summary',
         aiHint: 'Write a single retrieval-optimised paragraph of ≤ 400 characters. Pack in who, what, when, where, and material/technique.',
     )]
-    const DENSE_SUMMARY = 'ai:denseSummary';
+    public const DENSE_SUMMARY = 'ai:denseSummary';
     /** ai:observationProse — detailed AI visual observation (markdown prose). */
-    const OBSERVATION_PROSE = 'ai:observationProse';
+    public const OBSERVATION_PROSE = 'ai:observationProse';
     /** ai:caption — short AI-generated caption/title. */
-    const CAPTION = 'ai:caption';
+    public const CAPTION = 'ai:caption';
 
-    const PAGE_URL = 'pageUrl';
-    const DATE     = 'date';
-    const YEAR     = 'year';
-    const LANGUAGE = 'language';
+    public const PAGE_URL = 'pageUrl';
+    public const DATE = 'date';
+    public const YEAR = 'year';
+    public const LANGUAGE = 'language';
 
-    const LATITUDE  = 'schema:latitude';
-    const LONGITUDE = 'schema:longitude';
-    const COUNTRY   = 'country';
-    const CITY      = 'city';
+    public const LATITUDE = 'schema:latitude';
+    public const LONGITUDE = 'schema:longitude';
+    public const COUNTRY = 'country';
+    public const CITY = 'city';
 
     /** Single primary state/province — first-class display value (e.g. the "City, State, Country"
      *  line in PhotoGrid). A record touching more than one still sets this to the primary one. */
-    const STATE     = 'state';
+    public const STATE = 'state';
     /**
      * Every state/province a record touches, e.g. a National Park spanning two states. A dataset
      * whose source is naturally single-valued should just set STATE; one whose source can return
      * multiple (like NPS) sets both — STATE as the primary/display value, STATES as the full facet.
      */
-    const STATES    = 'states';
+    public const STATES = 'states';
 }

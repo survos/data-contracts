@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Survos\DataContracts\Dto\Item;
@@ -36,5 +37,8 @@ class CollectionDto extends AbstractWorkDto
     #[Field(facet: true, filterable: true)]
     public ?string $status = null;
 
-    public static function contentType(): string { return ContentType::COLLECTION; }
+    public static function contentType(): string
+    {
+        return ContentType::COLLECTION;
+    }
 }

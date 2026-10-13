@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Survos\DataContracts\Dto\Item;
@@ -14,5 +15,8 @@ class ArtifactDto extends PhysicalObjectDto
 {
     public ?string $objectType = null;
 
-    public static function contentType(): string { return ContentType::OBJECT; }
+    public static function contentType(): string
+    {
+        return ContentType::OBJECT;
+    }
 }

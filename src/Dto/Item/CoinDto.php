@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Survos\DataContracts\Dto\Item;
@@ -15,7 +16,10 @@ use Survos\DataContracts\Metadata\ContentType;
  */
 class CoinDto extends CurrencyDto
 {
-    public static function contentType(): string { return ContentType::COIN; }
+    public static function contentType(): string
+    {
+        return ContentType::COIN;
+    }
 
     /** Mint / place of striking. */
     #[PropertyMeta(label: 'Mint', description: 'Mint or place of striking.', facet: true)]

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Survos\DataContracts\Dto\Item;
@@ -10,13 +11,13 @@ use Survos\SchemaOrgBundle\Attribute\SchemaOrg;
 #[SchemaOrg('Newspaper')]
 class NewspaperDto extends AbstractWorkDto
 {
-    public ?string $publisher    = null;
-    public ?string $pubPlace     = null;
-    public ?string $volume       = null;
-    public ?string $issueNumber  = null;
-    public ?string $edition      = null;
+    public ?string $publisher = null;
+    public ?string $pubPlace = null;
+    public ?string $volume = null;
+    public ?string $issueNumber = null;
+    public ?string $edition = null;
     /** Has searchable full-text pages */
-    public bool    $hasTranscription = false;
+    public bool $hasTranscription = false;
 
     /**
      * Where this title can be read online, e.g. chronicling-america, virginia-chronicle; empty for
@@ -55,5 +56,8 @@ class NewspaperDto extends AbstractWorkDto
     /** @var list<string>|null */
     public ?array $lccn = null;
 
-    public static function contentType(): string { return ContentType::NEWSPAPER; }
+    public static function contentType(): string
+    {
+        return ContentType::NEWSPAPER;
+    }
 }

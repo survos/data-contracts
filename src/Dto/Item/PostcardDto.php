@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Survos\DataContracts\Dto\Item;
@@ -22,5 +23,8 @@ class PostcardDto extends PhotographDto
     /** Addressee */
     public ?string $addressee = null;
 
-    public static function contentType(): string { return ContentType::POSTCARD; }
+    public static function contentType(): string
+    {
+        return ContentType::POSTCARD;
+    }
 }

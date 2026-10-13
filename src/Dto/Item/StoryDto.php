@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Survos\DataContracts\Dto\Item;
@@ -24,5 +25,8 @@ class StoryDto extends BaseItemDto
     #[Field(group: 'Content')]
     public ?int $stopCount = null;
 
-    public static function contentType(): string { return ContentType::STORY; }
+    public static function contentType(): string
+    {
+        return ContentType::STORY;
+    }
 }

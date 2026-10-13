@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Survos\DataContracts\Vocabulary;
@@ -20,21 +21,21 @@ namespace Survos\DataContracts\Vocabulary;
  */
 enum Dc: string
 {
-    case TITLE       = 'dc:title';
-    case CREATOR     = 'dc:creator';
-    case SUBJECT     = 'dc:subject';
+    case TITLE = 'dc:title';
+    case CREATOR = 'dc:creator';
+    case SUBJECT = 'dc:subject';
     case DESCRIPTION = 'dc:description';
-    case PUBLISHER   = 'dc:publisher';
+    case PUBLISHER = 'dc:publisher';
     case CONTRIBUTOR = 'dc:contributor';
-    case DATE        = 'dc:date';
-    case TYPE        = 'dc:type';
-    case FORMAT      = 'dc:format';
-    case IDENTIFIER  = 'dc:identifier';
-    case SOURCE      = 'dc:source';
-    case LANGUAGE    = 'dc:language';
-    case RELATION    = 'dc:relation';
-    case COVERAGE    = 'dc:coverage';
-    case RIGHTS      = 'dc:rights';
+    case DATE = 'dc:date';
+    case TYPE = 'dc:type';
+    case FORMAT = 'dc:format';
+    case IDENTIFIER = 'dc:identifier';
+    case SOURCE = 'dc:source';
+    case LANGUAGE = 'dc:language';
+    case RELATION = 'dc:relation';
+    case COVERAGE = 'dc:coverage';
+    case RIGHTS = 'dc:rights';
 
     public const NAMESPACE_URI = 'http://purl.org/dc/elements/1.1/';
     public const PREFIX = 'dc';
@@ -46,12 +47,12 @@ enum Dc: string
 
     public function uri(): string
     {
-        return self::NAMESPACE_URI . $this->localName();
+        return self::NAMESPACE_URI.$this->localName();
     }
 
     /** Map to the equivalent DcTerms case (same local name, refined namespace). */
     public function asDcTerms(): DcTerms
     {
-        return DcTerms::from('dcterms:' . $this->localName());
+        return DcTerms::from('dcterms:'.$this->localName());
     }
 }

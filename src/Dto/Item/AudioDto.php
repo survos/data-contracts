@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Survos\DataContracts\Dto\Item;
@@ -15,9 +16,12 @@ use Survos\SchemaOrgBundle\Attribute\SchemaOrg;
 class AudioDto extends AbstractWorkDto
 {
     /** Physical carrier e.g. "Cylinder", "LP", "Cassette", "Digital" */
-    public ?string $medium      = null;
-    public ?string $duration    = null;
-    public bool    $hasTranscription = false;
+    public ?string $medium = null;
+    public ?string $duration = null;
+    public bool $hasTranscription = false;
 
-    public static function contentType(): string { return ContentType::AUDIO; }
+    public static function contentType(): string
+    {
+        return ContentType::AUDIO;
+    }
 }

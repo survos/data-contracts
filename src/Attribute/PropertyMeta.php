@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Survos\DataContracts\Attribute;
@@ -27,5 +28,6 @@ class PropertyMeta
 
         /** Include in facet panel (Meilisearch filterableAttributes + UI refinements) */
         public readonly bool $facet = false,
-    ) {}
+    ) {
+    }
 }

@@ -17,11 +17,12 @@ final class Arrays
      * indexing in Meilisearch or storing as JSONL.
      *
      * @param array<mixed>|object|null $data
+     *
      * @return array<mixed>|object|null
      */
     public static function sparse(array|object|null $data): array|object|null
     {
-        if ($data === null) {
+        if (null === $data) {
             return null;
         }
 
@@ -36,12 +37,21 @@ final class Arrays
                 if (is_array($value) || is_object($value)) {
                     $value = self::sparse($value);
                 }
-                if ($value === null) continue;
-                if ($value === '') continue;
-                if ($value === []) continue;
-                if (is_object($value) && (array) $value === []) continue;
+                if (null === $value) {
+                    continue;
+                }
+                if ('' === $value) {
+                    continue;
+                }
+                if ([] === $value) {
+                    continue;
+                }
+                if (is_object($value) && [] === (array) $value) {
+                    continue;
+                }
                 $clean[$key] = $value;
             }
+
             return $isObject ? (object) $clean : $clean;
         }
 
@@ -62,8 +72,9 @@ final class Arrays
      * No-op when $from is absent or $from === $to. Mutates $row by reference and also returns it so
      * calls can be chained or used as an expression.
      *
-     * @param array<string,mixed> $row
+     * @param array<string,mixed>          $row
      * @param (callable(mixed):mixed)|null $transform applied to the value as it moves to $to
+     *
      * @return array<string,mixed>
      */
     public static function renameKey(array &$row, string $from, string $to, ?callable $transform = null): array
@@ -74,7 +85,7 @@ final class Arrays
 
         $value = $row[$from];
         unset($row[$from]);
-        $row[$to] = $transform === null ? $value : $transform($value);
+        $row[$to] = null === $transform ? $value : $transform($value);
 
         return $row;
     }

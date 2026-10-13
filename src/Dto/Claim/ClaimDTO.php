@@ -23,20 +23,20 @@ namespace Survos\DataContracts\Dto\Claim;
 readonly class ClaimDTO implements \JsonSerializable
 {
     public function __construct(
-        public string  $predicate,
-        public mixed   $value,
-        public ?int    $confidence = null,
-        public ?string $basis      = null,
+        public string $predicate,
+        public mixed $value,
+        public ?int $confidence = null,
+        public ?string $basis = null,
     ) {
     }
 
     public function jsonSerialize(): array
     {
         return array_filter([
-            'predicate'  => $this->predicate,
-            'value'      => $this->value,
+            'predicate' => $this->predicate,
+            'value' => $this->value,
             'confidence' => $this->confidence,
-            'basis'      => $this->basis,
-        ], static fn ($v): bool => $v !== null);
+            'basis' => $this->basis,
+        ], static fn ($v): bool => null !== $v);
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Survos\DataContracts\Dto\Item;
@@ -15,5 +16,8 @@ class EphemeraDto extends PhysicalObjectDto
     /** Specific ephemera type e.g. "Ticket", "Trade card", "Broadside" */
     public ?string $ephemeraType = null;
 
-    public static function contentType(): string { return ContentType::EPHEMERA; }
+    public static function contentType(): string
+    {
+        return ContentType::EPHEMERA;
+    }
 }

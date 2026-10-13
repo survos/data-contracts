@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Survos\DataContracts\Attribute;
@@ -22,13 +23,13 @@ final class VocabTerm
 
         /**
          * Linked-data URI for this term.
-         * e.g. 'http://purl.org/dc/terms/medium', 'https://schema.org/latitude'
+         * e.g. 'http://purl.org/dc/terms/medium', 'https://schema.org/latitude'.
          */
         public readonly ?string $uri = null,
 
         /**
          * Hint for AI extraction — injected into the field prompt.
-         * e.g. 'Named cultural group or civilisation, e.g. "Roman", "Edo period Japan"'
+         * e.g. 'Named cultural group or civilisation, e.g. "Roman", "Edo period Japan"'.
          */
         public readonly ?string $aiHint = null,
 
@@ -77,5 +78,6 @@ final class VocabTerm
          * non-personal entity cores like collections, whose value is just a title.
          */
         public readonly bool $personName = false,
-    ) {}
+    ) {
+    }
 }

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Survos\DataContracts\Vocabulary;
 
-use ReflectionClass;
 use Survos\DataContracts\Attribute\VocabTerm;
 
 /**
@@ -14,7 +13,7 @@ use Survos\DataContracts\Attribute\VocabTerm;
  * (writes term.jsonl) and folio rendering (resolves an item's Terms) agree on what a term set is and
  * which fields feed it.
  *
- * @see \Survos\DataContracts\Attribute\VocabTerm
+ * @see VocabTerm
  */
 final class TermSetBinding
 {
@@ -38,13 +37,13 @@ final class TermSetBinding
     /** @return array<string, list<string>> termSet code => normalized fields whose values feed it */
     public static function fields(): array
     {
-        if (self::$cache !== null) {
+        if (null !== self::$cache) {
             return self::$cache;
         }
 
         $map = [];
         foreach (self::SOURCES as $source) {
-            foreach ((new ReflectionClass($source))->getReflectionConstants() as $const) {
+            foreach ((new \ReflectionClass($source))->getReflectionConstants() as $const) {
                 foreach ($const->getAttributes(VocabTerm::class) as $attr) {
                     $meta = $attr->newInstance();
                     if (!$meta->termSet) {

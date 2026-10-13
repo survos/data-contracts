@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Survos\DataContracts\Dto\Item;
@@ -27,5 +28,8 @@ class StopDto extends BaseItemDto
     #[Field(group: 'Content')]
     public ?string $subtitle = null;
 
-    public static function contentType(): string { return ContentType::STOP; }
+    public static function contentType(): string
+    {
+        return ContentType::STOP;
+    }
 }

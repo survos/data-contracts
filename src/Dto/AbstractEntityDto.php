@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Survos\DataContracts\Dto;
@@ -36,7 +37,7 @@ abstract class AbstractEntityDto
     #[Map(source: [ItemField::SOURCE_ID, ItemField::ARK, 'objectID', 'ObjectID', 'codigoDeCatalogacion', 'systemId'])]
     #[Field(group: 'Identity')]
     public ?string $id = null {
-        set(mixed $value) => $this->id = $value !== null ? (string) $value : null;
+        set(mixed $value) => $this->id = null !== $value ? (string) $value : null;
     }
 
     /** The citable/reader-facing page for this record (e.g. a museum's public object page). */

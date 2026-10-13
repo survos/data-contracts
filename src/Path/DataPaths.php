@@ -1,17 +1,10 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Survos\DataContracts\Path;
 
 use Symfony\Component\Filesystem\Filesystem;
-
-use function preg_replace;
-use function rtrim;
-use function sprintf;
-use function str_contains;
-use function str_starts_with;
-use function strtolower;
-use function trim;
 
 /**
  * Canonical layout under APP_DATA_DIR:
@@ -54,17 +47,17 @@ class DataPaths
      */
     public function parseDatasetRef(string $ref): array
     {
-        $ref = trim($ref);
-        if ($ref === '') {
+        $ref = \trim($ref);
+        if ('' === $ref) {
             throw new \InvalidArgumentException('Dataset cannot be empty.');
         }
 
         $provider = '';
         $code = '';
 
-        if (str_contains($ref, '/')) {
+        if (\str_contains($ref, '/')) {
             [$provider, $code] = explode('/', $ref, 2);
-        } elseif (str_contains($ref, '-')) {
+        } elseif (\str_contains($ref, '-')) {
             [$provider, $code] = explode('-', $ref, 2);
         } else {
             $provider = $ref;
@@ -74,7 +67,8 @@ class DataPaths
         $provider = $this->sanitizeToken($provider);
         $code = $this->sanitizeToken($code);
 
-        $key = $provider . '-' . $code;
+        $key = $provider.'-'.$code;
+
         return ['provider' => $provider, 'code' => $code, 'key' => $key];
     }
 
@@ -85,24 +79,24 @@ class DataPaths
 
     private function sanitizeToken(string $token): string
     {
-        $token = trim($token);
-        if ($token === '') {
+        $token = \trim($token);
+        if ('' === $token) {
             throw new \InvalidArgumentException('Dataset token cannot be empty.');
         }
 
-        $safe = preg_replace('/[^a-zA-Z0-9_-]+/', '_', $token) ?? $token;
-        $safe = trim($safe, '_');
+        $safe = \preg_replace('/[^a-zA-Z0-9_-]+/', '_', $token) ?? $token;
+        $safe = \trim($safe, '_');
 
         if (
-            $safe === ''
-            || str_contains($safe, '..')
-            || str_starts_with($safe, '/')
-            || str_contains($safe, "\0")
+            '' === $safe
+            || \str_contains($safe, '..')
+            || \str_starts_with($safe, '/')
+            || \str_contains($safe, "\0")
         ) {
-            throw new \InvalidArgumentException(sprintf('Invalid token "%s".', $token));
+            throw new \InvalidArgumentException(\sprintf('Invalid token "%s".', $token));
         }
 
-        return strtolower($safe);
+        return \strtolower($safe);
     }
 
     public function __construct(
@@ -118,7 +112,7 @@ class DataPaths
     ) {
     }
 
-    public string $root { get => rtrim($this->dataDir, '/'); }
+    public string $root { get => \rtrim($this->dataDir, '/'); }
 
     public string $datasetsRoot { get => "{$this->root}/{$this->datasetRoot}"; }
     public string $workRoot { get => "{$this->root}/{$this->worksRoot}"; }
@@ -129,8 +123,8 @@ class DataPaths
     public string $folioArchiveRootDir { get => "{$this->root}/folio-archive"; }
     public string $folioBareRootDir { get => "{$this->root}/folio-bare"; }
     public string $zipsRootDir {
-        get => str_starts_with($this->zipsRoot, '/')
-            ? rtrim($this->zipsRoot, '/')
+        get => \str_starts_with($this->zipsRoot, '/')
+            ? \rtrim($this->zipsRoot, '/')
             : "{$this->root}/{$this->zipsRoot}";
     }
 
@@ -147,12 +141,12 @@ class DataPaths
      */
     public string $captureRootDir {
         get {
-            $root = trim((string) $this->captureRoot);
+            $root = \trim((string) $this->captureRoot);
             if ('' === $root) {
                 return $this->zipsRootDir;
             }
 
-            return str_starts_with($root, '/') ? rtrim($root, '/') : "{$this->root}/{$root}";
+            return \str_starts_with($root, '/') ? \rtrim($root, '/') : "{$this->root}/{$root}";
         }
     }
 
@@ -164,6 +158,7 @@ class DataPaths
     public function datasetDir(string $datasetKey): string
     {
         $parsed = $this->parseDatasetRef($datasetKey);
+
         return "{$this->workRoot}/{$parsed['provider']}/{$parsed['code']}";
     }
 
@@ -176,7 +171,7 @@ class DataPaths
 
     public function candidateJsonlFilename(string $providerId): string
     {
-        return $this->providerRoot($providerId) . '/candidates.jsonl';
+        return $this->providerRoot($providerId).'/candidates.jsonl';
     }
 
     public function providerArchiveRoot(string $providerId): string
@@ -188,12 +183,12 @@ class DataPaths
 
     public function providerArchiveFile(string $providerId, string $relativePath): string
     {
-        $relativePath = ltrim(trim($relativePath), '/');
-        if ($relativePath === '' || str_contains($relativePath, "\0") || str_contains($relativePath, '..')) {
+        $relativePath = ltrim(\trim($relativePath), '/');
+        if ('' === $relativePath || \str_contains($relativePath, "\0") || \str_contains($relativePath, '..')) {
             throw new \InvalidArgumentException('Invalid archive relative path.');
         }
 
-        return $this->providerArchiveRoot($providerId) . '/' . $relativePath;
+        return $this->providerArchiveRoot($providerId).'/'.$relativePath;
     }
 
     /**
@@ -208,7 +203,7 @@ class DataPaths
     {
         // captureRootDir, NOT providerArchiveRoot — capture may live on different storage than
         // the rest of the vault (see $captureRootDir). Identical result when capture_root is unset.
-        $dir = $this->captureRootDir . '/' . $this->sanitizeToken($providerId) . '/_capture';
+        $dir = $this->captureRootDir.'/'.$this->sanitizeToken($providerId).'/_capture';
         if ($create) {
             $this->filesystem()->mkdir($dir);
         }
@@ -219,12 +214,12 @@ class DataPaths
     /** A named file inside the provider capture dir: vault/<provider>/_capture/<relativePath>. */
     public function captureFile(string $providerId, string $relativePath, bool $createDir = false): string
     {
-        $relativePath = ltrim(trim($relativePath), '/');
-        if ($relativePath === '' || str_contains($relativePath, "\0") || str_contains($relativePath, '..')) {
+        $relativePath = ltrim(\trim($relativePath), '/');
+        if ('' === $relativePath || \str_contains($relativePath, "\0") || \str_contains($relativePath, '..')) {
             throw new \InvalidArgumentException('Invalid capture relative path.');
         }
 
-        return $this->captureDir($providerId, $createDir) . '/' . $relativePath;
+        return $this->captureDir($providerId, $createDir).'/'.$relativePath;
     }
 
     /**
@@ -237,7 +232,7 @@ class DataPaths
      */
     public function pagesDir(string $providerId, bool $create = false): string
     {
-        $dir = $this->providerArchiveRoot($providerId) . '/_pages';
+        $dir = $this->providerArchiveRoot($providerId).'/_pages';
         if ($create) {
             $this->filesystem()->mkdir($dir);
         }
@@ -250,7 +245,7 @@ class DataPaths
     {
         $parsed = $this->parseDatasetRef($datasetKey);
 
-        return $this->providerArchiveFile($parsed['provider'], $parsed['code'] . '/' . ltrim($file, '/'));
+        return $this->providerArchiveFile($parsed['provider'], $parsed['code'].'/'.ltrim($file, '/'));
     }
 
     /** The dataset's durable vault directory: vault/<provider>/<code>. */
@@ -258,7 +253,7 @@ class DataPaths
     {
         $parsed = $this->parseDatasetRef($datasetKey);
 
-        return $this->providerArchiveRoot($parsed['provider']) . '/' . $parsed['code'];
+        return $this->providerArchiveRoot($parsed['provider']).'/'.$parsed['code'];
     }
 
     /**
@@ -277,8 +272,8 @@ class DataPaths
      */
     public function ensureRawPortal(string $datasetKey): string
     {
-        $rawDir   = $this->datasetDir($datasetKey) . '/' . Stage::Raw->dir();
-        $vaultDir = $this->vaultDatasetDir($datasetKey) . '/' . Stage::Raw->dir();
+        $rawDir = $this->datasetDir($datasetKey).'/'.Stage::Raw->dir();
+        $vaultDir = $this->vaultDatasetDir($datasetKey).'/'.Stage::Raw->dir();
 
         $fs = $this->filesystem();
         $fs->mkdir($vaultDir);
@@ -304,8 +299,8 @@ class DataPaths
      */
     public function existingRawCores(string $datasetKey): ?array
     {
-        $vaultDir = $this->vaultDatasetDir($datasetKey) . '/' . Stage::Raw->dir();
-        $workDir  = $this->datasetDir($datasetKey) . '/' . Stage::Raw->dir();
+        $vaultDir = $this->vaultDatasetDir($datasetKey).'/'.Stage::Raw->dir();
+        $workDir = $this->datasetDir($datasetKey).'/'.Stage::Raw->dir();
 
         // Vault first: it is the durable home. The work dir only still matters for legacy
         // datasets whose raw was written before the vault existed.
@@ -319,7 +314,7 @@ class DataPaths
                 $cores = [...$cores, ...(glob("{$dir}/{$pattern}") ?: [])];
             }
 
-            if ($cores !== []) {
+            if ([] !== $cores) {
                 sort($cores);
 
                 return ['dir' => $dir, 'cores' => $cores];
@@ -341,7 +336,7 @@ class DataPaths
     public function folioFile(string $datasetKey, string $extension = 'folio', bool $create = false): string
     {
         $parsed = $this->parseDatasetRef($datasetKey);
-        $path = sprintf('%s/%s/%s.%s', $this->folioRootDir, $parsed['provider'], $parsed['code'], ltrim($extension, '.'));
+        $path = \sprintf('%s/%s/%s.%s', $this->folioRootDir, $parsed['provider'], $parsed['code'], ltrim($extension, '.'));
 
         if ($create) {
             $this->filesystem()->mkdir(dirname($path));
@@ -358,7 +353,7 @@ class DataPaths
     public function folioArchiveFile(string $datasetKey, string $extension = 'folio.gz', bool $create = false): string
     {
         $parsed = $this->parseDatasetRef($datasetKey);
-        $path = sprintf('%s/%s/%s.%s', $this->folioArchiveRootDir, $parsed['provider'], $parsed['code'], ltrim($extension, '.'));
+        $path = \sprintf('%s/%s/%s.%s', $this->folioArchiveRootDir, $parsed['provider'], $parsed['code'], ltrim($extension, '.'));
 
         if ($create) {
             $this->filesystem()->mkdir(dirname($path));
@@ -376,7 +371,7 @@ class DataPaths
     public function folioBareFile(string $datasetKey, string $extension = 'folio', bool $create = false): string
     {
         $parsed = $this->parseDatasetRef($datasetKey);
-        $path = sprintf('%s/%s/%s.%s', $this->folioBareRootDir, $parsed['provider'], $parsed['code'], ltrim($extension, '.'));
+        $path = \sprintf('%s/%s/%s.%s', $this->folioBareRootDir, $parsed['provider'], $parsed['code'], ltrim($extension, '.'));
 
         if ($create) {
             $this->filesystem()->mkdir(dirname($path));
@@ -387,7 +382,7 @@ class DataPaths
 
     public function folioBootstrapFile(string $extension = 'folio', bool $create = false): string
     {
-        $path = sprintf('%s/_bootstrap.%s', $this->folioRootDir, ltrim($extension, '.'));
+        $path = \sprintf('%s/_bootstrap.%s', $this->folioRootDir, ltrim($extension, '.'));
 
         if ($create) {
             $this->filesystem()->mkdir(dirname($path));
@@ -413,11 +408,11 @@ class DataPaths
         // read with no $create) and both must return the same vault-backed path. Making this
         // conditional on $create was the actual bug: the plain (no-create) read silently fell
         // through to a disposable work/ path with nothing behind it.
-        if ($resolved === Stage::Raw) {
+        if (Stage::Raw === $resolved) {
             return $this->ensureRawPortal($datasetKey);
         }
 
-        $path = $this->datasetDir($datasetKey) . '/' . $resolved->dir();
+        $path = $this->datasetDir($datasetKey).'/'.$resolved->dir();
         if ($create) {
             $this->filesystem()->mkdir($path);
         }
@@ -439,25 +434,26 @@ class DataPaths
         $stage ??= 'normalize';
         $stageDir = $this->stageDir($datasetKey, $stage);
 
-        if ($file !== null && $file !== '') {
-            $path = rtrim($stageDir, '/') . '/' . ltrim($file, '/');
+        if (null !== $file && '' !== $file) {
+            $path = \rtrim($stageDir, '/').'/'.ltrim($file, '/');
+
             return str_ends_with($path, '.jsonl') ? [$path, $path.'.gz'] : [$path];
         }
 
-        if ($stage === 'meta' || $stage === '00_meta') {
+        if ('meta' === $stage || '00_meta' === $stage) {
             return [$stageDir];
         }
 
-        $path = rtrim($stageDir, '/') . '/' . $this->defaultObjectFilename;
+        $path = \rtrim($stageDir, '/').'/'.$this->defaultObjectFilename;
         $candidates = [$path, $path.'.gz'];
 
-        if ($stage === 'raw' || $stage === '05_raw') {
-            $candidates[] = $candidates[0] . '.gz';
+        if ('raw' === $stage || '05_raw' === $stage) {
+            $candidates[] = $candidates[0].'.gz';
             $parsed = $this->parseDatasetRef($datasetKey);
-            $candidates[] = $this->providerRawFile($datasetKey, $this->defaultObjectFilename . '.gz');
+            $candidates[] = $this->providerRawFile($datasetKey, $this->defaultObjectFilename.'.gz');
             $candidates[] = $this->providerRawFile($datasetKey, $this->defaultObjectFilename);
-            $candidates[] = $this->providerArchiveFile($parsed['provider'], $parsed['code'] . '.jsonl.gz');
-            $candidates[] = $this->providerArchiveFile($parsed['provider'], $parsed['code'] . '.jsonl');
+            $candidates[] = $this->providerArchiveFile($parsed['provider'], $parsed['code'].'.jsonl.gz');
+            $candidates[] = $this->providerArchiveFile($parsed['provider'], $parsed['code'].'.jsonl');
         }
 
         return array_values(array_unique($candidates));
@@ -476,14 +472,14 @@ class DataPaths
 
     public function normalizeRawFilename(string $filename): string
     {
-        $name = trim($filename);
-        if ($name === '') {
+        $name = \trim($filename);
+        if ('' === $name) {
             throw new \InvalidArgumentException('Filename cannot be empty.');
         }
 
-        $name = preg_replace('/[^a-zA-Z0-9._-]+/', '_', $name) ?? $name;
-        $name = trim($name, '_');
-        if ($name === '') {
+        $name = \preg_replace('/[^a-zA-Z0-9._-]+/', '_', $name) ?? $name;
+        $name = \trim($name, '_');
+        if ('' === $name) {
             throw new \InvalidArgumentException('Invalid filename.');
         }
 
@@ -493,12 +489,12 @@ class DataPaths
     public function rawFileFromUrl(string $datasetKey, string $url): string
     {
         $path = parse_url($url, PHP_URL_PATH) ?: '';
-        $base = trim(basename($path));
-        if ($base === '') {
-            $base = md5($url) . '.bin';
+        $base = \trim(basename($path));
+        if ('' === $base) {
+            $base = md5($url).'.bin';
         }
 
-        return $this->stageDir($datasetKey, 'raw') . '/' . $this->normalizeRawFilename($base);
+        return $this->stageDir($datasetKey, 'raw').'/'.$this->normalizeRawFilename($base);
     }
 
     // ── AI output paths ───────────────────────────────────────────────────────
@@ -523,19 +519,19 @@ class DataPaths
     {
         $parsed = $this->parseDatasetRef($datasetKey);
 
-        return $this->providerArchiveRoot($parsed['provider']) . '/' . $parsed['code'] . '/ai';
+        return $this->providerArchiveRoot($parsed['provider']).'/'.$parsed['code'].'/ai';
     }
 
     /** Canonical path for a dataset's AI claims (vault/<p>/<c>/ai/). */
     public function claimsFile(string $datasetKey, string $filename = 'claims.jsonl'): string
     {
-        return $this->ensureAiDir($datasetKey) . '/' . $filename;
+        return $this->ensureAiDir($datasetKey).'/'.$filename;
     }
 
     /** Canonical path for the enriched (normalize + AI) JSONL and its profile. */
     public function enrichFile(string $datasetKey, string $core = 'obj'): string
     {
-        return $this->stageDir($datasetKey, 'enrich') . '/' . $core . '.jsonl';
+        return $this->stageDir($datasetKey, 'enrich').'/'.$core.'.jsonl';
     }
 
     /**
@@ -546,7 +542,8 @@ class DataPaths
      */
     public function aiBatchResultFile(string $datasetKey, string $providerBatchId): string
     {
-        $safe = preg_replace('/[^a-zA-Z0-9_-]+/', '_', $providerBatchId) ?? $providerBatchId;
+        $safe = \preg_replace('/[^a-zA-Z0-9_-]+/', '_', $providerBatchId) ?? $providerBatchId;
+
         return "{$this->aiDir($datasetKey)}/{$safe}.jsonl";
     }
 
@@ -554,6 +551,7 @@ class DataPaths
     {
         $dir = $this->aiDir($datasetKey);
         $this->filesystem()->mkdir($dir);
+
         return $dir;
     }
 
@@ -575,19 +573,20 @@ class DataPaths
         if ($create) {
             $this->filesystem()->mkdir($dir);
         }
+
         return $dir;
     }
 
     /** Keyword → ContentType classification cache file for a language. */
     public function vocabMapFile(string $lang): string
     {
-        return $this->vocabLangDir($lang) . '/dto_map.jsonl';
+        return $this->vocabLangDir($lang).'/dto_map.jsonl';
     }
 
     /** ContentType slug → display label cache file for a language. */
     public function vocabLabelsFile(string $lang): string
     {
-        return $this->vocabLangDir($lang) . '/labels.jsonl';
+        return $this->vocabLangDir($lang).'/labels.jsonl';
     }
 
     // ── Translation paths (stub — translation memory, future use) ────────────
@@ -603,6 +602,7 @@ class DataPaths
         if ($create) {
             $this->filesystem()->mkdir($dir);
         }
+
         return $dir;
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Survos\DataContracts\Dto\Item;
@@ -30,5 +31,8 @@ class PhotographDto extends AbstractWorkDto
     #[Field(facet: true, filterable: true, group: 'Subjects & Genre')]
     public ?array $genreSpecific = null;
 
-    public static function contentType(): string { return ContentType::PHOTOGRAPH; }
+    public static function contentType(): string
+    {
+        return ContentType::PHOTOGRAPH;
+    }
 }
