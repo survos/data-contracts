@@ -52,8 +52,13 @@ final class ImageUrl
      * Before this list existed, any non-http scheme was classified NotAnImage. That was harmless
      * while every image URL was a public https link, and became wrong the moment folios started
      * storing page.url as s3:// — it silently made every properly-mirrored row imageless, which is
-     * the exact opposite of the intended reward for mirroring it. Matches the schemes
-     * ImgproxyUrlBuilder::encodePlain() already documents as passing through untouched.
+     * the exact opposite of the intended reward for mirroring it.
+     *
+     * This is the offline, backend-agnostic union, used at harvest time when no image backend is
+     * wired. Whether a SPECIFIC backend can fetch a URL (imagor reads only its configured
+     * buckets, for one) is that backend's question:
+     * {@see \Survos\ImageContracts\ImageUrlBuilderInterface::supports()}. Render-time callers that
+     * hold a builder should ask it as well.
      */
     public const FETCHABLE_SCHEMES = ['http', 'https', 's3', 'gs', 'abs', 'swift'];
 
