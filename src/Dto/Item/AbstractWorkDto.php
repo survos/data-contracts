@@ -18,8 +18,8 @@ namespace Survos\DataContracts\Dto\Item;
  * safe to release on its own. Moving the fields down is the risky half, because
  * BaseItemDto::fromMeta() populates them for every subclass — see survos/mono#TBD.
  *
- * StopDto and StoryDto are deliberately NOT reparented here: whether a tour stop is a
- * place and whether a story is an Article are domain calls, not mechanical ones.
+ * TourDto is deliberately NOT reparented here: whether a tour is a creative work is a
+ * domain call, not a mechanical one.
  */
 abstract class AbstractWorkDto extends BaseItemDto
 {

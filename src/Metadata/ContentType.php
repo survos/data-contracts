@@ -27,8 +27,7 @@ use Survos\DataContracts\Dto\Item\PlaceDto;
 use Survos\DataContracts\Dto\Item\PoiDto;
 use Survos\DataContracts\Dto\Item\PostcardDto;
 use Survos\DataContracts\Dto\Item\SculptureDto;
-use Survos\DataContracts\Dto\Item\StopDto;
-use Survos\DataContracts\Dto\Item\StoryDto;
+use Survos\DataContracts\Dto\Item\TourDto;
 use Survos\DataContracts\Vocabulary\ItemField;
 use Symfony\Component\String\Inflector\EnglishInflector;
 
@@ -112,10 +111,10 @@ final class ContentType
     public const COLLECTION = 'collection';     // dcmitype:Collection; the `coll` core — a folio / set of items
 
     // ── Narrative / tours ─────────────────────────────────────────────────────────
-    public const STORY = 'story';          // A tour/story-contract story.v1 document, as a real
-    // queryable row (one per tour) — see StoryDto.
-    public const STOP = 'stop';           // One narrative stop within a story — see StopDto. Related
-    // to its story via a real `has_stop` Link, not a bare FK.
+    public const TOUR = 'tour';           // A tour as a real queryable row (one per tour) — see TourDto.
+    // Linked straight to the objects it visits by `has_stop`
+    // (ordinal on the Link's extras); there is no stop core.
+    // Terms and link codes: Vocabulary\Narrative.
 
     // ── LOC URIs for RDF / zm Vocabulary interop ─────────────────────────────
     public const URIS = [
@@ -596,8 +595,7 @@ final class ContentType
             self::EVENT => EventDto::class,
             self::POI => PoiDto::class,
             self::COLLECTION => CollectionDto::class,
-            self::STORY => StoryDto::class,
-            self::STOP => StopDto::class,
+            self::TOUR => TourDto::class,
             default => GenericItemDto::class,
         };
     }

@@ -58,6 +58,11 @@ final class Core
     /** Events. */
     public const EVENT = 'event';
 
+    /** Tours — walking/audio tours, curated trails. A tour links straight to what it visits:
+     *  TOUR --has_stop {ordinal}--> OBJECT (reverse `stop_of`). There is no stop core.
+     *  Terms and link codes: see Narrative. */
+    public const TOUR = 'tour';
+
     /** Named points of interest — a church, school, shop, park, or similar OSM-derived feature.
      *  See {@see \Survos\DataContracts\Dto\Item\PoiDto}. */
     public const POI = 'poi';
