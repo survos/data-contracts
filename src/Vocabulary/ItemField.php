@@ -36,6 +36,8 @@ interface ItemField
     public const PDF_URL = 'pdfUrl';
     public const CITATION = 'citation';
     public const CITATION_URL = 'citationUrl';
+    public const PUBLIC_URL = 'publicUrl';
+    public const ADMIN_URL = 'adminUrl';
     public const SOURCE_API_URL = 'sourceApiUrl';
     public const LICENSE = 'license';
     public const RIGHTS = 'rights';

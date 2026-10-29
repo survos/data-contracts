@@ -214,6 +214,14 @@ abstract class BaseItemDto extends AbstractEntityDto
     #[Field(group: 'Rights & Attribution')]
     public ?string $citationUrl = null;
 
+    /** ItemField::PUBLIC_URL — the record's page on the institution's own public site (PastPerfect Online, Omeka, …); set only when the record is public there. Rendered as the "On public site" link on the folio item page. */
+    #[Field(group: 'Rights & Attribution')]
+    public ?string $publicUrl = null;
+
+    /** ItemField::ADMIN_URL — the record's staff page in the source system (needs a login there); lets staff open the record to correct it. Rendered as the "Edit in source" link on the folio item page. */
+    #[Field(group: 'Rights & Attribution')]
+    public ?string $adminUrl = null;
+
     /** ItemField::SOURCE_API_URL — machine-readable source API endpoint for this record (admin/technical;
      *  e.g. museum-digital's JSON export). Not a user-facing display field. */
     public ?string $sourceApiUrl = null;
@@ -280,7 +288,7 @@ abstract class BaseItemDto extends AbstractEntityDto
     public ?string $institution = null;
 
     /** Collection name(s) */
-    #[Field(group: 'Agents & Collections')]
+    #[Field(facet: true, filterable: true, group: 'Agents & Collections')]
     public ?array $collections = null;
 
     // ── Subjects ──────────────────────────────────────────────────────────────
