@@ -18,6 +18,8 @@ use Survos\DataContracts\Attribute\VocabTerm;
 interface ItemField
 {
     public const ID = 'id';
+    /** List of AuthorityReference values; resolved by the host, never embedded authority records. */
+    public const AUTHORITIES = 'authorities';
     public const TITLE = 'title';
     public const DESCRIPTION = 'description';
     public const PHYSICAL_DESCRIPTION = 'physicalDescription';
