@@ -66,6 +66,7 @@ interface ItemField
      * that emits multiple images per row uses the same contract.
      */
     public const IMAGES = 'images';
+    public const IMAGE_COUNT = 'imageCount';
 
     #[VocabTerm(
         label: 'Search summary',

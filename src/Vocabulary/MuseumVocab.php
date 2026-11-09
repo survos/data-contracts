@@ -121,6 +121,25 @@ interface MuseumVocab
     )]
     public const PERIOD = 'period';
 
+    #[VocabTerm(label: 'Costume designer', termSet: true)]
+    public const COSTUME_DESIGNER = 'costumeDesigner';
+
+    #[VocabTerm(label: 'Studio', termSet: true)]
+    public const STUDIO = 'studio';
+
+    /** Source costume classification, not an assertion about a person's gender. */
+    #[VocabTerm(label: 'Sex (catalog)', termSet: true)]
+    public const COSTUME_SEX = 'costumeSex';
+
+    #[VocabTerm(label: 'Actor', termSet: true)]
+    public const ACTOR = 'actor';
+
+    #[VocabTerm(label: 'Character', termSet: true)]
+    public const CHARACTER = 'character';
+
+    #[VocabTerm(label: 'Film or show', termSet: true)]
+    public const PRODUCTION_TITLE = 'productionTitle';
+
     #[VocabTerm(
         label: 'Epoch',
         uri: 'http://purl.org/dc/terms/temporal',
