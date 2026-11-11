@@ -8,6 +8,7 @@ use Survos\DataContracts\Dto\Core\PersonDto;
 use Survos\DataContracts\Dto\Item\ArtifactDto;
 use Survos\DataContracts\Dto\Item\AudioDto;
 use Survos\DataContracts\Dto\Item\BookDto;
+use Survos\DataContracts\Dto\Item\BurialRecordDto;
 use Survos\DataContracts\Dto\Item\CoinDto;
 use Survos\DataContracts\Dto\Item\CollectionDto;
 use Survos\DataContracts\Dto\Item\CorrespondenceDto;
@@ -46,6 +47,8 @@ use Symfony\Component\String\Inflector\EnglishInflector;
 final class ContentType
 {
     private static ?EnglishInflector $inflector = null;
+
+    public const BURIAL_RECORD = 'burialRecord';
 
     // ── Photographic / Visual ────────────────────────────────────────────────
     public const PHOTOGRAPH = 'photograph';     // TGM tgm007965 / LCGFT gf2017027258
@@ -583,6 +586,7 @@ final class ContentType
             self::MANUSCRIPT => ManuscriptDto::class,
             self::BOOK => BookDto::class,
             self::DOCUMENT => DocumentDto::class,
+            self::BURIAL_RECORD => BurialRecordDto::class,
             self::EPHEMERA => EphemeraDto::class,
             self::AUDIO => AudioDto::class,
             self::INTERVIEW => InterviewDto::class,

@@ -18,6 +18,21 @@ use Survos\DataContracts\Attribute\VocabTerm;
 interface ItemField
 {
     public const ID = 'id';
+
+    // Structured burial-record fields; person life dates remain on PersonDto.
+    public const CEMETERY_NAME = 'cemeteryName';
+    public const INTERMENT_DATE = 'intermentDate';
+    public const INTERMENT_TIME = 'intermentTime';
+    public const SECTION = 'section';
+    public const GRAVE = 'grave';
+    public const LOCATION_ID = 'locationId';
+    public const SERVICE_BRANCH = 'serviceBranch';
+    public const MILITARY_RANK = 'militaryRank';
+    public const RELATIONSHIP = 'relationship';
+    public const WARS = 'wars';
+    public const FAITH = 'faith';
+    public const RELIGIOUS_SYMBOLS = 'religiousSymbols';
+    public const INSCRIPTION_CLAIMS = 'inscriptionClaims';
     /** List of AuthorityReference values; resolved by the host, never embedded authority records. */
     public const AUTHORITIES = 'authorities';
     public const TITLE = 'title';
