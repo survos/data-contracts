@@ -29,5 +29,6 @@ final class BurialRecordDtoTest extends TestCase
         self::assertSame('Veteran (Self)', $dto->relationship);
         self::assertNull($dto->description);
         self::assertSame(BurialRecordDto::class, ContentType::dtoClass(ContentType::BURIAL_RECORD));
+        self::assertSame(ContentType::BURIAL_RECORD, (new \Symfony\Component\String\UnicodeString(ContentType::BURIAL_RECORD))->snake()->lower()->toString());
     }
 }

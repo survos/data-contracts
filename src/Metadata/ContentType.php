@@ -48,7 +48,7 @@ final class ContentType
 {
     private static ?EnglishInflector $inflector = null;
 
-    public const BURIAL_RECORD = 'burialRecord';
+    public const BURIAL_RECORD = 'burial_record';
 
     // ── Photographic / Visual ────────────────────────────────────────────────
     public const PHOTOGRAPH = 'photograph';     // TGM tgm007965 / LCGFT gf2017027258
