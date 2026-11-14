@@ -17,6 +17,18 @@ use Survos\SchemaOrgBundle\Attribute\SchemaOrg;
 #[SchemaOrg('ArchiveComponent')]
 class DocumentDto extends AbstractWorkDto
 {
+    /** Stable local identifier of the containing newspaper issue. */
+    #[Field(filterable: true, index: true, group: 'Publication')]
+    public ?string $issueId = null;
+
+    /** Extraction tier of a newspaper record, such as block or full. */
+    #[Field(filterable: true, facet: true, group: 'Publication')]
+    public ?string $articleTier = null;
+
+    /** Source record classification, independent of heuristic kind. */
+    #[Field(filterable: true, facet: true, group: 'Publication')]
+    public ?string $recordKind = null;
+
     public ?string $extent = null;
     public bool $hasTranscription = false;
 

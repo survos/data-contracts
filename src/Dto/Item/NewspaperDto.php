@@ -11,6 +11,12 @@ use Survos\SchemaOrgBundle\Attribute\SchemaOrg;
 #[SchemaOrg('Newspaper')]
 class NewspaperDto extends AbstractWorkDto
 {
+    /** Distinguishes ordinary issues from annual indexes. */
+    public ?string $issueKind = null;
+
+    /** Declared processing receipt, including stage and review state. */
+    public ?array $issueProcessing = null;
+
     public ?string $publisher = null;
     public ?string $pubPlace = null;
     public ?string $volume = null;
