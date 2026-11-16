@@ -310,7 +310,7 @@ class DataPaths
             }
 
             $cores = [];
-            foreach (['*.jsonl', '*.jsonl.gz'] as $pattern) {
+            foreach (['*.jsonl', '*.jsonl.gz', '*.duckdb'] as $pattern) {
                 $cores = [...$cores, ...(glob("{$dir}/{$pattern}") ?: [])];
             }
 
