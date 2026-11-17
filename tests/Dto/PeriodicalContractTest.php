@@ -43,6 +43,19 @@ final class PeriodicalContractTest extends TestCase
         self::assertSame($segment, SegmentDto::fromArray($dto->segments[0])->toArray());
     }
 
+    /**
+     * A viewer opens the issue's PDF at an article's first page. Both halves of that are declared article fields:
+     * pageStart (1-based; it replaced the undeclared pdfPage) and sourcePdfUrl. Neither may fall into extras.
+     */
+    public function testAnArticleKnowsItsIssuePdfAndItsFirstPage(): void
+    {
+        $dto = DocumentDto::fromNormalized([ItemField::SOURCE_PDF_URL => 'https://example.org/issue.pdf', ItemField::PAGE_START => 3, ItemField::PAGE_END => 4]);
+        self::assertSame([], $dto->unmapped);
+        self::assertSame('https://example.org/issue.pdf', $dto->sourcePdfUrl);
+        self::assertSame(3, $dto->pageStart);
+        self::assertSame(['pdfPage' => 3], DocumentDto::fromNormalized(['pdfPage' => 3])->unmapped, 'pdfPage is the retired name: a producer that still writes it is caught, not silently accepted.');
+    }
+
     public function testIssueFieldsAreMapped(): void
     {
         $dto = NewspaperDto::fromNormalized([
