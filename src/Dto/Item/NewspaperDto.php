@@ -17,6 +17,55 @@ class NewspaperDto extends AbstractWorkDto
     /** Declared processing receipt, including stage and review state. */
     public ?array $issueProcessing = null;
 
+    /** basic (page items and blocks) or enhanced (published stories), declared per issue. See IssueTier. */
+    #[Field(filterable: true, facet: true, group: 'Publication')]
+    public ?string $issueTier = null;
+
+    /** Internet Archive identifier of the issue, when its scans are served from there. */
+    public ?string $iaIdentifier = null;
+
+    /** The issue's source PDF, kept apart from pdfUrl so a reader shows the page images instead of a PDF frame. */
+    public ?string $sourcePdfUrl = null;
+
+    /** Which state archive hosts the issue, e.g. pennsylvania, oregon (Open ONI sites). */
+    #[Field(filterable: true, facet: true, group: 'Availability')]
+    public ?string $hostingArchive = null;
+
+    /** Title of the publication the issue belongs to, as the source names it. */
+    public ?string $publicationTitle = null;
+
+    /** Where the issue's OCR came from, e.g. loc-alto, vendor-alto. */
+    #[Field(filterable: true, facet: true, group: 'Text')]
+    public ?string $ocrSource = null;
+
+    /** Name of the place a reader is sent to for the original, e.g. "Virginia Chronicle". */
+    public ?string $sourceLabel = null;
+
+    /** sprintf template for the source's page URL; %d is the 1-based page number. */
+    public ?string $pageUrlTemplate = null;
+
+    /** Workflow place of the issue's text-sheet grouping, e.g. ready, grouped. */
+    #[Field(filterable: true, facet: true, group: 'Publication')]
+    public ?string $groupingMarking = null;
+
+    /** Revision of the saved grouping; changes each time the issue is regrouped. */
+    public ?string $groupingRevision = null;
+
+    /** Version of the grouping document the group rows were written from. */
+    public ?int $groupingSchemaVersion = null;
+
+    /** Fingerprint of the page layouts the grouping was computed from. */
+    public ?string $groupingSourceHash = null;
+
+    /** Fingerprint of the grouping code that produced the groups. */
+    public ?string $groupingAlgorithmHash = null;
+
+    /** Fingerprint of everything the grouper was given (layouts and article records). */
+    public ?string $groupingInputHash = null;
+
+    /** Why the issue has no grouping, e.g. no-pages, incomplete-page-layout; null when it is grouped. */
+    public ?string $groupingUnavailable = null;
+
     public ?string $publisher = null;
     public ?string $pubPlace = null;
     public ?string $volume = null;

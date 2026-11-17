@@ -21,6 +21,12 @@ class DocumentDto extends AbstractWorkDto
     #[Field(filterable: true, index: true, group: 'Publication')]
     public ?string $issueId = null;
 
+    /** The containing issue's source PDF, so a viewer can open it at the record's first page (pageStart). */
+    public ?string $sourcePdfUrl = null;
+
+    /** Title of the containing issue, for display without a join. */
+    public ?string $issueTitle = null;
+
     /** Extraction tier of a newspaper record, such as block or full. */
     #[Field(filterable: true, facet: true, group: 'Publication')]
     public ?string $articleTier = null;
@@ -28,6 +34,63 @@ class DocumentDto extends AbstractWorkDto
     /** Source record classification, independent of heuristic kind. */
     #[Field(filterable: true, facet: true, group: 'Publication')]
     public ?string $recordKind = null;
+
+    /** scan (OCR of a page image) or digital (the publisher's own text, markdown). See SourceKind. */
+    #[Field(filterable: true, facet: true, group: 'Publication')]
+    public ?string $sourceKind = null;
+
+    /**
+     * The record's text cut into ordered segments, each anchored to the page blocks it came from.
+     *
+     * @var list<array<string, mixed>>|null each entry is a {@see \Survos\DataContracts\Dto\Periodical\SegmentDto} array
+     */
+    public ?array $segments = null;
+
+    /** What decided the record's boundaries: publisher ranges, a model, headline spans or the block heuristic. */
+    #[Field(filterable: true, facet: true, group: 'Publication')]
+    public ?string $segmentationBasis = null;
+
+    /** Where the OCR came from, e.g. vendor-alto, page-layout. */
+    #[Field(filterable: true, facet: true, group: 'Text')]
+    public ?string $ocrSource = null;
+
+    /** The model or engine that produced the OCR text. */
+    public ?string $ocrModel = null;
+
+    /** First page of the record within its issue, 1-based. */
+    #[Field(filterable: true, sortable: true, group: 'Publication')]
+    public ?int $pageStart = null;
+
+    /** Last page of the record within its issue, 1-based. */
+    public ?int $pageEnd = null;
+
+    /**
+     * Images published with a digital article.
+     *
+     * @var list<array<string, mixed>>|null each entry is an {@see \Survos\DataContracts\Dto\Periodical\ArticleImageDto} array
+     */
+    public ?array $articleImages = null;
+
+    /** Name of the publisher's archive file a born-digital article came from. */
+    public ?string $sourceArchive = null;
+
+    /** When the publisher last revised a born-digital article (ISO 8601). */
+    public ?string $modifiedAt = null;
+
+    /** @var list<string>|null people named in the record, as an enrichment pass read them */
+    #[Field(filterable: true, facet: true, group: 'Names')]
+    public ?array $people = null;
+
+    /** @var list<string>|null places named in the record */
+    #[Field(filterable: true, facet: true, group: 'Names')]
+    public ?array $places = null;
+
+    /** @var list<string>|null organizations named in the record */
+    #[Field(filterable: true, facet: true, group: 'Names')]
+    public ?array $organizations = null;
+
+    /** @var array<string, mixed>|null how the record was cut out of its issue; diagnostics for the producer */
+    public ?array $extractionEvidence = null;
 
     public ?string $extent = null;
     public bool $hasTranscription = false;

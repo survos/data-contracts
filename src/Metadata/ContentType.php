@@ -19,6 +19,7 @@ use Survos\DataContracts\Dto\Item\EventDto;
 use Survos\DataContracts\Dto\Item\FilmDto;
 use Survos\DataContracts\Dto\Item\GenericItemDto;
 use Survos\DataContracts\Dto\Item\InterviewDto;
+use Survos\DataContracts\Dto\Item\IssueGroupDto;
 use Survos\DataContracts\Dto\Item\ManuscriptDto;
 use Survos\DataContracts\Dto\Item\MapDto;
 use Survos\DataContracts\Dto\Item\NewspaperDto;
@@ -68,6 +69,7 @@ final class ContentType
 
     // ── Textual ──────────────────────────────────────────────────────────────
     public const NEWSPAPER = 'newspaper';      // LCGFT gf2014026139 / marcgt newspaper
+    public const ISSUE_GROUP = 'issue_group';   // a group of a newspaper issue's text-sheet grouping (local)
     public const PERIODICAL = 'periodical';     // LCGFT gf2014026156 / marcgt periodical
     public const MANUSCRIPT = 'manuscript';     // LCGFT gf2022026088 / marcgt manuscript
     public const CORRESPONDENCE = 'correspondence'; // LCGFT gf2014026051
@@ -582,6 +584,7 @@ final class ContentType
             self::PAINTING => PaintingDto::class,
             self::MAP, self::ATLAS => MapDto::class,
             self::NEWSPAPER, self::PERIODICAL => NewspaperDto::class,
+            self::ISSUE_GROUP => IssueGroupDto::class,
             self::CORRESPONDENCE => CorrespondenceDto::class,
             self::MANUSCRIPT => ManuscriptDto::class,
             self::BOOK => BookDto::class,

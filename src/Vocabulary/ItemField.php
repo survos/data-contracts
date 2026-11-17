@@ -120,4 +120,42 @@ interface ItemField
      * multiple (like NPS) sets both — STATE as the primary/display value, STATES as the full facet.
      */
     public const STATES = 'states';
+
+    // ── Periodicals: one constant per field, value = the DTO property name ──────────────────────────
+    public const ISSUE_ID = 'issueId';
+    public const ISSUE_TIER = 'issueTier';
+    public const ISSUE_KIND = 'issueKind';
+    public const ISSUE_NUMBER = 'issueNumber';
+    public const ARTICLE_TIER = 'articleTier';
+    public const RECORD_KIND = 'recordKind';
+    public const BLOCK_TYPE = 'blockType';
+    public const SOURCE_KIND = 'sourceKind';
+    public const SEGMENTS = 'segments';
+    public const SEGMENTATION_BASIS = 'segmentationBasis';
+    public const OCR_TEXT = 'ocrText';
+    public const OCR_SOURCE = 'ocrSource';
+    public const OCR_MODEL = 'ocrModel';
+    public const PAGE_START = 'pageStart';
+    public const PAGE_END = 'pageEnd';
+    public const ARTICLE_IMAGES = 'articleImages';
+    public const IA_IDENTIFIER = 'iaIdentifier';
+    public const SOURCE_PDF_URL = 'sourcePdfUrl';
+    public const PUBLICATION_TITLE = 'publicationTitle';
+    public const HOSTING_ARCHIVE = 'hostingArchive';
+    public const ISSUE_TITLE = 'issueTitle';
+    public const SOURCE_LABEL = 'sourceLabel';
+    public const PAGE_URL_TEMPLATE = 'pageUrlTemplate';
+    public const GROUPING_MARKING = 'groupingMarking';
+    public const GROUPING_REVISION = 'groupingRevision';
+    public const GROUPING_SCHEMA_VERSION = 'groupingSchemaVersion';
+    public const GROUPING_SOURCE_HASH = 'groupingSourceHash';
+    public const GROUPING_ALGORITHM_HASH = 'groupingAlgorithmHash';
+    public const GROUPING_INPUT_HASH = 'groupingInputHash';
+    public const GROUPING_UNAVAILABLE = 'groupingUnavailable';
+    public const EXTRACTION_EVIDENCE = 'extractionEvidence';
+    public const PEOPLE = 'people';
+    public const SOURCE_ARCHIVE = 'sourceArchive';
+    public const MODIFIED_AT = 'modifiedAt';
+    public const PLACES = 'places';
+    public const ORGANIZATIONS = 'organizations';
 }
