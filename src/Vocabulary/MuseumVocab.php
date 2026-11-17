@@ -70,8 +70,8 @@ interface MuseumVocab
     )]
     public const PLACE = Core::PLACE;
 
-    // A person is an entity worth its own core/page (enrichable with a Wikidata bio/photo), so model
-    // it as a RELATION (obj→per, "created"/"created_by"), not a flat term set.
+    // Creator is a role shared by people and organizations. The collector classifies these
+    // values into per/org cores and emits agent→item "created" / "created_by" relations.
     #[VocabTerm(
         label: 'Person',
         uri: 'http://xmlns.com/foaf/0.1/Person',
