@@ -36,6 +36,8 @@ interface ItemField
     /** List of AuthorityReference values; resolved by the host, never embedded authority records. */
     public const AUTHORITIES = 'authorities';
     public const TITLE = 'title';
+    /** Display name of a person, organization or place. */
+    public const NAME = 'name';
     public const DESCRIPTION = 'description';
     public const PHYSICAL_DESCRIPTION = 'physicalDescription';
     public const CONTEXT_DESCRIPTION = 'contextDescription';
